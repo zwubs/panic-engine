@@ -1,0 +1,34 @@
+{
+
+	"id": "debug",
+	"name": "UV Debugger",
+
+	"texture": "debug.png",
+
+	"tileset": {
+
+		"main": {
+			"default": { "x": 16, "y": 16, "w": 16, "h": 16 },
+			"north": { },
+			"south": { "x": 48 },
+			"east": { "x": 0 },
+			"west": { "x": 32 },
+			"up": { "y": 0 },
+			"down": { "y": 32 }
+		}
+
+	},
+
+	"armature": [
+		{
+			"name": "root",
+			"cubes": [
+				{
+					"size": [ 16, 16, 16 ],
+					"faces": "main"
+				}
+			]
+		}
+	]
+
+}

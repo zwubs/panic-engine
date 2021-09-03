@@ -1,0 +1,37 @@
+{
+
+	"id": "player",
+	"name": "Player",
+
+	"texture": "player.png",
+
+	"tileset": {
+		"main": {
+			"default": { "x": 0, "y": 0, "w":8, "h": 8 },
+			"north": { "x": 8 }
+		}
+    },
+
+	"armature": {
+		"root": {
+			"cubes": [
+				{
+					"size": [ 8, 8, 8 ],
+					"offset": [ 0, 0, 0 ],
+					"faces": "main"
+				}
+			]
+		}
+	},
+
+	"collision": {
+		"cubes": [
+			{
+				"size": [ 8, 8, 8 ],
+				"offset": [ 0, 0, 0 ],
+				"rotation": [ 0, 0, 0 ]
+			}
+		]
+	}
+
+}

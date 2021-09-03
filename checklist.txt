@@ -1,0 +1,25 @@
+
+    PANIC Engine Checklist
+
+    - Make certain things optional when loading block / entity files
+        - Collision
+        - Offsets
+
+    - Get EntityEntry hooked up to PANIC.Entities
+
+    - Make some fun new blocks
+
+    - Create a CollisionBox that works with EntityEntrys
+
+    - A Lighting handler
+
+    - Logger that queues logs and batch logs them
+
+    - Using new input methods create a custom controls handler
+        - The reason for this is so instead of making multiple event handlers, just have one main one that responds
+
+	- Swap directions, North is -Z, South +Z, West is -X, East is +X
+
+	- PANIC.Packages Offload scripts in to "Packages" that are dynamically loaded with dependies when needed
+
+	- Figure out the best way to light the scene so entities and the blocks all look good.

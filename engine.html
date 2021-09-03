@@ -1,0 +1,141 @@
+<html>
+
+    <head>
+
+        <title>PANIC Engine</title>
+
+		<meta charset="UTF-8">
+
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@700&display=swap" rel="stylesheet">
+
+        <style>
+
+            body {
+
+                width: 100%;
+                height: 100%;
+
+                margin: 0;
+
+            }
+
+			#PANIC {
+
+				width: 100%;
+				height: 100%;
+
+			}
+
+			#PANIC-Rendering {
+
+				width: 100%;
+				height: 100%;
+
+			}
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <!-- THREEjs Scripts -->
+        <script src="./src/lib/three131.js"></script>
+		<script src="./src/lib/OrbitControls.js"></script>
+		<script src="./src/lib/BufferGeometryUtils.js"></script>
+
+        <!-- Base PANIC Library -->
+		<script src="./src/panic.js"></script>
+
+        <!-- Core -->
+        <script src="./src/core/loops.js"></script>
+        <script src="./src/core/clock.js"></script>
+        <script src="./src/core/updater.js"></script>
+
+		<script src="./src/core/cube.js"></script>
+
+		<script src="./src/core/texture.js"></script>
+		<script src="./src/core/tileset/tileset.js"></script>
+		<script src="./src/core/tileset/tile.js"></script>
+		<script src="./src/core/tileset/tilegroup.js"></script>
+
+		<!-- Shaders -->
+		<script src="./src/shaders/shaders.js"></script>
+		<script src="./src/shaders/shader-entity.js"></script>
+		<script src="./src/shaders/shader-debug-grid.js"></script>
+		<script src="./src/shaders/shader-debug-axes.js"></script>
+
+        <!-- Loaders -->
+		<script src="./src/loaders/loaders.js"></script>
+		<script src="./src/loaders/loader-file.js"></script>
+		<script src="./src/loaders/loader-image.js"></script>
+		<script src="./src/loaders/loader-texture.js"></script>
+		<script src="./src/loaders/loader-entity.js"></script>
+
+        <!-- Parsers -->
+		<script src="./src/parsers/parsers.js"></script>
+		<script src="./src/parsers/parser-json.js"></script>
+		<script src="./src/parsers/parser-tileset.js"></script>
+		<script src="./src/parsers/parser-entity-model.js"></script>
+		<script src="./src/parsers/parser-cube-uv.js"></script>
+
+		<!-- Entity -->
+		<script src="./src/entities/entity-registry.js"></script>
+		<script src="./src/entities/entity-template.js"></script>
+		<script src="./src/entities/entity.js"></script>
+
+		<!-- Tools -->
+		<script src="./src/tools/tools.js"></script>
+
+        <!-- Debugging -->
+		<script src="./src/debug/debug.js"></script>
+		<script src="./src/debug/debug-grid.js"></script>
+		<script src="./src/debug/debug-axes.js"></script>
+		<script src="./src/debug/debug-compass.js"></script>
+
+
+        <script>
+
+			async function run() {
+
+				PANIC.Debug.enable();
+
+				try {
+
+					await PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
+					await PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
+
+					await PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" );
+
+					await PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
+
+					console.log( PANIC.EntityRegistry.spawnEntity( "player" ) );
+
+					PANIC.Debug.Grid.toggle();
+					PANIC.Debug.Grid.scale = 16;
+					PANIC.Debug.Grid.subdivisions = 16;
+					PANIC.Debug.Grid.color = 0x888888;
+
+					PANIC.Debug.Axes.toggle();
+
+					PANIC.Debug.Compass.toggle();
+
+					PANIC.Loop( 0 );
+
+				}
+
+				catch( error ) {
+
+					PANIC.Debug.error( error );
+
+				}
+
+			}
+
+			run();
+
+        </script>
+
+    </body>
+
+</html>

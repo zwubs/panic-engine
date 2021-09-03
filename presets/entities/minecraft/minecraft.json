@@ -1,0 +1,184 @@
+{
+
+	"id": "minecraft",
+	"name": "Minecraft Player",
+
+	"texture": "skin.png",
+
+	"tileset": {
+
+		"head": {
+			"default": { "w": 8, "h": 8 },
+			"north": { "x": 8, "y": 8 },
+			"south": { "x": 24, "y": 8 },
+			"east": { "x": 0, "y": 8 },
+			"west": { "x": 16, "y": 8 },
+			"up": { "x": 8, "y": 0 },
+			"down": { "x": 16, "y": 0, "t": { "flipY": true } }
+		},
+
+		"hat": {
+			"clone": "head",
+			"transform": {
+				"translate": { "x": 32 }
+			}
+		},
+
+		"body": {
+			"north": { "x": 20, "y": 20, "w": 8, "h": 12 },
+			"south": { "x": 32, "y": 20, "w": 8, "h": 12 },
+			"east": { "x": 16, "y": 20, "w": 4, "h": 12 },
+			"west": { "x": 28, "y": 20, "w": 4, "h": 12 },
+			"up": { "x": 20, "y": 16, "w": 8, "h": 4 },
+			"down": { "x": 28, "y": 16, "w": 8, "h": 4, "t": { "flipY": true } }
+		},
+
+		"jacket": {
+			"clone": "body",
+			"transform": {
+				"translate": { "y": 16 }
+			}
+		},
+
+		"arm-leg-template": {
+			"default": { "w": 4 },
+			"north": { "x": 4, "y": 4, "h": 12 },
+			"south": { "x": 12, "y": 4, "h": 12 },
+			"east": { "x": 8, "y": 4, "h": 12 },
+			"west": { "x": 0, "y": 4, "h": 12 },
+			"up": { "x": 4, "y": 0, "h": 4 },
+			"down": { "x": 8, "y": 0, "h": 4, "t": { "flipY": true } }
+		},
+
+		"right-arm": {
+			"clone": "arm-leg-template",
+			"transform": {
+				"translate": { "x": 40, "y": 16 }
+			}
+		},
+		"right-sleeve": {
+			"clone": "right-arm",
+			"transform": {
+				"translate": { "y": 16 }
+			}
+		},
+
+		"left-arm": {
+			"clone": "arm-leg-template",
+			"transform": {
+				"translate": { "x": 32, "y": 48 }
+			}
+		},
+		"left-sleeve": {
+			"clone": "left-arm",
+			"transform": {
+				"translate": { "x": 16 }
+			}
+		},
+
+		"right-leg": {
+			"clone": "arm-leg-template",
+			"transform": {
+				"translate": { "y": 16 }
+			}
+		},
+		"right-pant": {
+			"clone": "right-leg",
+			"transform": {
+				"translate": { "y": 16 }
+			}
+		},
+
+		"left-leg": {
+			"clone": "arm-leg-template",
+			"transform": {
+				"translate": { "x": 16, "y": 48 }
+			}
+		},
+		"left-pant": {
+			"clone": "left-leg",
+			"transform": {
+				"translate": { "x": -16 }
+			}
+		}
+
+	},
+
+	"armature": {
+		"root": {
+			"cubes": [
+				{
+					"size": [ 8, 8, 8 ],
+					"offset": [ 0, 10, 0 ],
+					"faces": "head"
+				},
+				{
+					"size": [ 9, 9, 9 ],
+					"offset": [ 0, 10, 0 ],
+					"faces": "hat"
+				},
+
+				{
+					"size": [ 8, 12, 4 ],
+					"faces": "body"
+				},
+				{
+					"size": [ 9, 13, 5 ],
+					"faces": "jacket"
+				},
+
+				{
+					"size": [ 4, 12, 4 ],
+					"offset": [ 6, 0, 0 ],
+					"faces": "right-arm"
+				},
+				{
+					"size": [ 5, 13, 5 ],
+					"offset": [ 6, 0, 0 ],
+					"faces": "right-sleeve"
+				},
+
+				{
+					"size": [ 4, 12, 4 ],
+					"offset": [ -6, 0, 0 ],
+					"faces": "left-arm"
+				},
+				{
+					"size": [ 5, 13, 5 ],
+					"offset": [ -6, 0, 0 ],
+					"faces": "left-sleeve"
+				},
+
+				{
+					"size": [ 4, 12, 4 ],
+					"offset": [ 2, -12, 0 ],
+					"faces": "right-leg"
+				},
+				{
+					"size": [ 5, 13, 5 ],
+					"offset": [ 2, -12, 0 ],
+					"faces": "right-pant"
+				},
+
+				{
+					"size": [ 4, 12, 4 ],
+					"offset": [ -2, -12, 0 ],
+					"faces": "left-leg"
+				},
+				{
+					"size": [ 5, 13, 5 ],
+					"offset": [ -2, -12, 0 ],
+					"faces": "left-pant"
+				}
+			]
+		}
+	},
+
+	"collision": {
+
+		"size": [ 16, 32, 8]
+
+	}
+
+
+}
