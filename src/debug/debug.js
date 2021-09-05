@@ -13,6 +13,8 @@ PANIC.Debug.Element.style.position = "absolute";
 PANIC.Debug.Element.style.top = "0px";
 PANIC.Debug.Element.style.left = "0px";
 
+PANIC.Debug.Element.style.margin = "5px";
+
 PANIC.Debug.Element.style.color = "#FFF";
 PANIC.Debug.Element.style.mixBlendMode = "difference";
 

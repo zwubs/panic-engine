@@ -5,6 +5,11 @@
 
 PANIC.Parsers = {};
 
-PANIC.Parsers.Lua = null;
+PANIC.Parsers.JSON = null;
 
-PANIC.Parsers.Entity = null;
+PANIC.Parsers.Tileset = null;
+
+PANIC.Parsers.CubeUV = null;
+
+PANIC.Parsers.EntityModel = null;
+PANIC.Parsers.EntityArmature = null;
