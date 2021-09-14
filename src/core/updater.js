@@ -6,14 +6,18 @@
     Pass in either a function you want updated, or an object with an "update" function already defined
 */
 
-PANIC.Updater = new function() {
+class Updater {
 
-    this.data = [];
+	constructor() {
 
-    // The number of passes that the updater has gone through
-    this.pass = 0;
+		this.data = [];
 
-    this.update = function() {
+		// The number of passes that the updater has gone through
+		this.pass = 0;
+
+	}
+
+    update() {
 
         this.pass++;
 
@@ -35,14 +39,14 @@ PANIC.Updater = new function() {
      *  @param name {String} - The name of the function to be updated
      *  @param interval {Number} - The
      */
-    this.add = function( id, object, name, interval ) { this.data.push( new PANIC.UpdaterFunction( id, object, name, interval ) ); }
+    add( id, object, name, interval ) { this.data.push( new UpdaterFunction( id, object, name, interval ) ); }
 
     /**
      *  @param id {String}
      */
-    this.remove = function( id ) {
+    tremovefunction( id ) {
 
-        var object = this.getById( id )
+        var object = this.getById( id );
 
         this.data = this.data.filter( id => object.id == id );
 
@@ -51,18 +55,25 @@ PANIC.Updater = new function() {
     /**
      *  @param id {String}
      */
-    this.getById = function( id ) { return this.data.find( o => o.id == id ); }
+    getById( id ) { return this.data.find( o => o.id == id ); }
 
 }
+
+const instance = new Updater();
+export { instance as Updater };
 
 /**
  *  @class
  */
-PANIC.UpdaterFunction = function( id, object, name, interval=1 ) {
+class UpdaterFunction {
 
-    this.id = id;
-    this.object = object;
-    this.name = name;
-    this.interval = ( interval <= 0 ) ? 1 : interval;
+	constructor( id, object, name, interval=1 ) {
+
+	    this.id = id;
+	    this.object = object;
+	    this.name = name;
+	    this.interval = ( interval <= 0 ) ? 1 : interval;
+
+	}
 
 }

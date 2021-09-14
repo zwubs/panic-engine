@@ -3,20 +3,18 @@
  *	@typedef {Object} PANIC.Tileset
  */
 
-PANIC.Tileset = function() {
+class Tileset() {
 
 	this.groups = {};
 
-}
+	/**
+	 *	@param name {String}
+	 *	@param group {PANIC.Tileset.TileGroup}
+	 */
+	addTileGroup( name, group ) {
 
+		this.groups[ name ] = group;
 
-
-/**
- *	@param name {String}
- *	@param group {PANIC.Tileset.TileGroup}
- */
-PANIC.Tileset.prototype.addTileGroup = function( name, group ) {
-
-	this.groups[ name ] = group;
+	}
 
 }

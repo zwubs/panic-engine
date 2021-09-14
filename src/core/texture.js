@@ -3,7 +3,7 @@
  *	@extends {THREE.Texture}
  */
 
-PANIC.Texture = class extends THREE.Texture {
+class Texture extends THREE.Texture {
 
 	constructor( image ) {
 

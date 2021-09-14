@@ -5,18 +5,22 @@
  */
 
 
-PANIC.Clock = new function() {
+class Clock {
 
-    this.time = 0.0; // Current Time
-    this.past = 0.0; // Last Time
-    this.delta = 0.0; // Time Difference
+	consturctor() {
 
-    this.framecap = 60;
+		this.time = 0.0; // Current Time
+	    this.past = 0.0; // Last Time
+	    this.delta = 0.0; // Time Difference
+
+	    this.framecap = 60;
+
+	}
 
     /**
      *  @param time {Number} - time variable passed from requestAnimationFrame
      */
-    this.update = function( time ) {
+    update( time ) {
 
         this.past = this.time;
         this.time = time;
@@ -26,35 +30,34 @@ PANIC.Clock = new function() {
 
     }
 
-    this.tick = function() {
-
-        return Math.floor( this.time / ( 1000 / this.framecap ) );
-
-    }
-
     /**
      *  @param round {Boolean} - should the number be rounded
      */
-    this.seconds = function( round = false ) {
+    seconds( round = false ) {
 
         return ( round ? Math.floor( this.time / ( 1000 ) ) : this.time / ( 1000 ));
 
     }
 
-    this.minutes = function( round = false ) {
+    minutes( round = false ) {
 
         return ( round ? Math.floor( this.time / ( 1000 * 60 ) ) : this.time / ( 1000 * 60 ) );
 
     }
 
-    this.hours = function( round = false ) {
+    hours( round = false ) {
 
         return ( round ? Math.floor( this.time / ( 1000 * 60 * 60 ) ) : this.time / ( 1000 * 60 * 60 ) );
 
     }
 
+	/**
+	 *
+	 */
+	get seconds() { return this.seconds(); }
+	get minutes() { return this.minutes(); }
+	get hours() { return this.hours(); }
+
 }
 
-/**
- *  Getters & Setters
- */
+export { Clock };

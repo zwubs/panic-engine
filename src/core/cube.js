@@ -8,7 +8,7 @@ PANIC.Cube = class extends THREE.BoxBufferGeometry {
 	constructor( width, height, depth  ) {
 
 		super( width, height, depth );
-		
+
 		// Rotate Y+ (Up) Plane 180 degree
 		this.attributes.position.array.set([
 			0.5, 0.5, 0.5,
