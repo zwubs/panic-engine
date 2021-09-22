@@ -2,117 +2,97 @@
  *	@author zwubs
  */
 
-PANIC.Debug.Grid = new function() {
+import { Scene } from '../core/rendering/scene.js'
+import * as Debug from './debug.js'
+import * as Shaders from '../shaders/shaders.js'
 
-	this.id = "PANIC-Debug-Grid";
+import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh } from '../lib/three.mjs';
 
-	this.active = false;
+class Grid {
 
-	this.geometry = new THREE.PlaneBufferGeometry( 2, 2, 1, 1 );
+	constructor() {
 
-	this.uniforms = {
+		this.id = "PANIC-Debug-Grid";
 
-		uColor: { value: new THREE.Color( 0x888888 ) },
+		this.active = false;
 
-		uScale: { value: 16.0 },
-		uSubdivisions: { value: 16.0 },
+		this.geometry = new PlaneBufferGeometry( 2, 2, 1, 1 );
 
-		uDistance: { value: 100.0 },
+		this.uniforms = {
 
-	}
+			uColor: { value: new Color( 0x888888 ) },
 
-	this.material = new THREE.ShaderMaterial({
+			uScale: { value: 16.0 },
+			uSubdivisions: { value: 16.0 },
 
-		side: THREE.DoubleSide,
-
-		uniforms: this.uniforms,
-
-		vertexShader: PANIC.Shaders.DebugGrid.vertex,
-		fragmentShader: PANIC.Shaders.DebugGrid.fragment,
-
-		transparent: true,
-		depthWrite: false,
-
-		extensions: {
-        	derivatives: true
-        }
-
-	});
-
-	this.mesh = new THREE.Mesh( this.geometry, this.material );
-	this.mesh.frustumCulled = false;
-
-	this.mesh.name = this.id;
-
-}
-
-/**
- *	@param override {Boolean} - Optional Toggle Override
- */
-PANIC.Debug.Grid.toggle = function( override=null ) {
-
-	if( typeof override == "boolean" ) { this.active = !override; }
-
-	if( !this.active ) {
-
-		if( PANIC.Scene.getObjectByName( this.id ) == null ) {
-
-			PANIC.Scene.add( this.mesh );
+			uDistance: { value: 100.0 },
 
 		}
 
+		this.material = new ShaderMaterial({
+
+			side: DoubleSide,
+
+			uniforms: this.uniforms,
+
+			vertexShader: Shaders.DebugGrid.vertex,
+			fragmentShader: Shaders.DebugGrid.fragment,
+
+			transparent: true,
+			depthWrite: false,
+
+			extensions: { derivatives: true }
+
+		});
+
+		this.mesh = new Mesh( this.geometry, this.material );
+		this.mesh.frustumCulled = false;
+
+		this.mesh.name = this.id;
+
 	}
 
-	else {
+	toggle( override=null ) {
 
-		if( PANIC.Scene.getObjectByName( this.id ) ) {
+		if( typeof override == "boolean" ) { this.active = !override; }
 
-			PANIC.Scene.remove( this.mesh );
+		if( !this.active ) {
+
+			if( Scene.getObjectByName( this.id ) == null ) {
+
+				Scene.add( this.mesh );
+
+			}
 
 		}
 
+		else {
+
+			if( Scene.getObjectByName( this.id ) ) {
+
+				Scene.remove( this.mesh );
+
+			}
+
+		}
+
+		this.active = !this.active
+
 	}
 
-	this.active = !this.active
+	get scale() { return this.uniforms.uScale.value; }
+	set scale( value ) { this.uniforms.uScale.value = value;}
+
+	get subdivisions() { return this.uniforms.uSubdivisions.value; }
+	set subdivisions( value ) { this.uniforms.uSubdivisions.value = value;}
+
+	get distance() { return this.uniforms.uDistance.value; }
+	set distance( value ) { this.uniforms.uDistance.value = value;}
+
+	get color() { return this.uniforms.uColor.value; }
+	set color( value ) { this.uniforms.uColor.value = new Color( value );}
 
 }
 
-/**
- *	Getters & Setters
- */
-
-// Grid Scale
-Object.defineProperty( PANIC.Debug.Grid, "scale", {
-
-  get: function() { return this.uniforms.uScale.value; },
-
-  set: function( value ) { this.uniforms.uScale.value = value; }
-
-});
-
-// Grid Subdivisions
-Object.defineProperty( PANIC.Debug.Grid, "subdivisions", {
-
-  get: function() { return this.uniforms.uSubdivisions.value; },
-
-  set: function( value ) { this.uniforms.uSubdivisions.value = value; }
-
-});
-
-// Grid Color
-Object.defineProperty( PANIC.Debug.Grid, "color", {
-
-  get: function() { return this.uniforms.uColor.value; },
-
-  set: function( value ) { this.uniforms.uColor.value = new THREE.Color( value ); }
-
-});
-
-// View Distance
-Object.defineProperty( PANIC.Debug.Grid, "distance", {
-
-  get: function() { return this.uniforms.uDistance.value; },
-
-  set: function( value ) { this.uniforms.uDistance.value = value; }
-
-});
+const instance = new Grid();
+export { instance as Grid };

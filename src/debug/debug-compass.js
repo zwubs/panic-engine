@@ -1,53 +1,63 @@
 /**
- *
+ *	@author zwubss
  */
 
-PANIC.Debug.Compass = new function() {
+import { Updater } from '../core/updater.js';
+import { Camera } from '../core/rendering/camera.js';
+import { DebugElement } from './debug-element.js';
 
-	this.id = "PANIC-Debug-Compass";
+import { Spherical, Vector3 } from '../lib/three.mjs';
 
-    this.element = document.createElement("div");
-	this.element.id = this.id;
+let spherical = new Spherical();
 
-	this.active = false;
+class Compass {
 
-	/**
-	 *	0 = Cardinal & Ordinal Directions
-	 *	1 = Cartesian Directions
-	 *	2 = Cartesian Coordinates
-	 */
-	this.state = 0;
+	constructor() {
 
-	this.toggle = function( override=null ) {
+		this.id = "PANIC-Debug-Compass";
+
+	    this.element = document.createElement("div");
+		this.element.id = this.id;
+
+		this.active = false;
+
+		/**
+		 *	0 = Cardinal & Ordinal Directions
+		 *	1 = Cartesian Directions
+		 *	2 = Cartesian Coordinates
+		 */
+		this.state = 0;
+
+	}
+
+	toggle( override=null ) {
 
 		if( typeof override == "boolean" ) { this.active = !override; }
 		else { this.active = !this.active; }
 
 		if( this.active ) {
 
-			PANIC.Debug.Element.appendChild( this.element );
+			DebugElement.appendChild( this.element );
 
-			PANIC.Updater.add( this.id, this, 'update', 15 );
+			Updater.add( this.id, this, 'update', 15 );
 
 		}
 
 		else {
 
-			PANIC.Debug.Element.removeChild( this.element );
+			DebugElement.removeChild( this.element );
 
-			PANIC.Updater.remove( this.id );
+			Updater.remove( this.id );
 
 		}
 
 	}
 
-	let spherical = new THREE.Spherical();
-
-	this.update = function() {
+	update() {
 
 		var string = "";
-		var direction = new THREE.Vector3( 0, 0, 0 );
-		PANIC.Camera.getWorldDirection( direction );
+		var direction = new Vector3( 0, 0, 0 );
+		Camera.getWorldDirection( direction );
 
 		if( this.state == 0 ) {
 
@@ -100,3 +110,6 @@ PANIC.Debug.Compass = new function() {
 	}
 
 }
+
+let instance = new Compass();
+export { instance as Compass };
