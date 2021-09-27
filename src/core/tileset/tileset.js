@@ -3,9 +3,13 @@
  *	@typedef {Object} PANIC.Tileset
  */
 
-class Tileset() {
+class Tileset {
 
-	this.groups = {};
+	constructor() {
+
+		this.groups = {};
+
+	}
 
 	/**
 	 *	@param name {String}
@@ -18,3 +22,5 @@ class Tileset() {
 	}
 
 }
+
+export { Tileset };

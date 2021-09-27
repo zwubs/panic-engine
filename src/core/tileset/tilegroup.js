@@ -1,6 +1,9 @@
 /**
  *	@typedef {Object} TileGroup
  */
+
+import { Tile } from './tile.js'
+
 class TileGroup {
 
 	/**
@@ -13,12 +16,12 @@ class TileGroup {
 	 */
 	constructor( north, south, east, west, up, down ) {
 
-		this.north = north || new PANIC.Tileset.Tile( "north" );
-		this.south = south || new PANIC.Tileset.Tile( "south" );
-		this.east = east || new PANIC.Tileset.Tile( "east" );
-		this.west = west || new PANIC.Tileset.Tile( "west" );
-		this.up = up || new PANIC.Tileset.Tile( "up" );
-		this.down = down || new PANIC.Tileset.Tile( "down" );
+		this.north = north || new Tile( "north" );
+		this.south = south || new Tile( "south" );
+		this.east = east || new Tile( "east" );
+		this.west = west || new Tile( "west" );
+		this.up = up || new Tile( "up" );
+		this.down = down || new Tile( "down" );
 
 	}
 
@@ -56,3 +59,5 @@ class TileGroup {
 	}
 
 }
+
+export { TileGroup };
