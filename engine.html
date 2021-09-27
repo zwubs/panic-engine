@@ -15,6 +15,8 @@
 
                 margin: 0;
 
+				overflow: hidden;
+
             }
 
 			#PANIC {
@@ -38,65 +40,19 @@
     <body>
 
         <!-- THREEjs Scripts -->
-        <script src="./src/lib/three131.js"></script>
-		<script src="./src/lib/OrbitControls.js"></script>
-		<script src="./src/lib/BufferGeometryUtils.js"></script>
+        <!-- <script src="./src/lib/three131.js"></script> -->
+		<!-- <script src="./src/lib/OrbitControls.js"></script> -->
+		<!-- <script src="./src/lib/MergeBufferGeometries.js"></script> -->
 
-        <!-- Base PANIC Library -->
-		<script src="./src/panic.js"></script>
+        <script type="module">
 
-        <!-- Core -->
-        <script src="./src/core/loops.js"></script>
-        <script src="./src/core/clock.js"></script>
-        <script src="./src/core/updater.js"></script>
-
-		<script src="./src/core/cube.js"></script>
-
-		<script src="./src/core/texture.js"></script>
-		<script src="./src/core/tileset/tileset.js"></script>
-		<script src="./src/core/tileset/tile.js"></script>
-		<script src="./src/core/tileset/tilegroup.js"></script>
-
-		<!-- Shaders -->
-		<script src="./src/shaders/shaders.js"></script>
-		<script src="./src/shaders/shader-entity.js"></script>
-		<script src="./src/shaders/shader-debug-grid.js"></script>
-		<script src="./src/shaders/shader-debug-axes.js"></script>
-
-        <!-- Loaders -->
-		<script src="./src/loaders/loaders.js"></script>
-		<script src="./src/loaders/loader-file.js"></script>
-		<script src="./src/loaders/loader-image.js"></script>
-		<script src="./src/loaders/loader-texture.js"></script>
-		<script src="./src/loaders/loader-entity.js"></script>
-
-        <!-- Parsers -->
-		<script src="./src/parsers/parsers.js"></script>
-		<script src="./src/parsers/parser-json.js"></script>
-		<script src="./src/parsers/parser-tileset.js"></script>
-		<script src="./src/parsers/parser-entity-model.js"></script>
-		<script src="./src/parsers/parser-cube-uv.js"></script>
-
-		<!-- Entity -->
-		<script src="./src/entities/entity-registry.js"></script>
-		<script src="./src/entities/entity-template.js"></script>
-		<script src="./src/entities/entity.js"></script>
-
-		<!-- Tools -->
-		<script src="./src/tools/tools.js"></script>
-
-        <!-- Debugging -->
-		<script src="./src/debug/debug.js"></script>
-		<script src="./src/debug/debug-grid.js"></script>
-		<script src="./src/debug/debug-axes.js"></script>
-		<script src="./src/debug/debug-compass.js"></script>
-
-
-        <script>
+			import * as PANIC from "./src/panic.js";
 
 			async function run() {
 
 				PANIC.Debug.enable();
+
+				PANIC.Debug.Access.enable();
 
 				try {
 
@@ -118,7 +74,17 @@
 
 					PANIC.Debug.Compass.toggle();
 
-					PANIC.Loop( 0 );
+					let Loop = function( time=0 ) {
+
+					    PANIC.Updater.update();
+
+					    PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
+
+					    requestAnimationFrame( Loop );
+
+					}
+
+					requestAnimationFrame( Loop );
 
 				}
 
