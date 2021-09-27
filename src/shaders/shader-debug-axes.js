@@ -2,7 +2,7 @@
  *	@namespace PANIC.Shaders.DebugAxes
  *	@author zwubs
  */
-PANIC.Shaders.DebugAxes = {
+export let DebugAxes = {
 
 	uniforms: {
 

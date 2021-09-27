@@ -3,9 +3,8 @@
  *	@namespace PANIC.Shaders
  */
 
-PANIC.Shaders = {};
+export { DebugAxes } from './shader-debug-axes.js';
 
-PANIC.Shaders.Entity = {};
+export { DebugGrid } from './shader-debug-grid.js';
 
-PANIC.Shaders.DebugGrid = {};
-PANIC.Shaders.DebugAxes = {};
+export { Entity } from './shader-entity.js';

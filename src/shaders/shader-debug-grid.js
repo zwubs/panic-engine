@@ -4,11 +4,14 @@
  *	Based heavily off of https://github.com/Fyrestar/THREE.InfiniteGridHelper
  *	@todo Use fog variables instead of distance
  */
-PANIC.Shaders.DebugGrid = {
+
+import { Color } from '../lib/three.mjs'
+
+export let DebugGrid = {
 
 	uniforms: {
 
-		uColor: { value: new THREE.Color( 0x000000 ) },
+		uColor: { value: new Color( 0x000000 ) },
 
 		uScale: { value: 1.0 },
 		uSubdivisions: { value: 1.0 },

@@ -2,9 +2,12 @@
  *	@namespace PANIC.Shaders.Entity
  *	@author zwubs
  */
-PANIC.Shaders.Entity = {
 
-	uniforms: THREE.ShaderLib.lambert.uniforms,
+import { ShaderLib } from '../lib/three.mjs';
+
+export let Entity = {
+
+	uniforms: ShaderLib.lambert.uniforms,
 
 	vertex: `
 
