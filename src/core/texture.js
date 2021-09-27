@@ -3,7 +3,9 @@
  *	@extends {THREE.Texture}
  */
 
-class Texture extends THREE.Texture {
+import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding } from '../lib/three.mjs';
+
+class Texture extends TEXTURE {
 
 	constructor( image ) {
 
@@ -13,12 +15,12 @@ class Texture extends THREE.Texture {
 
 		this.generateMipmaps = false;
 
-		this.magFilter = THREE.NearestFilter;
-		this.minFilter = THREE.LinearFilter;
+		this.magFilter = NearestFilter;
+		this.minFilter = LinearFilter;
 
 		this.premultiplyAlpha = true;
 
-		this.encoding = THREE.sRGBEncoding;
+		this.encoding = sRGBEncoding;
 
 		this.needsUpdate = true;
 
@@ -36,3 +38,5 @@ class Texture extends THREE.Texture {
 	get h() { return this.image.height; }
 
 }
+
+export { Texture };

@@ -3,7 +3,9 @@
  *	@extends {THREE.BoxBufferGeometry}
  */
 
-PANIC.Cube = class extends THREE.BoxBufferGeometry {
+import { BoxBufferGeometry } from '../lib/three.mjs';
+
+class Cube extends BoxBufferGeometry {
 
 	constructor( width, height, depth  ) {
 
@@ -30,3 +32,5 @@ PANIC.Cube = class extends THREE.BoxBufferGeometry {
 
 	}
 }
+
+export { Cube };

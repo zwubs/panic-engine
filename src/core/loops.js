@@ -1,9 +1,10 @@
 /**
- *	@function PANIC.Loop
+ *	@function Loop
  *  @author zwubs
  *  @description Where all game logic and rendering takes place
+ *	@deprecated
  */
-PANIC.Loop = function( time=0 ) {
+let Loop = function( time=0 ) {
 
     // Updating
 
