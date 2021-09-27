@@ -3,13 +3,11 @@
  *	@namespace PANIC.Parsers
  */
 
-PANIC.Parsers = {};
+export { JSONParser as JSON } from './parser-json.js';
 
-PANIC.Parsers.JSON = null;
+export { TilesetParser as Tileset } from './parser-tileset.js';
 
-PANIC.Parsers.Tileset = null;
+export { CubeUVParser as CubeUV } from './parser-cube-uv.js';
 
-PANIC.Parsers.CubeUV = null;
-
-PANIC.Parsers.EntityModel = null;
-PANIC.Parsers.EntityArmature = null;
+export { EntityModelParser as EntityModel } from './parser-entity-model.js';
+export { EntityArmatureParser as EntityArmature } from './parser-entity-armature.js';

@@ -1,7 +1,8 @@
 /**
- *
+ *	@author zwubs
  */
-PANIC.Parsers.CubeUV = new function() {
+
+export let CubeUVParser = new function() {
 
 	this.parse = function( tileGroupName, box, texture, tileset ) {
 

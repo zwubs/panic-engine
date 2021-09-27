@@ -1,11 +1,11 @@
 /**
- *
+ *	@author zwubs
  */
-PANIC.Parsers.JSON = new function() {
+export let JSONParser = new function() {
 
 	this.parse = function( string ) {
 
-		return JSON.parse( string );
+		return window.JSON.parse( string );
 
 	}
 

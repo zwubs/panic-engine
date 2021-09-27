@@ -1,6 +1,6 @@
 /**
  *
  */
-PANIC.Parsers.EntityArmature = new function() {
+export let EntityArmatureParser = new function() {
 
 }

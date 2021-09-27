@@ -1,14 +1,20 @@
 /**
- *
+ *	@author zwubs
  */
-PANIC.Parsers.Tileset = new function() {
+
+import { Tileset } from '../core/tileset/tileset.js';
+import { TileGroup } from '../core/tileset/tilegroup.js';
+
+import * as Debug from '../debug/debug.js'
+
+export let TilesetParser = new function() {
 
 	/**
 	 *	@param json {Object}
 	 */
 	this.parse = function( json, id="Undefined" ) {
 
-		let tileset = new PANIC.Tileset();
+		let tileset = new Tileset();
 
 		let groups = Object.entries( json );
 
@@ -18,7 +24,7 @@ PANIC.Parsers.Tileset = new function() {
 
 			if( this.isGroup( group ) ) {
 
-				PANIC.Debug.log( `'${name}' is a group` );
+				Debug.log( `'${name}' is a group` );
 
 				let tileGroup = this.parseGroup( group, tileset );
 
@@ -28,7 +34,7 @@ PANIC.Parsers.Tileset = new function() {
 
 			else {
 
-				PANIC.Debug.log( `'${name}' is unknown` );
+				Debug.log( `'${name}' is unknown` );
 
 			}
 
@@ -47,7 +53,7 @@ PANIC.Parsers.Tileset = new function() {
 
 		let acceptables = [ "t", "transform", "x", "y", "w", "width", "h", "height" ];
 
-		for( attribute in json ) {
+		for( let attribute in json ) {
 			if( attribute == "t" || attribute == "transform" )
 			if( typeof json[ attribute ] == "number" ) return true;
 		}
@@ -87,7 +93,7 @@ PANIC.Parsers.Tileset = new function() {
 	 */
 	this.parseGroup = function( group, tileset ) {
 
-		let tileGroup = new PANIC.Tileset.TileGroup();
+		let tileGroup = new TileGroup();
 		let directions = [ "north", "south", "east", "west", "up", "down" ]
 
 		if( group.clone ) tileGroup.clone( tileset.groups[ group.clone ] );
