@@ -3,39 +3,50 @@
  *	@param {PANIC.EntityTemplate} template
  */
 
-PANIC.Entity = function( template ) {
+import { Scene } from '../core/rendering/scene.js';
+import { Tools } from '../tools/tools.js'
 
-	// Unique Entity Identifier
-	this.uuid = PANIC.Tools.generateUUID();
+import { Vector3, Skeleton, Mesh, MeshDepthMaterial, RGBADepthPacking } from '../lib/three.mjs';
 
-	// Assign template for future access
-	this.template = template;
+class Entity {
 
-	// Transformation Variables
-	this.position = new THREE.Vector3( 0, 0, 0 );
-	this.rotation = new THREE.Vector3( 0, 0, 0 );
-	this.scale = new THREE.Vector3( 0, 0, 0 );
+	constructor( template ) {
 
-	// Skeleton
-	this.skeleton = new THREE.Skeleton();
+		// Unique Entity Identifier
+		this.uuid = Tools.generateUUID();
 
-	// Mesh definition
-	this.mesh = new THREE.Mesh( this.template.geometry, this.template.material );
+		// Assign template for future access
+		this.template = template;
 
-	this.mesh.castShadow = true;
-	this.mesh.receiveShadow = true;
+		// Transformation Variables
+		this.position = new Vector3( 0, 0, 0 );
+		this.rotation = new Vector3( 0, 0, 0 );
+		this.scale = new Vector3( 0, 0, 0 );
 
-	this.mesh.frustumCulled = false;
+		// Skeleton
+		this.skeleton = new Skeleton();
 
-	this.mesh.customDepthMaterial = new THREE.MeshDepthMaterial( {
-		depthPacking: THREE.RGBADepthPacking,
-		map: this.template.texture,
-		alphaTest: 0.5
-	} );
+		// Mesh definition
+		this.mesh = new Mesh( this.template.geometry, this.template.material );
 
-	// Bind skeleton to mesh
-	// this.mesh.bind( this.skeleton );
+		this.mesh.castShadow = true;
+		this.mesh.receiveShadow = true;
 
-	PANIC.Scene.add( this.mesh );
+		this.mesh.frustumCulled = false;
+
+		this.mesh.customDepthMaterial = new MeshDepthMaterial( {
+			depthPacking: RGBADepthPacking,
+			map: this.template.texture,
+			alphaTest: 0.5
+		} );
+
+		// Bind skeleton to mesh
+		// this.mesh.bind( this.skeleton );
+
+		Scene.add( this.mesh );
+
+	}
 
 }
+
+export { Entity };

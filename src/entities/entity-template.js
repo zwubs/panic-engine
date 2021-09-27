@@ -3,68 +3,80 @@
  * 	@typedef {Object} EntityTemplate
  */
 
-PANIC.EntityTemplate = function() {
+import { Entity } from './entity.js';
 
-	this.id = "unknown";
-	this.name = "Unknown";
+import { Entity as EntityShader } from '../shaders/shader-entity.js';
 
-	this.texture = null;
+import { UniformsUtils, ShaderMaterial, Uniform, DoubleSide } from '../lib/three.mjs';
 
-	this.tileset = null;
+class EntityTemplate {
 
-	this.bones = [];
-	this.geometry = null;
+	constructor() {
 
-	this.shader = PANIC.Shaders.Entity;
+		this.id = "unknown";
+		this.name = "Unknown";
 
-	this.uniforms = null;
-	this.material = null;
+		this.texture = null;
+
+		this.tileset = null;
+
+		this.bones = [];
+		this.geometry = null;
+
+		this.shader = EntityShader;
+
+		this.uniforms = null;
+		this.material = null;
+
+	}
+
+	/**
+	 *	@description Once having a texture, tileset, & geometry
+	 *	this'll do all the other fancy work needed to finish
+	 */
+	setup() {
+
+		// Create Uniforms
+		this.uniforms = UniformsUtils.clone( this.shader.uniforms );
+
+		// Create Material
+		this.material = new ShaderMaterial({
+
+			defines: {
+				"USE_MAP": "",
+				"DOUBLE_SIDED": ""
+			},
+
+			uniforms: this.uniforms,
+
+			vertexShader: this.shader.vertex,
+
+			fragmentShader: this.shader.fragment,
+
+			lights: true,
+			fog: true,
+
+			transparent: true,
+			alphaTest: 0.5,
+
+		});
+
+		// Assign Texture
+		this.uniforms[ "map" ] = new Uniform( this.texture );
+		this.material.map = this.texture;
+
+		// Shading
+		this.material.side = DoubleSide;
+		this.material.shadowSide = DoubleSide;
+
+	}
+
+	spawnEntity() {
+
+		return new Entity( this );
+
+	}
 
 }
 
-/**
- *	@description Once having a texture, tileset, & geometry
- *	this'll do all the other fancy work needed to finish
- */
-PANIC.EntityTemplate.prototype.setup = function() {
-
-	// Create Uniforms
-	this.uniforms = THREE.UniformsUtils.clone( this.shader.uniforms );
-
-	// Create Material
-	this.material = new THREE.ShaderMaterial({
-
-		defines: {
-			"USE_MAP": "",
-			"DOUBLE_SIDED": ""
-		},
-
-		uniforms: this.uniforms,
-
-		vertexShader: this.shader.vertex,
-
-		fragmentShader: this.shader.fragment,
-
-		lights: true,
-		fog: true,
-
-		transparent: true,
-		alphaTest: 0.5,
-
-	});
-
-	// Assign Texture
-	this.uniforms[ "map" ] = new THREE.Uniform( this.texture );
-	this.material.map = this.texture;
-
-	// Shading
-	this.material.side = THREE.DoubleSide;
-	this.material.shadowSide = THREE.DoubleSide;
-
-}
-
-PANIC.EntityTemplate.prototype.spawnEntity = function () {
-
-	return new PANIC.Entity( this );
-
-};
+export { EntityTemplate };
