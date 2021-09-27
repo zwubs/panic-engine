@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-PANIC.Loaders.Image = new function() {
+export let ImageLoader = new function() {
 
 	this.load = async function( url ) {
 

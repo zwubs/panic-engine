@@ -2,36 +2,43 @@
  *	@author zwubs
  */
 
-PANIC.Loaders.Entity = new function() {
+import * as Loaders from './loaders.js';
 
-	this.load = async function( url ) {
+import * as Parsers from '../parsers/parsers.js';
+
+import { EntityTemplate } from '../entities/entity-template.js';
+import { EntityRegistry } from '../entities/entity-registry.js';
+
+export let EntityLoader = new function() {
+
+ 	this.load = async function( url ) {
 
 		let baseURL = url.substring(0, url.lastIndexOf("/") + 1 );
 
-		let file = await PANIC.Loaders.File.load( url );
+		let file = await Loaders.File.load( url );
 
-		let json = await PANIC.Parsers.JSON.parse( file );
+		let json = await Parsers.JSON.parse( file );
 
-		let template = new PANIC.EntityTemplate();
+		let template = new EntityTemplate();
 
 		// Grab ID & Name
 		template.id = json.id;
 		template.name = json.name;
 
 		// Load Image & Create Texture
-		template.texture = await PANIC.Loaders.Texture.load( baseURL + json.texture );
+		template.texture = await Loaders.Texture.load( baseURL + json.texture );
 
 		// Create Tileset
-		template.tileset = await PANIC.Parsers.Tileset.parse( json.tileset, json.id );
+		template.tileset = await Parsers.Tileset.parse( json.tileset, json.id );
 
 		// Parse Geometry Data
-		template.geometry = await PANIC.Parsers.EntityModel.parse( json.armature, template );
+		template.geometry = await Parsers.EntityModel.parse( json.armature, template );
 
 		// Everything is loaded, finish template setup
 		template.setup();
 
 		// Register Entity Template
-		PANIC.EntityRegistry.registerEntity( template );
+		EntityRegistry.registerEntity( template );
 
 	}
 

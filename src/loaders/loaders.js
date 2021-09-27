@@ -3,12 +3,10 @@
  *	@namespace PANIC.Loaders
  */
 
-PANIC.Loaders = {};
+export { FileLoader as File } from './loader-file.js';
 
-PANIC.Loaders.File = null;
+export { ImageLoader as Image } from './loader-image.js';
 
-PANIC.Loaders.Image = null;
+export { TextureLoader as Texture  } from './loader-texture.js';
 
-PANIC.Loaders.Texture = null;
-
-PANIC.Loaders.Entity = null;
+export { EntityLoader as Entity } from './loader-entity.js';

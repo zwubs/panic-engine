@@ -2,9 +2,11 @@
  *	@author zwubs
  */
 
-PANIC.Loaders.File = new function() {
+import { FileLoader as FILELOADER} from '../lib/three.mjs'
 
-	this.loader = new THREE.FileLoader();
+export let FileLoader = new function() {
+
+	this.loader = new FILELOADER();
 
 	this.load = async function( url ) {
 
