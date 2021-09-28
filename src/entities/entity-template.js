@@ -7,7 +7,7 @@ import { Entity } from './entity.js';
 
 import { Entity as EntityShader } from '../shaders/shader-entity.js';
 
-import { UniformsUtils, ShaderMaterial, Uniform, DoubleSide } from '../lib/three.mjs';
+import { UniformsUtils, ShaderMaterial, Uniform, DoubleSide } from '../lib/three132.js';
 
 class EntityTemplate {
 

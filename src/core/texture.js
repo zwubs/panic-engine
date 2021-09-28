@@ -3,7 +3,7 @@
  *	@extends {THREE.Texture}
  */
 
-import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding } from '../lib/three.mjs';
+import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding } from '../lib/three132.js';
 
 class Texture extends TEXTURE {
 

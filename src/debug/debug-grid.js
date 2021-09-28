@@ -6,7 +6,7 @@ import { Scene } from '../core/rendering/scene.js'
 import * as Debug from './debug.js'
 import * as Shaders from '../shaders/shaders.js'
 
-import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh } from '../lib/three.mjs';
+import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh } from '../lib/three132.js';
 
 class Grid {
 

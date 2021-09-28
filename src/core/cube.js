@@ -3,7 +3,7 @@
  *	@extends {THREE.BoxBufferGeometry}
  */
 
-import { BoxBufferGeometry } from '../lib/three.mjs';
+import { BoxBufferGeometry } from '../lib/three132.js';
 
 class Cube extends BoxBufferGeometry {
 

@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-import { FileLoader as FILELOADER} from '../lib/three.mjs'
+import { FileLoader as FILELOADER} from '../lib/three132.js'
 
 export let FileLoader = new function() {
 

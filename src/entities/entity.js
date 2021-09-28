@@ -6,7 +6,7 @@
 import { Scene } from '../core/rendering/scene.js';
 import { Tools } from '../tools/tools.js'
 
-import { Vector3, Skeleton, Mesh, MeshDepthMaterial, RGBADepthPacking } from '../lib/three.mjs';
+import { Vector3, Skeleton, Mesh, MeshDepthMaterial, RGBADepthPacking } from '../lib/three132.js';
 
 class Entity {
 
