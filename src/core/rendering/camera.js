@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-import { PerspectiveCamera } from '../../lib/three.mjs';
+import { PerspectiveCamera } from '../../lib/three132.js';
 
 class Camera extends PerspectiveCamera {
 
@@ -11,6 +11,9 @@ class Camera extends PerspectiveCamera {
 		super( 45, 1920/1080, 0.1, 1000 );
 
 		this.position.set( 0, 1, -4 );
+
+		this.aspect = window.innerWidth / window.innerHeight;
+	    this.updateProjectionMatrix();
 
 	}
 
