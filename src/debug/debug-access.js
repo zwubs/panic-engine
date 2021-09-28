@@ -7,6 +7,8 @@ import * as PANIC from '../panic.js'
 
 import * as Status from './debug-status.js'
 
+import { THREEAccess } from './debug-access-three.js'
+
 class Access {
 
 	constuctor() {}
@@ -23,7 +25,7 @@ class Access {
 
 			}
 
-			else { PANIC.Debug.error( `[PANIC] Namespace 'PANIC' is already global`); }
+			else { PANIC.Debug.warn( `[PANIC] Namespace 'PANIC' is already global`); }
 
 		}
 
@@ -41,7 +43,7 @@ class Access {
 
 			}
 
-			else { PANIC.Debug.error( `[PANIC] Namespace 'PANIC' is already private`); }
+			else { PANIC.Debug.warn( `[PANIC] Namespace 'PANIC' is already private`); }
 
 		}
 
@@ -53,6 +55,8 @@ class Access {
 		else { this.disable(); }
 
 	}
+
+	get THREE() { return THREEAccess; }
 
 }
 
