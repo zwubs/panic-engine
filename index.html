@@ -59,14 +59,14 @@
 
 				try {
 
-					await PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
-					await PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
+					// Add 'await' if seeking complete loading prior to rendering
 
-					await PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" );
+					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
+					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
 
-					await PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
+					PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
 
-					console.log( PANIC.EntityRegistry.spawnEntity( "player" ) );
+					PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
 
 					PANIC.Debug.Grid.toggle();
 					PANIC.Debug.Grid.scale = 16;

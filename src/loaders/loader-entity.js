@@ -40,6 +40,8 @@ export let EntityLoader = new function() {
 		// Register Entity Template
 		EntityRegistry.registerEntity( template );
 
+		return template;
+
 	}
 
 }
