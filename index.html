@@ -9,6 +9,8 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+		<link rel="icon" type="image/png" href="./img/favicon.png"/>
+
         <style>
 
             body {
@@ -42,11 +44,6 @@
 
     <body>
 
-        <!-- THREEjs Scripts -->
-        <!-- <script src="./src/lib/three131.js"></script> -->
-		<!-- <script src="./src/lib/OrbitControls.js"></script> -->
-		<!-- <script src="./src/lib/MergeBufferGeometries.js"></script> -->
-
         <script type="module">
 
 			import * as PANIC from "./src/panic.js";
@@ -64,9 +61,11 @@
 					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
 					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
 
-					PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
+					PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" );
 
 					PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
+
+					PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
 
 					PANIC.Debug.Grid.toggle();
 					PANIC.Debug.Grid.scale = 16;
