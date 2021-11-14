@@ -57,9 +57,12 @@ class EntityTemplate {
 			fog: true,
 
 			transparent: true,
-			alphaTest: 0.5,
 
 		});
+
+		//
+		this.uniforms[ "alphaTest" ] = new Uniform( 0.5 );
+		this.material.alphaTest = true;
 
 		// Assign Texture
 		this.uniforms[ "map" ] = new Uniform( this.texture );
