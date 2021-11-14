@@ -11,6 +11,8 @@ class EntityRegistry {
 
 		this.data = [];
 
+		this.entities = {};
+
 	}
 
 	getEntityByName( name ) { return this.data.find( o => o.name == name ); }
@@ -41,7 +43,13 @@ class EntityRegistry {
 	 */
 	spawnEntity( id ) {
 
-		if( this.getEntityByID( id ) != undefined ) return this.getEntityByID( id ).spawnEntity();
+		if( this.getEntityByID( id ) != undefined ) {
+			
+			let entity = this.getEntityByID( id ).spawnEntity();
+
+			return this.entities[ entity.uuid ] = entity;
+
+		}
 
 	}
 
