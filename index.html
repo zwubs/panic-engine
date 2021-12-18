@@ -11,30 +11,124 @@
 
 		<link rel="icon" type="image/png" href="./img/favicon.png"/>
 
+		<link rel="stylesheet" href="./lib/highlight/styles/atom-one-dark.min.css">
+
         <style>
 
             body {
 
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
 
                 margin: 0;
 
 				overflow: hidden;
 
+				display: flex;
+
             }
 
+			* { scrollbar-color: rgba(255,255,255, 0.1) rgba(40, 44, 52, 0.5); }
+
 			#PANIC {
+
+				position: relative;
+
+				flex: 2;
+
+			}
+
+			#PANIC-Rendering, #PANIC-Debug  {
+
+				position: absolute;
 
 				width: 100%;
 				height: 100%;
 
 			}
 
-			#PANIC-Rendering {
+			#PANIC-Debug { pointer-events: none; }
+			#PANIC-Debug > * { pointer-events: auto; }
+
+			#PANIC-Debug #PANIC-Debug-Compass {
+
+				position: absolute;
+
+				right: 0;
+
+				margin: 10px;
+
+				font-size: 18px;
+				color: #FFF;
+
+				padding: 5px 10px;
+				background-color: rgba(40, 44, 52, 0.25);
+
+			}
+
+			#JSON-Editor {
+
+				position: absolute;
+
+				width: 33%;
+				min-width: 400px;
+
+				height: 100%;
+
+			}
+
+			#JSON-Editor.hide { width: 0%; min-width: initial; }
+
+			#JSON-Code {
 
 				width: 100%;
 				height: 100%;
+
+			}
+
+			#JSON-UI {
+
+				position: absolute;
+
+				left: 100%;
+				top: 0;
+
+				z-index: 1;
+
+			}
+
+			.JSON-Button {
+
+				position: relative;
+
+				width: 50px;
+				height: 50px;
+
+				background-color: #282c34;
+
+				border-radius: 100%;
+
+				margin: 5px;
+
+				cursor: pointer;
+
+			}
+
+			.JSON-Button:hover { background-color: #2f343e; }
+
+			.JSON-Button img {
+
+				position: absolute;
+
+				width: 75%;
+				height: 75%;
+
+				left: 50%;
+				top: 50%;
+
+				transform: translate( -50%, -50% );
+
+				filter: invert(80%);
 
 			}
 
@@ -44,28 +138,132 @@
 
     <body>
 
+		<div id="PANIC">
+
+			<div id="PANIC-Rendering">
+
+				<canvas id="PANIC-Canvas"></canvas>
+
+			</div>
+
+			<div id="PANIC-Debug">
+
+				<div id="PANIC-Debug-Compass"></div>
+
+			</div>
+
+		</div>
+
+		<div id="JSON-Editor">
+
+			<div id="JSON-Header"></div>
+
+			<div id="JSON-Code"></div>
+
+			<div id="JSON-UI">
+
+				<div id="JSON-Toggle" class="JSON-Button" onclick="toggleJSON()">
+
+					<img src="./img/code-json.svg" />
+
+				</div>
+
+				<div id="JSON-Run" class="JSON-Button">
+
+					<img src="./img/play-circle-outline.svg" />
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<script>
+
+			function toggleJSON() {
+
+				document.getElementById("JSON-Editor").classList.toggle("hide")
+
+			}
+
+		</script>
+
+		<script src="./lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+
         <script type="module">
 
 			import * as PANIC from "./src/panic.js";
+			import $ from './src/lib/jquery.module.js';
+
+			let Editor = ace.edit("JSON-Code");
 
 			async function run() {
+
+				new ResizeObserver( function() {
+
+					PANIC.Camera.aspect = PANIC.Element.clientWidth / PANIC.Element.clientHeight;
+				    PANIC.Camera.updateProjectionMatrix();
+
+					PANIC.Renderer.setPixelRatio( window.devicePixelRatio );
+				    PANIC.Renderer.setSize( PANIC.Element.clientWidth, PANIC.Element.clientHeight );
+
+					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
+
+				}).observe( PANIC.Element );
 
 				PANIC.Debug.enable();
 
 				PANIC.Debug.Access.enable();
 
+				PANIC.Debug.Access.THREE.enable();
+
 				try {
 
-					// Add 'await' if seeking complete loading prior to rendering
+					// Add 'await' to completely load all assets prior to rendering
 
-					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
-					PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
+					// PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
+					// PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
 
-					PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" );
+					PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
 
-					PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
+					// PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
 
-					PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
+					// PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" );
+
+					let JSON = await PANIC.Loaders.File.load( "./presets/entities/player/player.json" );
+
+					Editor.setValue( JSON );
+					Editor.setTheme("ace/theme/one_dark");
+					Editor.session.setMode("ace/mode/json");
+					Editor.setOptions({ showPrintMargin: false });
+
+					let currentID = "player";
+
+					document.getElementById("JSON-Run").onclick = function() {
+
+						if( PANIC.EntityRegistry.getEntityByID( currentID ) != undefined ) {
+
+							PANIC.EntityRegistry.unregisterEntity( currentID );
+
+							PANIC.Scene.remove( PANIC.EntityRegistry.entities[ 0 ] );
+
+							delete PANIC.EntityRegistry.entities[ 0 ];
+
+						}
+
+						PANIC.Loaders.Entity.loadFromText( Editor.getValue() ).then(
+
+							( template) => {
+
+								currentID = template.id;
+
+								PANIC.EntityRegistry.spawnEntity( template.id );
+
+							}
+
+						);
+
+					}
 
 					PANIC.Debug.Grid.toggle();
 					PANIC.Debug.Grid.scale = 16;
