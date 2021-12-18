@@ -3,7 +3,7 @@
  *	@extends {THREE.Texture}
  */
 
-import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding } from '../lib/three132.js';
+import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding, RepeatWrapping } from '../lib/three132.js';
 
 class Texture extends TEXTURE {
 
@@ -18,6 +18,10 @@ class Texture extends TEXTURE {
 		this.magFilter = NearestFilter;
 		this.minFilter = LinearFilter;
 
+		this.wrapS = RepeatWrapping;
+    	this.wrapT = RepeatWrapping;
+
+		// TODO: Check if necessary
 		this.premultiplyAlpha = true;
 
 		this.encoding = sRGBEncoding;
