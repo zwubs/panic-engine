@@ -10,7 +10,7 @@ export let TextureLoader = new function() {
 
 	this.load = async function( url ) {
 
-		let image = await Loaders.Image.load( url );
+		let image = await ImageLoaders.load( url );
 
 		let texture = new Texture( image );
 
