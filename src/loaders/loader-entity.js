@@ -16,7 +16,7 @@ export let EntityLoader = new function() {
 
 		let baseURL = url.substring(0, url.lastIndexOf("/") + 1 );
 
-		let file = await Loaders.File.load( url );
+		let file = await FileLoader.load( url );
 
 		let json = await Parsers.JSON.parse( file );
 
@@ -27,7 +27,7 @@ export let EntityLoader = new function() {
 		template.name = json.name;
 
 		// Load Image & Create Texture
-		template.texture = await Loaders.Texture.load( baseURL + json.texture );
+		template.texture = await TextureLoader.load( baseURL + json.texture );
 
 		// Create Tileset
 		template.tileset = await Parsers.Tileset.parse( json.tileset, json.id );
