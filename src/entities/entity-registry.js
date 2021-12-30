@@ -3,7 +3,7 @@
  *	@object
  */
 
-import * as Debug from '../debug/debug.js';
+import * as Debug from '../debug/debug-console.js';
 
 class EntityRegistry {
 
@@ -44,7 +44,7 @@ class EntityRegistry {
 	spawnEntity( id ) {
 
 		if( this.getEntityByID( id ) != undefined ) {
-			
+
 			let entity = this.getEntityByID( id ).spawnEntity();
 
 			return this.entities[ entity.uuid ] = entity;
