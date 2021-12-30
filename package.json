@@ -1,0 +1,23 @@
+{
+  "name": "panic-engine",
+  "version": "0.0.0",
+  "description": "A WebGL & THREEjs based game engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZWubs/PANIC-Engine.git"
+  },
+  "keywords": [
+    "panic",
+    "PANIC"
+  ],
+  "author": "ZWubs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZWubs/PANIC-Engine/issues"
+  },
+  "homepage": "https://github.com/ZWubs/PANIC-Engine#readme"
+}
