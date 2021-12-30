@@ -2,7 +2,8 @@
  *	@author zwubs
  */
 
-import * as Loaders from './loaders.js';
+import { FileLoader } from './loader-file.js';
+import { TextureLoader } from './loader-texture.js';
 
 import * as Parsers from '../parsers/parsers.js';
 
