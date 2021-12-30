@@ -4,7 +4,7 @@
 
 import { Texture } from '../core/texture.js';
 
-import * as Loaders from './loaders.js';
+import { ImageLoader } from './loader-image.js';
 
 export let TextureLoader = new function() {
 
