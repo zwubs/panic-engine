@@ -5,7 +5,7 @@
 import { Tileset } from '../core/tileset/tileset.js';
 import { TileGroup } from '../core/tileset/tilegroup.js';
 
-import * as Debug from '../debug/debug.js'
+import * as Debug from '../debug/debug-console.js';
 
 export let TilesetParser = new function() {
 
