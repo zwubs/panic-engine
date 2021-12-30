@@ -18,7 +18,7 @@ var PANIC = (function (exports) {
 		get Tileset () { return Tileset; },
 		get Entity () { return Entity$1; },
 		get EntityTemplate () { return EntityTemplate; },
-		get EntityRegistry () { return instance; },
+		get EntityRegistry () { return instance$5; },
 		get Shaders () { return shaders; },
 		get Loaders () { return loaders; },
 		get Parsers () { return parsers; },
@@ -50428,16 +50428,6 @@ var PANIC = (function (exports) {
 
 	Canvas.id = "PANIC-Canvas";
 
-	window.addEventListener("resize", function() {
-
-		instance$9.aspect = window.innerWidth / window.innerHeight;
-	    instance$9.updateProjectionMatrix();
-
-		instance$8.setPixelRatio( window.devicePixelRatio );
-	    instance$8.setSize( window.innerWidth, window.innerHeight );
-
-	}, false);
-
 	Element.appendChild( Canvas );
 
 	/**
@@ -50453,12 +50443,25 @@ var PANIC = (function (exports) {
 			this.shadowMap.enabled = true;
 			this.outputEncoding = sRGBEncoding;
 
-			this.setPixelRatio( window.devicePixelRatio );
-			this.setSize( window.innerWidth, window.innerHeight );
+			this.parentElement = window;
+
+			window.addEventListener("resize", this.resize, false);
+
+			this.resize();
 
 		}
 
 		kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
+
+		resize() {
+
+			instance$9.aspect = this.parentElement.innerWidth / this.parentElement.innerHeight;
+		    instance$9.updateProjectionMatrix();
+
+			this.setPixelRatio( window.devicePixelRatio );
+		    this.setSize( this.parentElement.innerWidth, this.parentElement.innerHeight );
+
+		}
 
 		get canvas() { return this.domElement; }
 
@@ -52512,134 +52515,60 @@ var PANIC = (function (exports) {
 	}
 
 	/**
-	 *
+	 *	Tracks Entity Templates
+	 *	@object
 	 */
 
-	let DebugElement = document.createElement("div");
+	class EntityRegistry {
 
-	DebugElement.id = "PANIC-Debug";
+		constructor() {
 
-	Element.appendChild( DebugElement );
+			this.data = [];
 
-	/**
-	 *	@author zwubs
-	 *	@description Make the PANIC namespace global
-	 */
-
-	class THREEAccess {
-
-		constuctor() {
-
-			this.THREE = undefined;
+			this.entities = {};
 
 		}
 
-		async enable() {
+		getEntityByName( name ) { return this.data.find( o => o.name == name ); }
+		getEntityByID( id ) { return this.data.find( o => o.id == id ); }
 
-			if( enabled ) {
+	    /**
+	     *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
+	     */
+	    registerEntity( template ) {
 
-				if( this.THREE == undefined ) this.THREE = await Promise.resolve().then(function () { return three132; });
+	        if( this.getEntityByID( template.id ) == undefined ) this.data.push( template );
 
-				if( window.THREE != this.THREE ) {
+	        else warn("Entity \"" + entity.id + "\" is already registered");
 
-					window.THREE = this.THREE;
+	    }
 
-					PANIC.Debug.warn( `[PANIC] Namespace 'THREE' has been made global`);
+		/**
+		 *	@param {String} id
+		 */
+		unregisterEntity( id ) {
 
-				}
+			if( this.getEntityByID( template.id ) != undefined ) delete this.getEntityByID( template.id );
 
-				else { PANIC.Debug.error( `[PANIC] Namespace 'THREE' is already global`); }
+		}
+
+		/**
+		 *	@param {String} id
+		 */
+		spawnEntity( id ) {
+
+			if( this.getEntityByID( id ) != undefined ) {
+
+				let entity = this.getEntityByID( id ).spawnEntity();
+
+				return this.entities[ entity.uuid ] = entity;
 
 			}
-
-		}
-
-		disable() {
-
-			if( enabled ) {
-
-				if( this.THREE != undefined && window.THREE == this.THREE ) {
-
-					window.THREE = undefined;
-
-					PANIC.Debug.warn( `[PANIC] Namespace 'THREE' has been made private`);
-
-				}
-
-				else { PANIC.Debug.error( `[PANIC] Namespace 'THREE' is already private`); }
-
-			}
-
-		}
-
-		toggle() {
-
-			if( window.THREE != this.THREE ) { this.enable(); }
-			else { this.disable(); }
 
 		}
 
 	}
-
-	let instance$5 = new THREEAccess();
-
-	/**
-	 *	@author zwubs
-	 *	@description Make the PANIC namespace global
-	 */
-
-	class Access {
-
-		constuctor() {}
-
-		enable() {
-
-			if( enabled ) {
-
-				if( window.PANIC != PANIC$1 ) {
-
-					window.PANIC = PANIC$1;
-
-					warn( `[PANIC] Namespace 'PANIC' has been made global`);
-
-				}
-
-				else { warn( `[PANIC] Namespace 'PANIC' is already global`); }
-
-			}
-
-		}
-
-		disable() {
-
-			if( enabled ) {
-
-				if( window.PANIC == PANIC$1 ) {
-
-					window.PANIC = undefined;
-
-					warn( `[PANIC] Namespace 'PANIC' has been made private`);
-
-				}
-
-				else { warn( `[PANIC] Namespace 'PANIC' is already private`); }
-
-			}
-
-		}
-
-		toggle() {
-
-			if( window.PANIC != PANIC$1 ) { this.enable(); }
-			else { this.disable(); }
-
-		}
-
-		get THREE() { return instance$5; }
-
-	}
-
-	let instance$4 = new Access();
+	let instance$5 = new EntityRegistry();
 
 	/**
 	 *	@namespace PANIC.Shaders.DebugAxes
@@ -52787,448 +52716,6 @@ var PANIC = (function (exports) {
 		DebugGrid: DebugGrid,
 		Entity: Entity
 	});
-
-	/**
-	 *	@author zwubs
-	 */
-
-	class Grid {
-
-		constructor() {
-
-			this.id = "PANIC-Debug-Grid";
-
-			this.active = false;
-
-			this.geometry = new PlaneGeometry( 2, 2, 1, 1 );
-
-			this.uniforms = {
-
-				uColor: { value: new Color( 0x888888 ) },
-
-				uScale: { value: 16.0 },
-				uSubdivisions: { value: 16.0 },
-
-				uDistance: { value: 100.0 },
-
-			};
-
-			this.material = new ShaderMaterial({
-
-				side: DoubleSide,
-
-				uniforms: this.uniforms,
-
-				vertexShader: DebugGrid.vertex,
-				fragmentShader: DebugGrid.fragment,
-
-				transparent: true,
-				depthWrite: false,
-
-				extensions: { derivatives: true }
-
-			});
-
-			this.mesh = new Mesh( this.geometry, this.material );
-			this.mesh.frustumCulled = false;
-
-			this.mesh.name = this.id;
-
-		}
-
-		toggle( override=null ) {
-
-			if( typeof override == "boolean" ) { this.active = !override; }
-
-			if( !this.active ) {
-
-				if( instance$a.getObjectByName( this.id ) == null ) {
-
-					instance$a.add( this.mesh );
-
-				}
-
-			}
-
-			else {
-
-				if( instance$a.getObjectByName( this.id ) ) {
-
-					instance$a.remove( this.mesh );
-
-				}
-
-			}
-
-			this.active = !this.active;
-
-		}
-
-		get scale() { return this.uniforms.uScale.value; }
-		set scale( value ) { this.uniforms.uScale.value = value;}
-
-		get subdivisions() { return this.uniforms.uSubdivisions.value; }
-		set subdivisions( value ) { this.uniforms.uSubdivisions.value = value;}
-
-		get distance() { return this.uniforms.uDistance.value; }
-		set distance( value ) { this.uniforms.uDistance.value = value;}
-
-		get color() { return this.uniforms.uColor.value; }
-		set color( value ) { this.uniforms.uColor.value = new Color( value );}
-
-	}
-
-	const instance$3 = new Grid();
-
-	/**
-	 *	@author zwubs
-	 *	@todo Implement using PANIC.Entity class
-	 */
-
-	class Axes {
-
-		constructor() {
-
-			this.id = "PANIC-Debug-Axes";
-
-			this.active = false;
-
-			// Colors
-			this.colors = {
-				x: new Color( 0xFF3352 ),
-				y: new Color( 0x8BDC00 ),
-				z: new Color( 0x2890FF )
-			};
-
-			// Geometry
-			this.geometry = new BufferGeometry();
-
-			// Vertices
-			this.geometry.setAttribute( 'position', new Float32BufferAttribute( [
-				-1, 0, 0, 1, 0, 0,
-				 0, 0,-1, 0, 0, 1,
-				 0,-1, 0, 0, 1, 0,
-			], 3 ) );
-
-			// Colors
-			this.geometry.setAttribute( 'color', new Float32BufferAttribute( [].concat(
-				this.colors.x.toArray(), this.colors.x.toArray(),
-				this.colors.y.toArray(), this.colors.y.toArray(),
-				this.colors.z.toArray(), this.colors.z.toArray(),
-			), 3 ) );
-
-			// Opacity
-			this.geometry.setAttribute( 'opacity', new Float32BufferAttribute( [
-				1.0, 1.0,
-				1.0, 1.0,
-				1.0, 1.0,
-			], 1 ) );
-
-			/**
-			 *	@todo Implement PANIC.Shaders in Class Structure
-			 */
-
-			// Material
-			this.material = new ShaderMaterial({
-
-				uniforms: DebugAxes.uniforms,
-
-				vertexShader: DebugAxes.vertex,
-				fragmentShader: DebugAxes.fragment,
-
-				vertexColors: true,
-				transparent: true,
-				depthWrite: false,
-
-				extensions: {
-		        	derivatives: true
-		        }
-
-			});
-
-			// Mesh
-			this.mesh = new LineSegments( this.geometry, this.material );
-			this.mesh.frustumCulled = false;
-
-			this.mesh.name = this.id;
-
-		}
-
-		/**
-		 *	@param override {Boolean} - Optional Toggle Override
-		 */
-		toggle( override=null ) {
-
-			if( typeof override == "boolean" ) { this.active = !override; }
-
-			if( !this.active ) {
-
-				if( instance$a.getObjectByName( this.id ) == null ) {
-
-					instance$a.add( this.mesh );
-
-				}
-
-			}
-
-			else {
-
-				if( instance$a.getObjectByName( this.id ) ) {
-
-					instance$a.remove( this.mesh );
-
-				}
-
-			}
-
-			this.active = !this.active;
-
-		}
-
-		/**
-		 *	@param axis {String} - String containing axes to affect Ex. ("XyZ")
-		 *	@param override {Boolean} - Optional Toggle Override
-		 */
-		toggleAxis( axes, override=null ) {
-
-			var indices = [];
-
-			if( axes.toLowerCase().includes("x") ) { indices.push( 0, 1 ); }
-			if( axes.toLowerCase().includes("y") ) { indices.push( 2, 3 ); }
-			if( axes.toLowerCase().includes("z") ) { indices.push( 4, 5 ); }
-
-			if( !indices ) { warn(`Invalid axes name "${axis}", use either 'x', 'y', or 'z'`); return; }
-
-			this.geometry.attributes.opacity.array.forEach( ( element, index, array ) => {
-
-				if( indices.includes( index ) ) {
-
-					if( typeof override == "boolean" ) array[ index ] = override;
-
-					else array[index] = 1 - element;
-
-				}
-
-			});
-
-			this.geometry.attributes.opacity.needsUpdate = true;
-
-		}
-
-		/**
-		 *	@description Updates the 'color' attribute with new values
-		 */
-		updateColors() {
-
-			this.geometry.attributes.colors.set( [].concat(
-				this.colors.x.toArray(), this.colors.x.toArray(),
-				this.colors.y.toArray(), this.colors.y.toArray(),
-				this.colors.z.toArray(), this.colors.z.toArray(),
-			), 0 );
-
-			this.geometry.attributes.colors.needsUpdate = true;
-
-		}
-
-	 	/**
-		 *	@todo Implement
-		 */
-		setColors( axes, color ) {
-
-
-
-		}
-
-	}
-
-	const instance$2 = new Axes();
-
-	/**
-	 *	@author zwubss
-	 */
-
-	let spherical = new Spherical();
-
-	class Compass {
-
-		constructor() {
-
-			this.id = "PANIC-Debug-Compass";
-
-		    this.element = document.createElement("div");
-			this.element.id = this.id;
-
-			this.active = false;
-
-			/**
-			 *	0 = Cardinal & Ordinal Directions
-			 *	1 = Cartesian Directions
-			 *	2 = Cartesian Coordinates
-			 */
-			this.state = 0;
-
-		}
-
-		toggle( override=null ) {
-
-			if( typeof override == "boolean" ) { this.active = !override; }
-			else { this.active = !this.active; }
-
-			if( this.active ) {
-
-				DebugElement.appendChild( this.element );
-
-				instance$7.add( this.id, this, 'update', 15 );
-
-			}
-
-			else {
-
-				DebugElement.removeChild( this.element );
-
-				instance$7.remove( this.id );
-
-			}
-
-		}
-
-		update() {
-
-			var string = "";
-			var direction = new Vector3( 0, 0, 0 );
-			instance$9.getWorldDirection( direction );
-
-			if( this.state == 0 ) {
-
-				var radians = Math.atan2( direction.x, direction.z );
-				var degrees = Math.round( radians / Math.PI * 180 );
-
-				if( degrees >= 112.5 || degrees <= -112.5 ) string += "N";
-				else if( degrees >= -67.5 && degrees <= 67.5  ) string += "S";
-				if( degrees >= 22.5 && degrees <= 157.5 ) string += "E";
-				else if( degrees >= -157.5 && degrees <= -22.5 ) string += "W";
-
-			}
-
-			else if( this.state == 1 ) {
-
-				spherical.setFromVector3( direction );
-				spherical.makeSafe();
-
-				let phi = Math.round( spherical.phi / Math.PI * 180 );
-				let theta = Math.round( spherical.theta / Math.PI * 180 );
-
-				if( theta > 0 ) string += "+X";
-				else if( theta < 0 ) string += "-X";
-				else string += "±X";
-
-				if( phi > 90 ) string += " +Y";
-				else if( phi < 90 ) string += " -Y";
-				else string += " ±Y";
-
-				if( Math.abs( theta ) > 90 ) string += " +Z";
-				else if( Math.abs( theta ) < 90 ) string += " -Z";
-				else string += " ±Z";
-
-			}
-
-			else if( this.state == 2 ) {
-
-				spherical.setFromVector3( direction );
-				spherical.makeSafe();
-
-				let phi = Math.round( spherical.phi / Math.PI * 180 );
-				let theta = Math.round( spherical.theta / Math.PI * 180 );
-
-				string = `${phi} ${theta}`;
-
-			}
-
-			this.element.innerHTML = `Facing: ${ string }`;
-
-		}
-
-	}
-
-	let instance$1 = new Compass();
-
-	/**
-	 *  @author zwubs
-	 */
-
-	var debug = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		Access: instance$4,
-		Grid: instance$3,
-		Axes: instance$2,
-		Compass: instance$1,
-		get enabled () { return enabled; },
-		enable: enable,
-		disable: disable,
-		toggle: toggle,
-		log: log,
-		warn: warn,
-		error: error,
-		clear: clear,
-		style: style,
-		DebugElement: DebugElement
-	});
-
-	/**
-	 *	Tracks Entity Templates
-	 *	@object
-	 */
-
-	class EntityRegistry {
-
-		constructor() {
-
-			this.data = [];
-
-			this.entities = {};
-
-		}
-
-		getEntityByName( name ) { return this.data.find( o => o.name == name ); }
-		getEntityByID( id ) { return this.data.find( o => o.id == id ); }
-
-	    /**
-	     *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
-	     */
-	    registerEntity( template ) {
-
-	        if( this.getEntityByID( template.id ) == undefined ) this.data.push( template );
-
-	        else warn("Entity \"" + entity.id + "\" is already registered");
-
-	    }
-
-		/**
-		 *	@param {String} id
-		 */
-		unregisterEntity( id ) {
-
-			if( this.getEntityByID( template.id ) != undefined ) delete this.getEntityByID( template.id );
-
-		}
-
-		/**
-		 *	@param {String} id
-		 */
-		spawnEntity( id ) {
-
-			if( this.getEntityByID( id ) != undefined ) {
-				
-				let entity = this.getEntityByID( id ).spawnEntity();
-
-				return this.entities[ entity.uuid ] = entity;
-
-			}
-
-		}
-
-	}
-	let instance = new EntityRegistry();
 
 	/**
 	 *	@author zwubs
@@ -53860,7 +53347,7 @@ var PANIC = (function (exports) {
 			template.setup();
 
 			// Register Entity Template
-			instance.registerEntity( template );
+			instance$5.registerEntity( template );
 
 			return template;
 
@@ -53882,6 +53369,522 @@ var PANIC = (function (exports) {
 	});
 
 	/**
+	 *
+	 */
+
+	let DebugElement = document.createElement("div");
+
+	DebugElement.id = "PANIC-Debug";
+
+	Element.appendChild( DebugElement );
+
+	/**
+	 *	@author zwubs
+	 *	@description Make the PANIC namespace global
+	 */
+
+	class THREEAccess {
+
+		constuctor() {
+
+			this.THREE = undefined;
+
+		}
+
+		async enable() {
+
+			if( enabled ) {
+
+				if( this.THREE == undefined ) this.THREE = await Promise.resolve().then(function () { return three132; });
+
+				if( window.THREE != this.THREE ) {
+
+					window.THREE = this.THREE;
+
+					PANIC.Debug.warn( `[PANIC] Namespace 'THREE' has been made global`);
+
+				}
+
+				else { PANIC.Debug.error( `[PANIC] Namespace 'THREE' is already global`); }
+
+			}
+
+		}
+
+		disable() {
+
+			if( enabled ) {
+
+				if( this.THREE != undefined && window.THREE == this.THREE ) {
+
+					window.THREE = undefined;
+
+					PANIC.Debug.warn( `[PANIC] Namespace 'THREE' has been made private`);
+
+				}
+
+				else { PANIC.Debug.error( `[PANIC] Namespace 'THREE' is already private`); }
+
+			}
+
+		}
+
+		toggle() {
+
+			if( window.THREE != this.THREE ) { this.enable(); }
+			else { this.disable(); }
+
+		}
+
+	}
+
+	let instance$4 = new THREEAccess();
+
+	/**
+	 *	@author zwubs
+	 *	@description Make the PANIC namespace global
+	 */
+
+	class Access {
+
+		constuctor() {}
+
+		enable() {
+
+			if( enabled ) {
+
+				if( window.PANIC != PANIC$1 ) {
+
+					window.PANIC = PANIC$1;
+
+					warn( `[PANIC] Namespace 'PANIC' has been made global`);
+
+				}
+
+				else { warn( `[PANIC] Namespace 'PANIC' is already global`); }
+
+			}
+
+		}
+
+		disable() {
+
+			if( enabled ) {
+
+				if( window.PANIC == PANIC$1 ) {
+
+					window.PANIC = undefined;
+
+					warn( `[PANIC] Namespace 'PANIC' has been made private`);
+
+				}
+
+				else { warn( `[PANIC] Namespace 'PANIC' is already private`); }
+
+			}
+
+		}
+
+		toggle() {
+
+			if( window.PANIC != PANIC$1 ) { this.enable(); }
+			else { this.disable(); }
+
+		}
+
+		get THREE() { return instance$4; }
+
+	}
+
+	let instance$3 = new Access();
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class Grid {
+
+		constructor() {
+
+			this.id = "PANIC-Debug-Grid";
+
+			this.active = false;
+
+			this.geometry = new PlaneGeometry( 2, 2, 1, 1 );
+
+			this.uniforms = {
+
+				uColor: { value: new Color( 0x888888 ) },
+
+				uScale: { value: 16.0 },
+				uSubdivisions: { value: 16.0 },
+
+				uDistance: { value: 100.0 },
+
+			};
+
+			this.material = new ShaderMaterial({
+
+				side: DoubleSide,
+
+				uniforms: this.uniforms,
+
+				vertexShader: DebugGrid.vertex,
+				fragmentShader: DebugGrid.fragment,
+
+				transparent: true,
+				depthWrite: false,
+
+				extensions: { derivatives: true }
+
+			});
+
+			this.mesh = new Mesh( this.geometry, this.material );
+			this.mesh.frustumCulled = false;
+
+			this.mesh.name = this.id;
+
+		}
+
+		toggle( override=null ) {
+
+			if( typeof override == "boolean" ) { this.active = !override; }
+
+			if( !this.active ) {
+
+				if( instance$a.getObjectByName( this.id ) == null ) {
+
+					instance$a.add( this.mesh );
+
+				}
+
+			}
+
+			else {
+
+				if( instance$a.getObjectByName( this.id ) ) {
+
+					instance$a.remove( this.mesh );
+
+				}
+
+			}
+
+			this.active = !this.active;
+
+		}
+
+		get scale() { return this.uniforms.uScale.value; }
+		set scale( value ) { this.uniforms.uScale.value = value;}
+
+		get subdivisions() { return this.uniforms.uSubdivisions.value; }
+		set subdivisions( value ) { this.uniforms.uSubdivisions.value = value;}
+
+		get distance() { return this.uniforms.uDistance.value; }
+		set distance( value ) { this.uniforms.uDistance.value = value;}
+
+		get color() { return this.uniforms.uColor.value; }
+		set color( value ) { this.uniforms.uColor.value = new Color( value );}
+
+	}
+
+	const instance$2 = new Grid();
+
+	/**
+	 *	@author zwubs
+	 *	@todo Implement using PANIC.Entity class
+	 */
+
+	class Axes {
+
+		constructor() {
+
+			this.id = "PANIC-Debug-Axes";
+
+			this.active = false;
+
+			// Colors
+			this.colors = {
+				x: new Color( 0xFF3352 ),
+				y: new Color( 0x8BDC00 ),
+				z: new Color( 0x2890FF )
+			};
+
+			// Geometry
+			this.geometry = new BufferGeometry();
+
+			// Vertices
+			this.geometry.setAttribute( 'position', new Float32BufferAttribute( [
+				-1, 0, 0, 1, 0, 0,
+				 0, 0,-1, 0, 0, 1,
+				 0,-1, 0, 0, 1, 0,
+			], 3 ) );
+
+			// Colors
+			this.geometry.setAttribute( 'color', new Float32BufferAttribute( [].concat(
+				this.colors.x.toArray(), this.colors.x.toArray(),
+				this.colors.y.toArray(), this.colors.y.toArray(),
+				this.colors.z.toArray(), this.colors.z.toArray(),
+			), 3 ) );
+
+			// Opacity
+			this.geometry.setAttribute( 'opacity', new Float32BufferAttribute( [
+				1.0, 1.0,
+				1.0, 1.0,
+				1.0, 1.0,
+			], 1 ) );
+
+			/**
+			 *	@todo Implement PANIC.Shaders in Class Structure
+			 */
+
+			// Material
+			this.material = new ShaderMaterial({
+
+				uniforms: DebugAxes.uniforms,
+
+				vertexShader: DebugAxes.vertex,
+				fragmentShader: DebugAxes.fragment,
+
+				vertexColors: true,
+				transparent: true,
+				depthWrite: false,
+
+				extensions: {
+		        	derivatives: true
+		        }
+
+			});
+
+			// Mesh
+			this.mesh = new LineSegments( this.geometry, this.material );
+			this.mesh.frustumCulled = false;
+
+			this.mesh.name = this.id;
+
+		}
+
+		/**
+		 *	@param override {Boolean} - Optional Toggle Override
+		 */
+		toggle( override=null ) {
+
+			if( typeof override == "boolean" ) { this.active = !override; }
+
+			if( !this.active ) {
+
+				if( instance$a.getObjectByName( this.id ) == null ) {
+
+					instance$a.add( this.mesh );
+
+				}
+
+			}
+
+			else {
+
+				if( instance$a.getObjectByName( this.id ) ) {
+
+					instance$a.remove( this.mesh );
+
+				}
+
+			}
+
+			this.active = !this.active;
+
+		}
+
+		/**
+		 *	@param axis {String} - String containing axes to affect Ex. ("XyZ")
+		 *	@param override {Boolean} - Optional Toggle Override
+		 */
+		toggleAxis( axes, override=null ) {
+
+			var indices = [];
+
+			if( axes.toLowerCase().includes("x") ) { indices.push( 0, 1 ); }
+			if( axes.toLowerCase().includes("y") ) { indices.push( 2, 3 ); }
+			if( axes.toLowerCase().includes("z") ) { indices.push( 4, 5 ); }
+
+			if( !indices ) { warn(`Invalid axes name "${axis}", use either 'x', 'y', or 'z'`); return; }
+
+			this.geometry.attributes.opacity.array.forEach( ( element, index, array ) => {
+
+				if( indices.includes( index ) ) {
+
+					if( typeof override == "boolean" ) array[ index ] = override;
+
+					else array[index] = 1 - element;
+
+				}
+
+			});
+
+			this.geometry.attributes.opacity.needsUpdate = true;
+
+		}
+
+		/**
+		 *	@description Updates the 'color' attribute with new values
+		 */
+		updateColors() {
+
+			this.geometry.attributes.colors.set( [].concat(
+				this.colors.x.toArray(), this.colors.x.toArray(),
+				this.colors.y.toArray(), this.colors.y.toArray(),
+				this.colors.z.toArray(), this.colors.z.toArray(),
+			), 0 );
+
+			this.geometry.attributes.colors.needsUpdate = true;
+
+		}
+
+	 	/**
+		 *	@todo Implement
+		 */
+		setColors( axes, color ) {
+
+
+
+		}
+
+	}
+
+	const instance$1 = new Axes();
+
+	/**
+	 *	@author zwubss
+	 */
+
+	let spherical = new Spherical();
+
+	class Compass {
+
+		constructor() {
+
+			this.id = "PANIC-Debug-Compass";
+
+		    this.element = document.createElement("div");
+			this.element.id = this.id;
+
+			this.active = false;
+
+			/**
+			 *	0 = Cardinal & Ordinal Directions
+			 *	1 = Cartesian Directions
+			 *	2 = Cartesian Coordinates
+			 */
+			this.state = 0;
+
+		}
+
+		toggle( override=null ) {
+
+			if( typeof override == "boolean" ) { this.active = !override; }
+			else { this.active = !this.active; }
+
+			if( this.active ) {
+
+				DebugElement.appendChild( this.element );
+
+				instance$7.add( this.id, this, 'update', 15 );
+
+			}
+
+			else {
+
+				DebugElement.removeChild( this.element );
+
+				instance$7.remove( this.id );
+
+			}
+
+		}
+
+		update() {
+
+			var string = "";
+			var direction = new Vector3( 0, 0, 0 );
+			instance$9.getWorldDirection( direction );
+
+			if( this.state == 0 ) {
+
+				var radians = Math.atan2( direction.x, direction.z );
+				var degrees = Math.round( radians / Math.PI * 180 );
+
+				if( degrees >= 112.5 || degrees <= -112.5 ) string += "N";
+				else if( degrees >= -67.5 && degrees <= 67.5  ) string += "S";
+				if( degrees >= 22.5 && degrees <= 157.5 ) string += "E";
+				else if( degrees >= -157.5 && degrees <= -22.5 ) string += "W";
+
+			}
+
+			else if( this.state == 1 ) {
+
+				spherical.setFromVector3( direction );
+				spherical.makeSafe();
+
+				let phi = Math.round( spherical.phi / Math.PI * 180 );
+				let theta = Math.round( spherical.theta / Math.PI * 180 );
+
+				if( theta > 0 ) string += "+X";
+				else if( theta < 0 ) string += "-X";
+				else string += "±X";
+
+				if( phi > 90 ) string += " +Y";
+				else if( phi < 90 ) string += " -Y";
+				else string += " ±Y";
+
+				if( Math.abs( theta ) > 90 ) string += " +Z";
+				else if( Math.abs( theta ) < 90 ) string += " -Z";
+				else string += " ±Z";
+
+			}
+
+			else if( this.state == 2 ) {
+
+				spherical.setFromVector3( direction );
+				spherical.makeSafe();
+
+				let phi = Math.round( spherical.phi / Math.PI * 180 );
+				let theta = Math.round( spherical.theta / Math.PI * 180 );
+
+				string = `${phi} ${theta}`;
+
+			}
+
+			this.element.innerHTML = `Facing: ${ string }`;
+
+		}
+
+	}
+
+	let instance = new Compass();
+
+	/**
+	 *  @author zwubs
+	 */
+
+	var debug = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Access: instance$3,
+		Grid: instance$2,
+		Axes: instance$1,
+		Compass: instance,
+		get enabled () { return enabled; },
+		enable: enable,
+		disable: disable,
+		toggle: toggle,
+		log: log,
+		warn: warn,
+		error: error,
+		clear: clear,
+		style: style,
+		DebugElement: DebugElement
+	});
+
+	/**
 	 *	@author zwubs
 	 *	@namespace PANIC
 	 *	@todo Decide what actually needs to be visible to the user.
@@ -53896,7 +53899,7 @@ var PANIC = (function (exports) {
 	exports.Debug = debug;
 	exports.Element = Element;
 	exports.Entity = Entity$1;
-	exports.EntityRegistry = instance;
+	exports.EntityRegistry = instance$5;
 	exports.EntityTemplate = EntityTemplate;
 	exports.Loaders = loaders;
 	exports.Parsers = parsers;
