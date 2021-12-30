@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/ZWubs/PANIC-Engine/issues"
   },
-  "homepage": "https://github.com/ZWubs/PANIC-Engine#readme"
+  "homepage": "https://github.com/ZWubs/PANIC-Engine#readme",
+  "dependencies": {
+    "rollup": "^2.62.0"
+  }
 }
