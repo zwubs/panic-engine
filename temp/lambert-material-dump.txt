@@ -1,0 +1,132 @@
+{
+  "uuid": "EEFF0C65-0E83-413C-87DF-F8DC5193D317",
+  "name": "",
+  "type": "MeshLambertMaterial",
+  "fog": true,
+  "blending": 1,
+  "side": 2,
+  "vertexColors": false,
+  "opacity": 1,
+  "format": 1023,
+  "transparent": true,
+  "blendSrc": 204,
+  "blendDst": 205,
+  "blendEquation": 100,
+  "blendSrcAlpha": null,
+  "blendDstAlpha": null,
+  "blendEquationAlpha": null,
+  "depthFunc": 3,
+  "depthTest": true,
+  "depthWrite": true,
+  "stencilWriteMask": 255,
+  "stencilFunc": 519,
+  "stencilRef": 0,
+  "stencilFuncMask": 255,
+  "stencilFail": 7680,
+  "stencilZFail": 7680,
+  "stencilZPass": 7680,
+  "stencilWrite": false,
+  "clippingPlanes": null,
+  "clipIntersection": false,
+  "clipShadows": false,
+  "shadowSide": 2,
+  "colorWrite": true,
+  "precision": null,
+  "polygonOffset": false,
+  "polygonOffsetFactor": 0,
+  "polygonOffsetUnits": 0,
+  "dithering": false,
+  "alphaToCoverage": false,
+  "premultipliedAlpha": false,
+  "visible": true,
+  "toneMapped": true,
+  "userData": {},
+  "version": 1869,
+  "_alphaTest": 0.5,
+  "color": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+  },
+  "map": {
+    "uuid": "27F858B9-5395-42B6-83D8-D6588B94E549",
+    "name": "",
+    "image": {},
+    "mipmaps": [],
+    "mapping": 300,
+    "wrapS": 1001,
+    "wrapT": 1001,
+    "magFilter": 1003,
+    "minFilter": 1006,
+    "anisotropy": 1,
+    "format": 1023,
+    "internalFormat": null,
+    "type": 1009,
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "repeat": {
+      "x": 1,
+      "y": 1
+    },
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "rotation": 0,
+    "matrixAutoUpdate": true,
+    "matrix": {
+      "elements": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "generateMipmaps": false,
+    "premultiplyAlpha": true,
+    "flipY": true,
+    "unpackAlignment": 4,
+    "encoding": 3001,
+    "version": 1,
+    "onUpdate": null,
+    "isRenderTargetTexture": false,
+    "_listeners": {
+      "dispose": [
+        null
+      ]
+    }
+  },
+  "lightMap": null,
+  "lightMapIntensity": 1,
+  "aoMap": null,
+  "aoMapIntensity": 1,
+  "emissive": {
+    "r": 0,
+    "g": 0,
+    "b": 0
+  },
+  "emissiveIntensity": 1,
+  "emissiveMap": null,
+  "specularMap": null,
+  "alphaMap": null,
+  "envMap": null,
+  "combine": 0,
+  "reflectivity": 1,
+  "refractionRatio": 0.98,
+  "wireframe": false,
+  "wireframeLinewidth": 1,
+  "wireframeLinecap": "round",
+  "wireframeLinejoin": "round",
+  "_listeners": {
+    "dispose": [
+      null
+    ]
+  }
+}

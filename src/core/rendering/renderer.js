@@ -3,6 +3,7 @@
  */
 
 import { Canvas } from '../dom/canvas.js';
+import { Element } from '../dom/element.js';
 
 import { WebGLRenderer, sRGBEncoding } from '../../lib/three132.js';
 
@@ -16,7 +17,7 @@ class Renderer extends WebGLRenderer {
 		this.outputEncoding = sRGBEncoding;
 
 		this.setPixelRatio( window.devicePixelRatio );
-		this.setSize( window.innerWidth, window.innerHeight );
+		this.setSize( Element.clientWidth, Element.clientHeight );
 
 	}
 

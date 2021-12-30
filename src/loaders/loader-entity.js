@@ -2,6 +2,8 @@
  *	@author zwubs
  */
 
+import { UnknownModel } from '../core/constants.js';
+
 import * as Loaders from './loaders.js';
 
 import * as Parsers from '../parsers/parsers.js';
@@ -17,7 +19,16 @@ export let EntityLoader = new function() {
 
 		let file = await Loaders.File.load( url );
 
-		let json = await Parsers.JSON.parse( file );
+		return this.loadFromText( file, baseURL );
+
+	}
+
+	this.loadFromText = async function( string, baseURL ) {
+
+		let json;
+
+		try { json = await Parsers.JSON.parse( string ); }
+		catch( e ) { console.log(`JSON Parsing Error: ${e}`); }
 
 		let template = new EntityTemplate();
 
@@ -33,6 +44,8 @@ export let EntityLoader = new function() {
 
 		// Parse Geometry Data
 		template.geometry = await Parsers.EntityModel.parse( json.armature, template );
+		// template.geometry = UnknownModel;
+
 
 		// Everything is loaded, finish template setup
 		template.setup();

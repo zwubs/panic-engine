@@ -1,0 +1,17 @@
+{
+	"version": "1.0.0",
+	"base": {
+		"type": "filler"
+		"id": "PANIC"
+		"children": [
+			{
+				"type": "filler",
+				"id": "PANIC-Rendering"
+			}
+			{
+				"type": "filler",
+				"id": "PANIC-Debug"
+			}
+		]
+	}
+}

@@ -2,6 +2,8 @@
  *	@author zwubs
  */
 
+import { Element } from '../dom/element.js';
+
 import { PerspectiveCamera } from '../../lib/three132.js';
 
 class Camera extends PerspectiveCamera {
@@ -12,7 +14,7 @@ class Camera extends PerspectiveCamera {
 
 		this.position.set( 0, 1, -4 );
 
-		this.aspect = window.innerWidth / window.innerHeight;
+		this.aspect = Element.clientWidth / Element.clientHeight;
 	    this.updateProjectionMatrix();
 
 	}

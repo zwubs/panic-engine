@@ -1,0 +1,4 @@
+/**
+ *	@author zwubs
+ *	@module Aggregation
+ */

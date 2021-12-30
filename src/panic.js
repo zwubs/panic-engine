@@ -6,9 +6,13 @@
 
 export let Version = "0.0.1";
 
+export * from './core/constants.js';
+
 /**
  *	@filespace {CORE}
  */
+export { Element } from './core/dom/element.js';
+export { Canvas } from './core/dom/canvas.js';
 export { Scene } from './core/rendering/scene.js';
 export { Camera } from './core/rendering/camera.js';
 export { Renderer } from './core/rendering/renderer.js';
@@ -17,7 +21,6 @@ export { Updater } from './core/updater.js';
 export { Cube } from './core/cube.js';
 export { Texture } from './core/texture.js';
 export { Controls } from './core/input/controls.js';
-export { Element } from './core/dom/element.js';
 
 	/**
 	 * 	@filespace {CORE/TILESET}
@@ -25,6 +28,11 @@ export { Element } from './core/dom/element.js';
 	export { Tile } from './core/tileset/tile.js';
 	export { TileGroup } from './core/tileset/tilegroup.js';
 	export { Tileset } from './core/tileset/tileset.js';
+
+/**
+ *	@filespace {UI}
+ */
+export { UI } from './ui/ui.js';
 
 /**
  *	@filespace {ENTITIES}

@@ -1,0 +1,583 @@
+{
+  "uuid": "D21F13FA-DA83-4400-95E8-4421DE6F1435",
+  "name": "",
+  "type": "ShaderMaterial",
+  "fog": true,
+  "blending": 1,
+  "side": 2,
+  "vertexColors": false,
+  "opacity": 1,
+  "format": 1023,
+  "transparent": true,
+  "blendSrc": 204,
+  "blendDst": 205,
+  "blendEquation": 100,
+  "blendSrcAlpha": null,
+  "blendDstAlpha": null,
+  "blendEquationAlpha": null,
+  "depthFunc": 3,
+  "depthTest": true,
+  "depthWrite": true,
+  "stencilWriteMask": 255,
+  "stencilFunc": 519,
+  "stencilRef": 0,
+  "stencilFuncMask": 255,
+  "stencilFail": 7680,
+  "stencilZFail": 7680,
+  "stencilZPass": 7680,
+  "stencilWrite": false,
+  "clippingPlanes": null,
+  "clipIntersection": false,
+  "clipShadows": false,
+  "shadowSide": 2,
+  "colorWrite": true,
+  "precision": null,
+  "polygonOffset": false,
+  "polygonOffsetFactor": 0,
+  "polygonOffsetUnits": 0,
+  "dithering": false,
+  "alphaToCoverage": false,
+  "premultipliedAlpha": false,
+  "visible": true,
+  "toneMapped": true,
+  "userData": {},
+  "version": 4813,
+  "_alphaTest": 0.5,
+  "defines": {
+    "USE_MAP": "",
+    "DOUBLE_SIDED": ""
+  },
+  "uniforms": {
+    "diffuse": {
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      }
+    },
+    "opacity": {
+      "value": 1
+    },
+    "map": {
+      "value": {
+        "uuid": "1AF5C0BD-B736-48EC-A741-98BA275D626A",
+        "name": "",
+        "image": {},
+        "mipmaps": [],
+        "mapping": 300,
+        "wrapS": 1001,
+        "wrapT": 1001,
+        "magFilter": 1003,
+        "minFilter": 1006,
+        "anisotropy": 1,
+        "format": 1023,
+        "internalFormat": null,
+        "type": 1009,
+        "offset": {
+          "x": 0,
+          "y": 0
+        },
+        "repeat": {
+          "x": 1,
+          "y": 1
+        },
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation": 0,
+        "matrixAutoUpdate": true,
+        "matrix": {
+          "elements": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        "generateMipmaps": false,
+        "premultiplyAlpha": true,
+        "flipY": true,
+        "unpackAlignment": 4,
+        "encoding": 3001,
+        "version": 1,
+        "onUpdate": null,
+        "isRenderTargetTexture": false,
+        "_listeners": {
+          "dispose": [
+            null
+          ]
+        }
+      }
+    },
+    "uvTransform": {
+      "value": {
+        "elements": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "uv2Transform": {
+      "value": {
+        "elements": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "alphaMap": {
+      "value": null
+    },
+    "alphaTest": {
+      "value": 0
+    },
+    "specularMap": {
+      "value": null
+    },
+    "envMap": {
+      "value": null
+    },
+    "flipEnvMap": {
+      "value": -1
+    },
+    "reflectivity": {
+      "value": 1
+    },
+    "ior": {
+      "value": 1.5
+    },
+    "refractionRatio": {
+      "value": 0.98
+    },
+    "maxMipLevel": {
+      "value": 0
+    },
+    "aoMap": {
+      "value": null
+    },
+    "aoMapIntensity": {
+      "value": 1
+    },
+    "lightMap": {
+      "value": null
+    },
+    "lightMapIntensity": {
+      "value": 1
+    },
+    "emissiveMap": {
+      "value": null
+    },
+    "fogDensity": {
+      "value": 0.025
+    },
+    "fogNear": {
+      "value": 1
+    },
+    "fogFar": {
+      "value": 2000
+    },
+    "fogColor": {
+      "value": {
+        "r": 0.13333333333333333,
+        "g": 0.13333333333333333,
+        "b": 0.13333333333333333
+      }
+    },
+    "ambientLightColor": {
+      "value": [
+        0,
+        0,
+        0
+      ],
+      "needsUpdate": true
+    },
+    "lightProbe": {
+      "value": [
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      ],
+      "needsUpdate": true
+    },
+    "directionalLights": {
+      "value": [
+        {
+          "direction": {
+            "x": -0.3713906763541037,
+            "y": 0.5854905538443587,
+            "z": 0.720603758577672
+          },
+          "color": {
+            "r": 3.9269908169872414,
+            "g": 3.9269908169872414,
+            "b": 3.9269908169872414
+          }
+        }
+      ],
+      "properties": {
+        "direction": {},
+        "color": {}
+      },
+      "needsUpdate": true
+    },
+    "directionalLightShadows": {
+      "value": [
+        {
+          "shadowBias": -0.001,
+          "shadowNormalBias": 0,
+          "shadowRadius": 1,
+          "shadowMapSize": {
+            "x": 2048,
+            "y": 2048
+          }
+        }
+      ],
+      "properties": {
+        "shadowBias": {},
+        "shadowNormalBias": {},
+        "shadowRadius": {},
+        "shadowMapSize": {}
+      },
+      "needsUpdate": true
+    },
+    "directionalShadowMap": {
+      "value": [
+        {
+          "uuid": "CE7E71EB-214D-40AC-93C5-6AA6E1D7CE6A",
+          "name": ".shadowMap",
+          "image": {
+            "width": 2048,
+            "height": 2048,
+            "depth": 1
+          },
+          "mipmaps": [],
+          "mapping": 300,
+          "wrapS": 1001,
+          "wrapT": 1001,
+          "magFilter": 1003,
+          "minFilter": 1003,
+          "anisotropy": 1,
+          "format": 1023,
+          "internalFormat": null,
+          "type": 1009,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "repeat": {
+            "x": 1,
+            "y": 1
+          },
+          "center": {
+            "x": 0,
+            "y": 0
+          },
+          "rotation": 0,
+          "matrixAutoUpdate": true,
+          "matrix": {
+            "elements": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          "generateMipmaps": false,
+          "premultiplyAlpha": false,
+          "flipY": true,
+          "unpackAlignment": 4,
+          "encoding": 3000,
+          "version": 0,
+          "onUpdate": null,
+          "isRenderTargetTexture": true
+        }
+      ]
+    },
+    "directionalShadowMatrix": {
+      "value": [
+        {
+          "elements": [
+            -0.08320502943378436,
+            -0.041202096209968356,
+            -0.014861571682837273,
+            0,
+            -8.326672684688669e-18,
+            0.0669534063411986,
+            -0.029723143365674564,
+            0,
+            -0.05547001962252288,
+            0.06180314431495257,
+            0.022292357524255922,
+            0,
+            0.49999999999999994,
+            0.4999999999999999,
+            0.16121943198682975,
+            0.9999999999999998
+          ]
+        }
+      ]
+    },
+    "spotLights": {
+      "value": [],
+      "properties": {
+        "color": {},
+        "position": {},
+        "direction": {},
+        "distance": {},
+        "coneCos": {},
+        "penumbraCos": {},
+        "decay": {}
+      },
+      "needsUpdate": true
+    },
+    "spotLightShadows": {
+      "value": [],
+      "properties": {
+        "shadowBias": {},
+        "shadowNormalBias": {},
+        "shadowRadius": {},
+        "shadowMapSize": {}
+      },
+      "needsUpdate": true
+    },
+    "spotShadowMap": {
+      "value": []
+    },
+    "spotShadowMatrix": {
+      "value": []
+    },
+    "pointLights": {
+      "value": [],
+      "properties": {
+        "color": {},
+        "position": {},
+        "decay": {},
+        "distance": {}
+      },
+      "needsUpdate": true
+    },
+    "pointLightShadows": {
+      "value": [],
+      "properties": {
+        "shadowBias": {},
+        "shadowNormalBias": {},
+        "shadowRadius": {},
+        "shadowMapSize": {},
+        "shadowCameraNear": {},
+        "shadowCameraFar": {}
+      },
+      "needsUpdate": true
+    },
+    "pointShadowMap": {
+      "value": []
+    },
+    "pointShadowMatrix": {
+      "value": []
+    },
+    "hemisphereLights": {
+      "value": [
+        {
+          "direction": {
+            "x": 0,
+            "y": 0.9701425001453319,
+            "z": 0.24253562503633289
+          },
+          "skyColor": {
+            "r": 3.095392761625237,
+            "g": 3.8191910690699444,
+            "b": 3.9269908169872414
+          },
+          "groundColor": {
+            "r": 3.095392761625237,
+            "g": 3.8191910690699444,
+            "b": 3.9269908169872414
+          }
+        }
+      ],
+      "properties": {
+        "direction": {},
+        "skyColor": {},
+        "groundColor": {}
+      },
+      "needsUpdate": true
+    },
+    "rectAreaLights": {
+      "value": [],
+      "properties": {
+        "color": {},
+        "position": {},
+        "width": {},
+        "height": {}
+      },
+      "needsUpdate": true
+    },
+    "ltc_1": {
+      "value": null
+    },
+    "ltc_2": {
+      "value": null
+    },
+    "emissive": {
+      "value": {
+        "r": 0,
+        "g": 0,
+        "b": 0
+      }
+    }
+  },
+  "vertexShader": "#define LAMBERT\nvarying vec3 vLightFront;\nvarying vec3 vIndirectFront;\n#ifdef DOUBLE_SIDED\n\tvarying vec3 vLightBack;\n\tvarying vec3 vIndirectBack;\n#endif\n#include <common>\n#include <uv_pars_vertex>\n#include <uv2_pars_vertex>\n#include <envmap_pars_vertex>\n#include <bsdfs>\n#include <lights_pars_begin>\n#include <color_pars_vertex>\n#include <fog_pars_vertex>\n#include <morphtarget_pars_vertex>\n#include <skinning_pars_vertex>\n#include <shadowmap_pars_vertex>\n#include <logdepthbuf_pars_vertex>\n#include <clipping_planes_pars_vertex>\nvoid main() {\n\t#include <uv_vertex>\n\t#include <uv2_vertex>\n\t#include <color_vertex>\n\t#include <beginnormal_vertex>\n\t#include <morphnormal_vertex>\n\t#include <skinbase_vertex>\n\t#include <skinnormal_vertex>\n\t#include <defaultnormal_vertex>\n\t#include <begin_vertex>\n\t#include <morphtarget_vertex>\n\t#include <skinning_vertex>\n\t#include <project_vertex>\n\t#include <logdepthbuf_vertex>\n\t#include <clipping_planes_vertex>\n\t#include <worldpos_vertex>\n\t#include <envmap_vertex>\n\t#include <lights_lambert_vertex>\n\t#include <shadowmap_vertex>\n\t#include <fog_vertex>\n}",
+  "fragmentShader": "uniform vec3 diffuse;\nuniform vec3 emissive;\nuniform float opacity;\nvarying vec3 vLightFront;\nvarying vec3 vIndirectFront;\n#ifdef DOUBLE_SIDED\n\tvarying vec3 vLightBack;\n\tvarying vec3 vIndirectBack;\n#endif\n#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\n#include <color_pars_fragment>\n#include <uv_pars_fragment>\n#include <uv2_pars_fragment>\n#include <map_pars_fragment>\n#include <alphamap_pars_fragment>\n#include <alphatest_pars_fragment>\n#include <aomap_pars_fragment>\n#include <lightmap_pars_fragment>\n#include <emissivemap_pars_fragment>\n#include <envmap_common_pars_fragment>\n#include <envmap_pars_fragment>\n#include <cube_uv_reflection_fragment>\n#include <bsdfs>\n#include <lights_pars_begin>\n#include <fog_pars_fragment>\n#include <shadowmap_pars_fragment>\n#include <shadowmask_pars_fragment>\n#include <specularmap_pars_fragment>\n#include <logdepthbuf_pars_fragment>\n#include <clipping_planes_pars_fragment>\nvoid main() {\n\t#include <clipping_planes_fragment>\n\tvec4 diffuseColor = vec4( diffuse, opacity );\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\n\tvec3 totalEmissiveRadiance = emissive;\n\t#include <logdepthbuf_fragment>\n\t#include <map_fragment>\n\t#include <color_fragment>\n\t#include <alphamap_fragment>\n\t#include <alphatest_fragment>\n\t#include <specularmap_fragment>\n\t#include <emissivemap_fragment>\n\t#ifdef DOUBLE_SIDED\n\t\treflectedLight.indirectDiffuse += ( gl_FrontFacing ) ? vIndirectFront : vIndirectBack;\n\t#else\n\t\treflectedLight.indirectDiffuse += vIndirectFront;\n\t#endif\n\t#include <lightmap_fragment>\n\treflectedLight.indirectDiffuse *= BRDF_Lambert( diffuseColor.rgb );\n\t#ifdef DOUBLE_SIDED\n\t\treflectedLight.directDiffuse = ( gl_FrontFacing ) ? vLightFront : vLightBack;\n\t#else\n\t\treflectedLight.directDiffuse = vLightFront;\n\t#endif\n\treflectedLight.directDiffuse *= BRDF_Lambert( diffuseColor.rgb ) * getShadowMask();\n\t#include <aomap_fragment>\n\tvec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;\n\t#include <envmap_fragment>\n\t#include <output_fragment>\n\t#include <tonemapping_fragment>\n\t#include <encodings_fragment>\n\t#include <fog_fragment>\n\t#include <premultiplied_alpha_fragment>\n\t#include <dithering_fragment>\n}",
+  "linewidth": 1,
+  "wireframe": false,
+  "wireframeLinewidth": 1,
+  "lights": true,
+  "clipping": false,
+  "extensions": {
+    "derivatives": true,
+    "fragDepth": true
+  },
+  "defaultAttributeValues": {
+    "color": [
+      1,
+      1,
+      1
+    ],
+    "uv": [
+      0,
+      0
+    ],
+    "uv2": [
+      0,
+      0
+    ]
+  },
+  "uniformsNeedUpdate": false,
+  "glslVersion": null,
+  "map": {
+    "uuid": "1AF5C0BD-B736-48EC-A741-98BA275D626A",
+    "name": "",
+    "image": {},
+    "mipmaps": [],
+    "mapping": 300,
+    "wrapS": 1001,
+    "wrapT": 1001,
+    "magFilter": 1003,
+    "minFilter": 1006,
+    "anisotropy": 1,
+    "format": 1023,
+    "internalFormat": null,
+    "type": 1009,
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "repeat": {
+      "x": 1,
+      "y": 1
+    },
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "rotation": 0,
+    "matrixAutoUpdate": true,
+    "matrix": {
+      "elements": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "generateMipmaps": false,
+    "premultiplyAlpha": true,
+    "flipY": true,
+    "unpackAlignment": 4,
+    "encoding": 3001,
+    "version": 1,
+    "onUpdate": null,
+    "isRenderTargetTexture": false,
+    "_listeners": {
+      "dispose": [
+        null
+      ]
+    }
+  },
+  "_listeners": {
+    "dispose": [
+      null
+    ]
+  }
+}
