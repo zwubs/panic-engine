@@ -43,7 +43,7 @@ export let EntityModelParser = new function() {
 				matrix.compose( position, quaternion, scale );
 				box.applyMatrix4( matrix );
 
-				if( cube.faces ) Parsers.CubeUV.parse( cube.faces, box, entity.texture, entity.tileset );
+				if( cube.faces ) CubeUVParser.parse( cube.faces, box, entity.texture, entity.tileset );
 
 				// this.setupSkinning( box, boneIndex );
 
