@@ -2,7 +2,13 @@
 A game engine based on the three.js library and WebGL.
 
 ## Version 0.0.2
-**The UI Update**
+**The Packaging Update**
+- Convert entire project to a node project.
+- Move three.js dependencies from files to node modules.
+- Create a building system with minification.
+```bash
+npm run build
+```
 
 ## Version 0.0.1
 **The Class Update**
