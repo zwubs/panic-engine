@@ -6,7 +6,7 @@
 import { Camera } from '../rendering/camera.js';
 import { Canvas } from '../dom/canvas.js';
 
-import { Vector3 } from '../../lib/three132.js';
+import { Vector3 } from 'three';
 import { OrbitControls } from '../../lib/OrbitControls.mjs';
 
 let Controls = new OrbitControls( Camera, Canvas );

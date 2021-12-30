@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-import { PerspectiveCamera } from '../../lib/three132.js';
+import { PerspectiveCamera } from 'three';
 
 class Camera extends PerspectiveCamera {
 

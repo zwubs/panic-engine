@@ -17,7 +17,7 @@ class THREEAccess {
 
 		if( Status.enabled ) {
 
-			if( this.THREE == undefined ) this.THREE = await import('../lib/three132.js');
+			if( this.THREE == undefined ) this.THREE = await import('three');
 
 			if( window.THREE != this.THREE ) {
 

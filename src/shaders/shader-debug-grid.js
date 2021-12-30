@@ -5,7 +5,7 @@
  *	@todo Use fog variables instead of distance
  */
 
-import { Color } from '../lib/three132.js'
+import { Color } from 'three'
 
 export let DebugGrid = {
 

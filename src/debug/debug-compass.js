@@ -6,7 +6,7 @@ import { Updater } from '../core/updater.js';
 import { Camera } from '../core/rendering/camera.js';
 import { DebugElement } from './debug-element.js';
 
-import { Spherical, Vector3 } from '../lib/three132.js';
+import { Spherical, Vector3 } from 'three';
 
 let spherical = new Spherical();
 

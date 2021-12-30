@@ -6,7 +6,7 @@ import { Cube } from '../core/cube.js';
 
 import { CubeUVParser } from './parser-cube-uv.js'
 
-import { BufferGeometry, Matrix4, Vector3, Euler, Quaternion, BufferAttribute } from '../lib/three132.js';
+import { BufferGeometry, Matrix4, Vector3, Euler, Quaternion, BufferAttribute } from 'three';
 
 import * as BufferGeometryUtils from '../lib/BufferGeometryUtils.js';
 

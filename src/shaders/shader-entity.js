@@ -2,14 +2,14 @@
  *	@author zwubs
  */
 
-import { ShaderLib } from '../lib/three132.js';
+import { ShaderLib } from 'three';
 
 export let Entity = {
 
 	uniforms: ShaderLib.lambert.uniforms,
 
 	vertex: `
-	
+
 		#define LAMBERT
 
 		varying vec3 vLightFront;

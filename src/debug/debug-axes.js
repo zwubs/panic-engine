@@ -7,7 +7,7 @@ import { Scene } from '../core/rendering/scene.js'
 import * as Debug from '../debug/debug-console.js';
 import * as Shaders from '../shaders/shaders.js'
 
-import { Color, BufferGeometry, Float32BufferAttribute, ShaderMaterial, LineSegments } from '../lib/three132.js';
+import { Color, BufferGeometry, Float32BufferAttribute, ShaderMaterial, LineSegments } from 'three';
 
 class Axes {
 

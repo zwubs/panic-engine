@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-import { Scene as THREE_Scene, Color, FogExp2, HemisphereLight, DirectionalLight } from '../../lib/three132.js';
+import { Scene as THREE_Scene, Color, FogExp2, HemisphereLight, DirectionalLight } from 'three';
 
 class Scene extends THREE_Scene {
 

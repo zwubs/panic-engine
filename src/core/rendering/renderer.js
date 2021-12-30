@@ -6,7 +6,7 @@ import { Camera } from './camera.js';
 
 import { Canvas } from '../dom/canvas.js';
 
-import { WebGLRenderer, sRGBEncoding } from '../../lib/three132.js';
+import { WebGLRenderer, sRGBEncoding } from 'three';
 
 class Renderer extends WebGLRenderer {
 

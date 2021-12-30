@@ -8,7 +8,7 @@ import {
 	TriangleStripDrawMode,
 	TrianglesDrawMode,
 	Vector3
-} from './three132.js';
+} from 'three';
 
 
 function computeTangents( geometry ) {

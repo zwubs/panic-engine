@@ -2,7 +2,7 @@
  *   @namespace PANIC.Tools
  */
 
-import { Vector3 } from '../lib/three132.js';
+import { Vector3 } from 'three';
 
 class Tools {
 
