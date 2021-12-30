@@ -24,5 +24,8 @@
   "dependencies": {
     "rollup": "^2.62.0",
     "three": "^0.136.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.1.1"
   }
 }
