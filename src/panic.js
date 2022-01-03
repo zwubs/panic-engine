@@ -26,6 +26,11 @@ export { Element } from './core/dom/element.js';
 	export { TileGroup } from './core/tileset/tilegroup.js';
 	export { Tileset } from './core/tileset/tileset.js';
 
+	/**
+	 *	@filespace {Events}
+	 */
+	export * as Events from './core/events/events.js';
+
 /**
  *	@filespace {ENTITIES}
  */

@@ -50864,25 +50864,9 @@
 			this.shadowMap.enabled = true;
 			this.outputEncoding = sRGBEncoding;
 
-			this.parentElement = window;
-
-			window.addEventListener("resize", this.resize, false);
-
-			this.resize();
-
 		}
 
 		kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
-
-		resize() {
-
-			instance$9.aspect = this.parentElement.innerWidth / this.parentElement.innerHeight;
-		    instance$9.updateProjectionMatrix();
-
-			this.setPixelRatio( window.devicePixelRatio );
-		    this.setSize( this.parentElement.innerWidth, this.parentElement.innerHeight );
-
-		}
 
 		get canvas() { return this.domElement; }
 
@@ -52513,6 +52497,31 @@
 		}
 
 	}
+
+	/**
+	 *  @author zwubs
+	 */
+
+	let ResizeRenderer = function() {
+
+	    instance$9.aspect = Element.clientWidth / Element.clientHeight;
+	    instance$9.updateProjectionMatrix();
+
+	    instance$8.setPixelRatio( window.devicePixelRatio );
+	    instance$8.setSize( Element.clientWidth, Element.clientHeight );
+
+	};
+
+	window.addEventListener("resize", ResizeRenderer, false);
+
+	/**
+	 *  @author zwubs
+	 */
+
+	var events = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		ResizeRenderer: ResizeRenderer
+	});
 
 	/**
 	 *   @namespace PANIC.Tools
@@ -54293,7 +54302,7 @@
 	 *	@todo Decide what actually needs to be visible to the user.
 	 */
 
-	let Version = "0.0.1";
+	let Version = "0.0.2";
 
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -54310,6 +54319,7 @@
 		Tile: Tile,
 		TileGroup: TileGroup,
 		Tileset: Tileset,
+		Events: events,
 		Entity: Entity$1,
 		EntityTemplate: EntityTemplate,
 		EntityRegistry: instance$5,
@@ -54329,6 +54339,7 @@
 	exports.Entity = Entity$1;
 	exports.EntityRegistry = instance$5;
 	exports.EntityTemplate = EntityTemplate;
+	exports.Events = events;
 	exports.Loaders = loaders;
 	exports.Parsers = parsers;
 	exports.Renderer = instance$8;

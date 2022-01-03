@@ -17,25 +17,9 @@ class Renderer extends WebGLRenderer {
 		this.shadowMap.enabled = true;
 		this.outputEncoding = sRGBEncoding;
 
-		this.parentElement = window;
-
-		window.addEventListener("resize", this.resize, false);
-
-		this.resize();
-
 	}
 
 	kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
-
-	resize() {
-
-		Camera.aspect = this.parentElement.innerWidth / this.parentElement.innerHeight;
-	    Camera.updateProjectionMatrix();
-
-		this.setPixelRatio( window.devicePixelRatio );
-	    this.setSize( this.parentElement.innerWidth, this.parentElement.innerHeight );
-
-	}
 
 	get canvas() { return this.domElement; }
 
