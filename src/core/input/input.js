@@ -2,6 +2,4 @@
  *	@author zwubs
  */
 
-PANIC.Input = {};
-
-PANIC.Input.enabled = true;
+export { Keyboard } from './keyboard.js'
