@@ -19,3 +19,5 @@ export let ResizeRenderer = function() {
 }
 
 window.addEventListener("resize", ResizeRenderer, false);
+
+ResizeRenderer()
