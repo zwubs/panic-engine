@@ -8,6 +8,11 @@ Element.id = "PANIC";
 
 Element.style = "width: 100%; height: 100%;"
 
+Element.tabIndex = 1;
+
 document.body.appendChild( Element );
+
+// Auto focus on PANIC
+Element.focus();
 
 export { Element };

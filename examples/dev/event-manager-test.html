@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>PANIC Engine</title>
+
+		<meta charset="UTF-8">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="icon" type="image/png" href="../logo.png"/>
+
+        <style>
+
+            html, body {
+
+                width: 100%;
+                height: 100%;
+
+                margin: 0;
+
+				overflow: hidden;
+
+            }
+
+			#PANIC {
+
+				width: 100%;
+				height: 100%;
+
+			}
+
+			#PANIC-Rendering {
+
+				width: 100%;
+				height: 100%;
+
+			}
+
+        </style>
+
+    </head>
+
+    <body>
+
+		<script src="../../build/panic.js"></script>
+
+        <script>
+
+            PANIC.Debug.enable();
+
+			PANIC.Debug.Access.enable();
+
+            let a = new PANIC.EventManager();
+
+            /**
+             *  CUSTOM EVENTS
+             */
+
+            // Test Creating Custom Event
+            a.registerEvent("hello")
+
+            // Test subscribing
+            a.on( "hello", function(e) { console.log( e ) } );
+
+            // Test emitting
+            a.emit("hello","Subscribing & Emitting works");
+
+            // Test Removing Custom Events
+            a.unregisterEvent("hello");
+
+            // Test emitting after removal
+            a.emit("hello","A");
+
+            // Test subscribing after removal
+            a.on( "hello", function(e) { console.log( e ) } );
+
+            // Test removing an event that doesn't exist
+            a.unregisterEvent("hello");
+
+
+            /**
+             *  NATIVE EVENTS
+             */
+
+            // Test registering NativeEvent
+            a.registerNativeEvent("keydown")
+
+            // Test
+            a.on( "keydown", function(e) { console.log( e ) } );
+
+            // Test unregistering a NativeEvent
+            a.unregisterNativeEvent("keydown");
+
+            // Test registering a regular Event as a NativeEvent
+            a.registerNativeEvent("hello");
+
+            // Test registering a regular NativeEvent as a Event
+            a.registerEvent("keydown");
+
+
+            /**
+             *  ONCE EVENTS
+             */
+            // once = false
+            a.registerEvent("hello",false);
+
+            a.on( "hello", function(e) { console.log( e ) } );
+
+            a.emit("hello","A");
+            a.emit("hello","B");
+
+            a.unregisterEvent("hello");
+
+            // once = true
+            a.registerEvent("hello",true);
+
+            a.on( "hello", function(e) { console.log( e ) } );
+
+            a.emit("hello","A");
+            a.emit("hello","B");
+
+            a.unregisterEvent("hello");
+
+            // Native event
+            a.registerNativeEvent("keydown",false);
+
+            a.on( "keydown", function(e) { console.log( e ) } );
+
+        </script>
+
+    </body>
+
+</html>
