@@ -14,9 +14,7 @@ export class NativeEvent extends Event {
     constructor( id, manager, once=false ) {
 
         super( id, manager, once );
-
-        this.native = true;
-
+        
         this.manager.element.addEventListener( this.id, this, true );
 
     }

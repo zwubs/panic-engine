@@ -113,7 +113,7 @@ export class EventManager {
 
         }
 
-        if( this.events[ eventID ].native ) {
+        if( this.events[ eventID ] instanceof NativeEvent ) {
 
             Debug.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
 
