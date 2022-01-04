@@ -29,7 +29,7 @@ export { Element } from './core/dom/element.js';
 	/**
 	 *	@filespace {Events}
 	 */
-	export * as Events from './core/events/events.js';
+	export { EventManager } from './core/events/event-manager.js';
 
 /**
  *	@filespace {ENTITIES}
