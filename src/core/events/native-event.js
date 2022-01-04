@@ -14,8 +14,8 @@ export class NativeEvent extends Event {
     constructor( id, manager, once=false ) {
 
         super( id, manager, once );
-        
-        this.manager.element.addEventListener( this.id, this, true );
+
+        this.manager.element.addEventListener( this.id, this, { capture: true } );
 
     }
 
@@ -25,17 +25,19 @@ export class NativeEvent extends Event {
      */
     handleEvent( e ) {
 
+        e.preventDefault();
+
         this.emit( e );
 
         if( this.once ) this.manager.unregisterNativeEvent( this.id );
 
     }
 
-    clear() {
+    remove() {
 
         this.manager.element.removeEventListener( this.id, this, true );
 
-        super.clear();
+        super.remove();
 
     }
 

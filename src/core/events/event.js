@@ -27,7 +27,7 @@ export class Event {
 
         this.functions.forEach( ( func, index ) => func.apply( null, [ data ] ) );
 
-        if( this.once ) this.clear();
+        if( this.once ) this.remove();
 
     }
 
@@ -46,6 +46,15 @@ export class Event {
     clear() {
 
         this.functions = [];
+
+    }
+
+    /**
+     *  @description Remove even from EventManager
+     */
+    remove() {
+
+        this.manager.unregisterEvent( this.id );
 
     }
 
