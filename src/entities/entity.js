@@ -47,6 +47,12 @@ class Entity {
 
 	}
 
+	update() {
+
+		this.mesh.position.copy( this.position );
+
+	}
+
 }
 
 export { Entity };
