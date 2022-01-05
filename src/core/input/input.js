@@ -2,4 +2,4 @@
  *	@author zwubs
  */
 
-export { Keyboard } from './keyboard.js'
+export { Keyboard } from './keyboard/keyboard.js'

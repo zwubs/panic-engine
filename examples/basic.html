@@ -52,6 +52,8 @@
 
 			PANIC.Debug.Access.enable();
 
+			let Fish = null;
+
 			try {
 
 				// Add 'await' if seeking complete loading prior to rendering
@@ -63,7 +65,16 @@
 
 				PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
+				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
+
+					Fish = PANIC.EntityRegistry.spawnEntity( template.id )
+
+					PANIC.Updater.add( "updateFish", Fish, "update" );
+
+					PANIC.Keyboard.on( "keydown_W", () => { Fish.position.y += 0.01 } );
+					PANIC.Keyboard.on( "keydown_S", () => { Fish.position.y -= 0.01 } );
+
+				} );
 
 				PANIC.Debug.Grid.toggle();
 				PANIC.Debug.Grid.scale = 16;
