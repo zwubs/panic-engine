@@ -1,5 +1,6 @@
 /**
  *  @author zwubs
+ *  @note Custom events are fired on update. NativeEvents are fired when available.
  */
 
 import { Event } from './event.js'
@@ -9,6 +10,8 @@ import { NativeEventList } from './native-event-list.js'
 
 import { Element } from '../dom/element.js'
 
+import { Updater } from '../updater.js'
+
 import * as Debug from '../../debug/debug-console.js';
 
 export class EventManager {
@@ -17,7 +20,13 @@ export class EventManager {
 
         this.events = {};
 
+		this.queue = {};
+
+        this.loopingEvents = {};
+
         this.element = Element;
+
+        Updater.add( "EventManager", this, "update", 0 );
 
     }
 
@@ -30,7 +39,7 @@ export class EventManager {
 
             Debug.warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
 
-            return;
+            return false;
 
         }
         // If already registered, warn & skip
@@ -38,9 +47,10 @@ export class EventManager {
 
             Debug.warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
 
-            return;
+            return false;
 
         }
+
 		this.events[ eventID ] = new Event( eventID, this, once );
 
 	}
@@ -54,7 +64,7 @@ export class EventManager {
 
             Debug.warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
 
-            return;
+            return false;
 
         }
 
@@ -73,7 +83,7 @@ export class EventManager {
 
             Debug.warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
 
-            return;
+            return false;
 
         }
 
@@ -81,7 +91,7 @@ export class EventManager {
 
             Debug.warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
 
-            return;
+            return false;
 
         }
 
@@ -111,13 +121,13 @@ export class EventManager {
      *  @param {String} eventID - A string acting as identification for the event.
      *  @param {Object} data - Data to be passed to all listeners
      */
-    emit( eventID, data ) {
+    emit( eventID, data, loop=false ) {
 
         if( !( eventID in this.events ) ) {
 
             Debug.warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
 
-            return;
+            return false;
 
         }
 
@@ -125,11 +135,18 @@ export class EventManager {
 
             Debug.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
 
-            return;
+            return false;
 
         }
 
-        this.events[ eventID ].emit( data );
+        this.queue[ eventID ] = { loop: loop, data: data };
+
+    }
+
+
+    breakLoop( eventID ) {
+
+        if( eventID in this.events ) this.queue[ eventID ].loop = false;
 
     }
 
@@ -143,7 +160,7 @@ export class EventManager {
 
             Debug.warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
 
-            return;
+            return false;
 
         }
 
@@ -151,11 +168,26 @@ export class EventManager {
 
             Debug.warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
 
-            return;
+            return false;
 
         }
 
         this.events[ eventID ].add( func );
+
+    }
+
+    /**
+     *  @description Called every frame to emit all events.
+     */
+    update() {
+
+        for ( const [key, value] of Object.entries( this.queue ) ) {
+
+            this.events[ key ].emit( value.data );
+
+            if( value.loop == false ) { delete this.queue[ key ]; }
+
+        }
 
     }
 

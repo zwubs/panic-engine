@@ -8,13 +8,14 @@ export class Event {
      *  @param {String} id - A string acting as identification for this event.
      *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
      */
-    constructor( id, manager, once=false ) {
+    constructor( id, manager, type="" ) {
 
 		this.id = id;
         this.manager = manager;
 
 		// Either continual or once
-        this.once = once ? true : false;
+        this.once = type == "once" ? true : false;
+        this.loop = type == "loop" ? true : false;
 
         /**
          *  @description An array of functions that are listening for the emit.
