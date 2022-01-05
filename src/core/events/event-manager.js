@@ -98,6 +98,14 @@ export class EventManager {
 
     }
 
+	/**
+	 * 	@description
+	 */
+	hasEvent( eventID ) {
+
+		return this.events.hasOwnProperty( eventID );
+
+	}
 
     /**
      *  @param {String} eventID - A string acting as identification for the event.
