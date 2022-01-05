@@ -25,7 +25,11 @@ class Updater {
 
             if( this.pass % this.data[ i ].interval == 0 ) {
 
-                this.data[ i ].object[ this.data[ i ].name ]();
+                if( typeof this.data[i].object[ "update" ] === "function" ) {
+
+					this.data[i].object.update();
+
+				}
 
             }
 
@@ -34,28 +38,11 @@ class Updater {
     }
 
     /**
-     *  @param id {String} - Unique ID of the PANIC.UpdaterFunction
      *  @param object {Object} - The object holding the function
-     *  @param name {String} - The name of the function to be updated
-     *  @param interval {Number} - The
      */
-    add( id, object, name, interval ) { this.data.push( new UpdaterFunction( id, object, name, interval ) ); }
+    add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
 
-    /**
-     *  @param id {String}
-     */
-    tremovefunction( id ) {
-
-        var object = this.getById( id );
-
-        this.data = this.data.filter( id => object.id == id );
-
-    }
-
-    /**
-     *  @param id {String}
-     */
-    getById( id ) { return this.data.find( o => o.id == id ); }
+	remove( object ) { }
 
 }
 
@@ -67,11 +54,9 @@ export { instance as Updater };
  */
 class UpdaterFunction {
 
-	constructor( id, object, name, interval=1 ) {
+	constructor( object, interval=1 ) {
 
-	    this.id = id;
 	    this.object = object;
-	    this.name = name;
 	    this.interval = ( interval <= 0 ) ? 1 : interval;
 
 	}

@@ -22,11 +22,9 @@ export class EventManager {
 
 		this.queue = {};
 
-        this.loopingEvents = {};
-
         this.element = Element;
 
-        Updater.add( "EventManager", this, "update", 0 );
+        Updater.add( this );
 
     }
 

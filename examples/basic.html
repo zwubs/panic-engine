@@ -71,7 +71,7 @@
 
 					Fish = PANIC.EntityRegistry.spawnEntity( template.id )
 
-					PANIC.Updater.add( "updateFish", Fish, "update" );
+					PANIC.Updater.add( Fish );
 
 					// ???
 					PANIC.Keyboard.on( "W", () => {
@@ -85,6 +85,9 @@
 
                     PANIC.Keyboard.on( "A", () => { Fish.rotation.y += 0.1; } );
 					PANIC.Keyboard.on( "D", () => { Fish.rotation.y -= 0.1; } );
+
+                    PANIC.Keyboard.on( "SPACE", () => { Fish.position.y += 0.0625; } );
+                    PANIC.Keyboard.on( "SHIFT", () => { Fish.position.y -= 0.0625; } );
 
 					// 60 fps
 					// if( PANIC.Keyboard.isKeyDown("W") ) { Fish.position.y += 0.01; }
