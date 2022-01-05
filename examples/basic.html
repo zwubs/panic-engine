@@ -54,6 +54,8 @@
 
 			let Fish = null;
 
+			let Run = 0;
+
 			try {
 
 				// Add 'await' if seeking complete loading prior to rendering
@@ -71,8 +73,21 @@
 
 					PANIC.Updater.add( "updateFish", Fish, "update" );
 
-					PANIC.Keyboard.on( "keydown_W", () => { Fish.position.y += 0.01 } );
-					PANIC.Keyboard.on( "keydown_S", () => { Fish.position.y -= 0.01 } );
+					// ???
+					PANIC.Keyboard.on( "W", () => {
+                        Fish.position.x -= 0.0625 * Math.sin( Fish.rotation.y );
+                        Fish.position.z -= 0.0625 * Math.cos( Fish.rotation.y );
+                    } );
+					PANIC.Keyboard.on( "S", () => {
+                        Fish.position.x += 0.0625 * Math.sin( Fish.rotation.y );
+                        Fish.position.z += 0.0625 * Math.cos( Fish.rotation.y );
+                    } );
+
+                    PANIC.Keyboard.on( "A", () => { Fish.rotation.y += 0.1; } );
+					PANIC.Keyboard.on( "D", () => { Fish.rotation.y -= 0.1; } );
+
+					// 60 fps
+					// if( PANIC.Keyboard.isKeyDown("W") ) { Fish.position.y += 0.01; }
 
 				} );
 

@@ -55,5 +55,5 @@ class EntityRegistry {
 
 };
 
-let instance = new EntityRegistry()
+let instance = new EntityRegistry();
 export { instance as EntityRegistry };
