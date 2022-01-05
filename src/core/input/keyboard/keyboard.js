@@ -17,7 +17,13 @@ class Keyboard {
 
 		this.eventManager.on( "keydown", this.handleKeyDown.bind(this) );
 
+		this.eventManager.registerNativeEvent( "keyup" );
+
+		this.eventManager.on( "keyup", this.handleKeyUp.bind(this) );
+
 		this.registerKeyEvents();
+
+		this.keys = {};
 
 	}
 
@@ -25,23 +31,29 @@ class Keyboard {
 
 		for ( let key in KeyCodes ) {
 
-			this.eventManager.registerEvent( `keydown_${ key }`);
+			this.eventManager.registerEvent( key );
 
 		}
+
+	}
+
+	handleKeyUp( e ) {
+
+		this.eventManager.breakLoop( KeyMap[ e.keyCode ] );
+
+	}
+
+	handleKeyDown( e ) {
+
+		if( e.repeat ) return;
+
+		this.eventManager.emit( KeyMap[ e.keyCode ], null, true );
 
 	}
 
 	on( key, func ) {
 
 		this.eventManager.on( key, func );
-
-	}
-
-	handleKeyDown( e ) {
-
-		let event = `keydown_${KeyMap[e.keyCode]}`;
-
-		this.eventManager.emit( event );
 
 	}
 
