@@ -29,33 +29,100 @@ class Keyboard {
 
 	}
 
+	/**
+	 * 	@description Registers all events for the
+	 * 	@todo Optimize to only use necessary events
+	 */
 	registerKeyEvents() {
 
 		for ( let key in KeyCodes ) {
 
-			this.eventManager.registerEvent( key );
+			this.eventManager.registerEvent( `keydown_${key}` );
+			this.eventManager.registerEvent( `keyup_${key}` );
+			this.eventManager.registerEvent( `keyheld_${key}` );
 
 		}
 
 	}
 
+	/**
+	 * 	@param {Event} e - Event from "keyup" event listener
+	 */
 	handleKeyUp( e ) {
 
-		this.eventManager.breakLoop( KeyMap[ e.keyCode ] );
+		this.eventManager.emit( `keyup_${KeyMap[ e.keyCode ]}`, {} );
+
+		this.eventManager.breakLoop( `keyheld_${KeyMap[ e.keyCode ]}` );
 
 	}
 
+	/**
+	 * 	@param {Event} e - Event from "keydown" event listener
+	 */
 	handleKeyDown( e ) {
 
 		if( e.repeat ) return;
 
-		this.eventManager.emit( KeyMap[ e.keyCode ], null, true );
+		this.eventManager.emit( `keydown_${KeyMap[ e.keyCode ]}`, {} );
+
+		this.eventManager.emit( `keyheld_${KeyMap[ e.keyCode ]}`, {}, true );
 
 	}
 
-	on( key, func ) {
+	onKey( key, func ) {
 
-		this.eventManager.on( key, func );
+		if( !this.checkValidKey( key, "onKey" ) ) { return; }
+
+		this.eventManager.on( `keyheld_${ key }`, func );
+
+	}
+
+	onKeyDown( key, func ) {
+
+		if( !this.checkValidKey( key, "onKeyDown" ) ) { return; }
+
+		this.eventManager.on( `keydown_${ key }`, func );
+
+	}
+
+	onKeyUp( key, func ) {
+
+		if( !this.checkValidKey( key, "onKeyUp" ) ) { return; }
+
+		this.eventManager.on( `keyup_${ key }`, func );
+
+	}
+
+	getKey( key ) {
+
+		if( !this.checkValidKey( key, "getKey" ) ) { return; }
+
+		return this.eventManager.eventActive( `keyheld_${ key }` );
+
+	}
+
+	getKeyDown( key ) {
+
+		if( !this.checkValidKey( key, "getKeyDown" ) ) { return; }
+
+		return this.eventManager.eventActive( `keydown_${ key }` );
+
+	}
+	getKeyUp( key ) {
+
+		if( !this.checkValidKey( key, "getKeyUp" ) ) { return; }
+
+		return this.eventManager.eventActive( `keyup_${ key }` );
+
+	}
+
+	checkValidKey( key, functionName ) {
+
+		if( key in KeyCodes ) return true;
+
+		Console.warn(`Keyboard.${functionName}(): '${ key }' is not a valid key`);
+
+		return false;
 
 	}
 
