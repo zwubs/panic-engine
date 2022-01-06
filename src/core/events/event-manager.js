@@ -191,7 +191,7 @@ export class EventManager {
      */
     breakLoop( eventID ) {
 
-        if( eventID in this.events ) this.queue[ eventID ].loop = false;
+        if( eventID in this.queue ) this.queue[ eventID ].loop = false;
 
     }
 
