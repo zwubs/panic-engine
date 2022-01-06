@@ -26,6 +26,14 @@ class Mouse {
 
 		this.eventManager.on( "click", this.handleClick.bind(this) );
 
+		this.eventManager.registerNativeEvent( "mousemove" );
+
+		this.eventManager.on( "mousemove", this.handleMove.bind(this) );
+
+		this.eventManager.registerNativeEvent( "wheel" );
+
+		this.eventManager.on( "wheel", this.handleScroll.bind(this) );
+
 		this.registerMouseEvents();
 
 	}
@@ -44,6 +52,10 @@ class Mouse {
 			this.eventManager.registerEvent( `held_${btn}` );
 
 		}
+
+		this.eventManager.registerEvent( `scroll_wheel`, false, true );
+
+		this.eventManager.registerEvent( `move`, false, true );
 
 	}
 
@@ -200,6 +212,56 @@ class Mouse {
 		Console.warn(`Mouse.${functionName}(): '${ btn }' is not a valid button`);
 
 		return false;
+
+	}
+
+	/**
+	 *	@HEADER {} WHEEL / SCROLL
+	 */
+	 handleScroll( e ) {
+
+		 this.eventManager.emit( 'scroll_wheel', { direction: Math.sign( e.deltaY ) } );
+
+	 }
+
+	 /**
+	  * @param {Function} func Function to be executed when event is recieved
+	  */
+	 onScroll( func ) {
+
+		 this.eventManager.on( 'scroll_wheel', func );
+
+	 }
+
+
+	/**
+	 *	@HEADER {} MOVEMENT
+	 */
+
+	 /**
+ 	 * 	@param {Event} e - Event from "mousemove" event listener
+ 	 */
+ 	handleMove( e ) {
+
+  		this.eventManager.emit( 'move', { x: e.x, y: e.y } );
+
+  	}
+
+	/**
+	 * @param {Function} func Function to be executed when event is recieved
+	 */
+	onMove( func ) {
+
+		this.eventManager.on( 'move', func );
+
+	}
+
+	/**
+	 *
+	 */
+	getPosition() {
+
+		return this.eventManager.getStore( 'move' );
 
 	}
 

@@ -48,9 +48,9 @@
 
         <script>
 
-			PANIC.Debug.enable();
+			// PANIC.Debug.enable();
 
-			PANIC.Debug.Access.enable();
+			// PANIC.Debug.Access.enable();
 
 			let Fish = null;
 
@@ -61,38 +61,46 @@
 				PANIC.Loaders.Entity.load( "./presets/entities/minecraft/minecraft.json" );
 				PANIC.Loaders.Entity.load( "./presets/entities/minecraft/slim.json" );
 
-				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" );
+				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
+
+                    Player = PANIC.EntityRegistry.spawnEntity( template.id )
+
+					PANIC.Updater.add( Player );
+
+                    PANIC.Keyboard.onKey( "W", () => {
+                        Player.position.x -= 0.0625 * Math.sin( Player.rotation.y );
+                        Player.position.z -= 0.0625 * Math.cos( Player.rotation.y );
+                    } );
+					PANIC.Keyboard.onKey( "S", () => {
+                        Player.position.x += 0.0625 * Math.sin( Player.rotation.y );
+                        Player.position.z += 0.0625 * Math.cos( Player.rotation.y );
+                    } );
+
+					PANIC.Keyboard.onKey( "A", () => { Player.rotation.y += 0.0625; } );
+					PANIC.Keyboard.onKey( "D", () => { Player.rotation.y -= 0.0625; } );
+
+                    PANIC.Keyboard.onKey( "SPACE", () => { Player.position.y += 0.0625 * 0.5; } );
+                    PANIC.Keyboard.onKey( "SHIFT", () => { Player.position.y -= 0.0625 * 0.5; } );
+
+                });
 
 				PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
 
 				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
 
-					Fish = PANIC.EntityRegistry.spawnEntity( template.id )
+					Fish = PANIC.EntityRegistry.spawnEntity( template.id );
 
 					PANIC.Updater.add( Fish );
 
-					// ???
-
-					PANIC.Keyboard.onKey( "W", () => {
-                        Fish.position.x -= 0.0625 * Math.sin( Fish.rotation.y );
-                        Fish.position.z -= 0.0625 * Math.cos( Fish.rotation.y );
-                    } );
-					PANIC.Keyboard.onKey( "S", () => {
-                        Fish.position.x += 0.0625 * Math.sin( Fish.rotation.y );
-                        Fish.position.z += 0.0625 * Math.cos( Fish.rotation.y );
-                    } );
-
-					PANIC.Keyboard.onKey( "A", () => { Fish.rotation.y += 0.0625; } );
-					PANIC.Keyboard.onKey( "D", () => { Fish.rotation.y -= 0.0625; } );
-
-                    PANIC.Keyboard.onKey( "SPACE", () => { Fish.position.y += 0.0625 * 0.5; } );
-                    PANIC.Keyboard.onKey( "SHIFT", () => { Fish.position.y -= 0.0625 * 0.5; } );
-
                     PANIC.Mouse.onButton( "R", () => { Fish.rotation.y += 0.0625; } );
-					PANIC.Mouse.onButton( "L", () => { Fish.rotation.y -= 0.0625; } );
+                    PANIC.Mouse.onButton( "L", () => { Fish.rotation.y -= 0.0625; } );
 
-					// 60 fps
-					// if( PANIC.Keyboard.isKeyDown("W") ) { Fish.position.y += 0.01; }
+					PANIC.Mouse.onMove( ( e ) => {
+                        Fish.position.x = ( e.x - PANIC.Element.clientWidth / 2 ) / -1000 * Fish.scale.x;
+                        Fish.position.z = ( e.y - PANIC.Element.clientHeight / 2 ) / -1000 * Fish.scale.x;
+                    } );
+
+                    PANIC.Mouse.onScroll( ( e ) => { Fish.scale.addScalar( e.direction / 4 ); } );
 
 				} );
 
@@ -110,6 +118,8 @@
 				    PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
 					PANIC.Updater.update();
+
+                    // console.log( PANIC.Mouse.getPosition() )
 
 				    requestAnimationFrame( Loop );
 

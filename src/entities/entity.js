@@ -21,7 +21,7 @@ class Entity {
 		// Transformation Variables
 		this.position = new Vector3( 0, 0, 0 );
 		this.rotation = new Vector3( 0, 0, 0 );
-		this.scale = new Vector3( 0, 0, 0 );
+		this.scale = new Vector3( 1, 1, 1 );
 
 		// Skeleton
 		this.skeleton = new Skeleton();
@@ -51,6 +51,7 @@ class Entity {
 
 		this.mesh.position.copy( this.position );
 		this.mesh.rotation.setFromVector3( this.rotation );
+		this.mesh.scale.copy( this.scale );
 
 	}
 
