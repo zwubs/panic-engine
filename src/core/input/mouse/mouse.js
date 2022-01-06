@@ -22,6 +22,10 @@ class Mouse {
 
 		this.eventManager.on( "mouseup", this.handleButtonUp.bind(this) );
 
+		this.eventManager.registerNativeEvent( "click" );
+
+		this.eventManager.on( "click", this.handleClick.bind(this) );
+
 		this.registerMouseEvents();
 
 	}
@@ -36,11 +40,16 @@ class Mouse {
 
 			this.eventManager.registerEvent( `mousedown_${btn}` );
 			this.eventManager.registerEvent( `mouseup_${btn}` );
+			this.eventManager.registerEvent( `mouseclick_${btn}` );
 			this.eventManager.registerEvent( `mouseheld_${btn}` );
 
 		}
 
 	}
+
+	/**
+	 *	@HEADER {} BUTTONS
+	 */
 
 	/**
 	 * 	@param {Event} e - Event from "mouseup" event listener
@@ -61,6 +70,15 @@ class Mouse {
 		this.eventManager.emit( `mousedown_${MouseButtonMap[ e.button ]}`, {} );
 
 		this.eventManager.emit( `mouseheld_${MouseButtonMap[ e.button ]}`, {}, true );
+
+	}
+
+	/**
+	 * 	@param {Event} e - Event from "mousedown" event listener
+	 */
+	handleClick( e ) {
+
+		this.eventManager.emit( `mouseclick_${MouseButtonMap[ e.button ]}`, {} );
 
 	}
 
@@ -105,6 +123,19 @@ class Mouse {
 	}
 
 	/**
+	 * @description Event is fired when the button is pressed and released successfully
+	 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+	 * @param {Function} func Function to be executed when event is recieved
+	 */
+	onClick( btn, func ) {
+
+		if( !this.checkValidButton( btn, "onClick" ) ) { return; }
+
+		this.eventManager.on( `mouseclick_${ btn }`, func );
+
+	}
+
+	/**
 	 * @description Returns a Boolean based on wether the button is being held down
 	 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
 	 * @return {Boolean}
@@ -144,7 +175,20 @@ class Mouse {
 	}
 
 	/**
-	 * @description Checks that a given buttonID is actually valid
+	 * @description Returns a Boolean based on wether a successful down and up event occured
+	 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+	 * @return {Boolean}
+	 */
+	getClick( btn ) {
+
+		if( !this.checkValidButton( btn, "getClick" ) ) { return; }
+
+		return this.eventManager.eventActive( `mouseclick_${ btn }` );
+
+	}
+
+	/**
+	 * @description Checks that a given buttonID is valid
 	 * @param  {String} btn ID used is signify the button, values available in MouseButtonCodes
 	 * @param  {String} functionName Function name to be logged is something goes wrong
 	 * @return {Boolean}
