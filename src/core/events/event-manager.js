@@ -12,7 +12,7 @@ import { Element } from '../dom/element.js'
 
 import { Updater } from '../updater.js'
 
-import * as Debug from '../../debug/debug-console.js';
+import * as Console from '../../debug/debug-console.js';
 
 export class EventManager {
 
@@ -35,7 +35,7 @@ export class EventManager {
 
         if( NativeEventList.includes( eventID ) ) {
 
-            Debug.warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
+            Console.warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
 
             return false;
 
@@ -43,7 +43,7 @@ export class EventManager {
         // If already registered, warn & skip
         else if( eventID in this.events ) {
 
-            Debug.warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
+            Console.warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
 
             return false;
 
@@ -60,7 +60,7 @@ export class EventManager {
 
         if( !( eventID in this.events ) ) {
 
-            Debug.warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
+            Console.warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
 
             return false;
 
@@ -79,7 +79,7 @@ export class EventManager {
 
         if( !( NativeEventList.includes( eventID ) ) ) {
 
-            Debug.warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
+            Console.warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
 
             return false;
 
@@ -87,7 +87,7 @@ export class EventManager {
 
         if( eventID in this.events ) {
 
-            Debug.warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
+            Console.warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
 
             return false;
 
@@ -123,7 +123,7 @@ export class EventManager {
 
         if( !( eventID in this.events ) ) {
 
-            Debug.warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
+            Console.warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
 
             return false;
 
@@ -131,7 +131,7 @@ export class EventManager {
 
         if( this.events[ eventID ] instanceof NativeEvent ) {
 
-            Debug.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
+            Console.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
 
             return false;
 
@@ -156,7 +156,7 @@ export class EventManager {
 
         if( !( eventID in this.events ) ) {
 
-            Debug.warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
+            Console.warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
 
             return false;
 
@@ -164,7 +164,7 @@ export class EventManager {
 
         if( typeof func !== "function" ) {
 
-            Debug.warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
+            Console.warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
 
             return false;
 

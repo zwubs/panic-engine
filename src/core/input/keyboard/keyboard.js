@@ -7,6 +7,8 @@ import { KeyMap } from './keymap.js';
 
 import { EventManager } from '../../events/event-manager.js'
 
+import * as Console from '../../../debug/debug-console.js';
+
 class Keyboard {
 
 	constructor() {
