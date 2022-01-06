@@ -88,6 +88,9 @@
                     PANIC.Keyboard.onKey( "SPACE", () => { Fish.position.y += 0.0625 * 0.5; } );
                     PANIC.Keyboard.onKey( "SHIFT", () => { Fish.position.y -= 0.0625 * 0.5; } );
 
+                    PANIC.Mouse.onButton( "R", () => { Fish.rotation.y += 0.0625; } );
+					PANIC.Mouse.onButton( "L", () => { Fish.rotation.y -= 0.0625; } );
+
 					// 60 fps
 					// if( PANIC.Keyboard.isKeyDown("W") ) { Fish.position.y += 0.01; }
 
