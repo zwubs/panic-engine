@@ -36,6 +36,10 @@ class Mouse {
 
 		this.registerMouseEvents();
 
+		this.eventManager.registerNativeEvent( "blur" );
+
+		this.eventManager.on( "blur", this.handleBlur.bind(this) );
+
 	}
 
 	/**
@@ -262,6 +266,16 @@ class Mouse {
 	getPosition() {
 
 		return this.eventManager.getStore( 'move' );
+
+	}
+
+
+	/**
+	 *	@HEADER {} BLUR
+	 */
+	handleBlur( e ) {
+
+		this.eventManager.clearQueue();
 
 	}
 

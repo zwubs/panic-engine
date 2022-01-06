@@ -24,6 +24,10 @@ class Keyboard {
 
 		this.registerKeyEvents();
 
+		this.eventManager.registerNativeEvent( "blur" );
+
+		this.eventManager.on( "blur", this.handleBlur.bind(this) );
+
 	}
 
 	/**
@@ -159,6 +163,16 @@ class Keyboard {
 		Console.warn(`Keyboard.${functionName}(): '${ key }' is not a valid key`);
 
 		return false;
+
+	}
+
+
+	/**
+	 *	@HEADER {} BLUR
+	 */
+	handleBlur( e ) {
+
+		this.eventManager.clearQueue();
 
 	}
 

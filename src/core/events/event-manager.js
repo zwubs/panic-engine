@@ -110,6 +110,15 @@ export class EventManager {
 
     }
 
+    /**
+     *  @description Clears the queue of all current events;
+     */
+    clearQueue() {
+
+        this.queue = {};
+
+    }
+
 	/**
 	 * 	@description
 	 */
