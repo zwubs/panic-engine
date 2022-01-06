@@ -38,10 +38,10 @@ class Mouse {
 
 		for ( let btn in MouseButtonCodes ) {
 
-			this.eventManager.registerEvent( `mousedown_${btn}` );
-			this.eventManager.registerEvent( `mouseup_${btn}` );
-			this.eventManager.registerEvent( `mouseclick_${btn}` );
-			this.eventManager.registerEvent( `mouseheld_${btn}` );
+			this.eventManager.registerEvent( `down_${btn}` );
+			this.eventManager.registerEvent( `up_${btn}` );
+			this.eventManager.registerEvent( `click_${btn}` );
+			this.eventManager.registerEvent( `held_${btn}` );
 
 		}
 
@@ -56,9 +56,9 @@ class Mouse {
 	 */
 	handleButtonUp( e ) {
 
-		this.eventManager.emit( `mouseup_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `up_${MouseButtonMap[ e.button ]}`, {} );
 
-		this.eventManager.breakLoop( `mouseheld_${MouseButtonMap[ e.button ]}` );
+		this.eventManager.breakLoop( `held_${MouseButtonMap[ e.button ]}` );
 
 	}
 
@@ -67,9 +67,9 @@ class Mouse {
 	 */
 	handleButtonDown( e ) {
 
-		this.eventManager.emit( `mousedown_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `down_${MouseButtonMap[ e.button ]}`, {} );
 
-		this.eventManager.emit( `mouseheld_${MouseButtonMap[ e.button ]}`, {}, true );
+		this.eventManager.emit( `held_${MouseButtonMap[ e.button ]}`, {}, true );
 
 	}
 
@@ -78,7 +78,7 @@ class Mouse {
 	 */
 	handleClick( e ) {
 
-		this.eventManager.emit( `mouseclick_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `click_${MouseButtonMap[ e.button ]}`, {} );
 
 	}
 
@@ -92,7 +92,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButton" ) ) { return; }
 
-		this.eventManager.on( `mouseheld_${ btn }`, func );
+		this.eventManager.on( `held_${ btn }`, func );
 
 	}
 
@@ -105,7 +105,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButtonDown" ) ) { return; }
 
-		this.eventManager.on( `mousedown_${ btn }`, func );
+		this.eventManager.on( `down_${ btn }`, func );
 
 	}
 
@@ -118,7 +118,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButtonUp" ) ) { return; }
 
-		this.eventManager.on( `mouseup_${ btn }`, func );
+		this.eventManager.on( `up_${ btn }`, func );
 
 	}
 
@@ -131,7 +131,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onClick" ) ) { return; }
 
-		this.eventManager.on( `mouseclick_${ btn }`, func );
+		this.eventManager.on( `click_${ btn }`, func );
 
 	}
 
@@ -144,7 +144,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButton" ) ) { return; }
 
-		return this.eventManager.eventActive( `mouseheld_${ btn }` );
+		return this.eventManager.eventActive( `held_${ btn }` );
 
 	}
 
@@ -157,7 +157,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButtonDown" ) ) { return; }
 
-		return this.eventManager.eventActive( `mousedown_${ btn }` );
+		return this.eventManager.eventActive( `down_${ btn }` );
 
 	}
 
@@ -170,7 +170,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButtonUp" ) ) { return; }
 
-		return this.eventManager.eventActive( `mouseup_${ btn }` );
+		return this.eventManager.eventActive( `up_${ btn }` );
 
 	}
 
@@ -183,7 +183,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getClick" ) ) { return; }
 
-		return this.eventManager.eventActive( `mouseclick_${ btn }` );
+		return this.eventManager.eventActive( `click_${ btn }` );
 
 	}
 
