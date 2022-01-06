@@ -2,8 +2,7 @@
  *	@author zwubs
  */
 
-import { KeyCodes } from './keycodes.js';
-import { KeyMap } from './keymap.js';
+import { KeyCodes, KeyMap } from './keyboard-consts.js';
 
 import { EventManager } from '../../events/event-manager.js'
 
@@ -24,8 +23,6 @@ class Keyboard {
 		this.eventManager.on( "keyup", this.handleKeyUp.bind(this) );
 
 		this.registerKeyEvents();
-
-		this.keys = {};
 
 	}
 

@@ -103,3 +103,13 @@ export const KeyCodes = {
     CLOSE_BRAKET: 221,
     SINGLE_QUOTE: 222
 }
+
+let KeyMap = {};
+
+for (var key in KeyCodes) {
+
+	KeyMap[ KeyCodes[ key ] ] = key;
+
+}
+
+export { KeyMap };
