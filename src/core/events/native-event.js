@@ -11,9 +11,9 @@ export class NativeEvent extends Event {
      *  @param { EventManager } mananger - EventManager of this event
      *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
      */
-    constructor( id, manager, type ) {
+    constructor( id, manager, loop, store ) {
 
-        super( id, manager, type );
+        super( id, manager, loop, store );
 
         this.manager.element.addEventListener( this.id, this, { capture: true } );
 
@@ -28,8 +28,6 @@ export class NativeEvent extends Event {
         e.preventDefault();
 
         this.emit( e );
-
-        if( this.once ) this.manager.unregisterNativeEvent( this.id );
 
     }
 

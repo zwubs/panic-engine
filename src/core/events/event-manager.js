@@ -20,9 +20,13 @@ export class EventManager {
 
         this.events = {};
 
+        // Storage events waiting for the next game update/tick
 		this.queue = {};
 
-        this.element = Element;
+        // Storage of data for aquiring later
+        this.store = {};
+
+        this.element = element ? element : Element;
 
         Updater.add( this );
 
@@ -31,7 +35,7 @@ export class EventManager {
     /**
      *  @description Register a custom event
      */
-	registerEvent( eventID, once ) {
+	registerEvent( eventID, loop, store ) {
 
         if( NativeEventList.includes( eventID ) ) {
 
@@ -49,7 +53,7 @@ export class EventManager {
 
         }
 
-		this.events[ eventID ] = new Event( eventID, this, once );
+		this.events[ eventID ] = new Event( eventID, this, loop, store );
 
 	}
 
@@ -75,7 +79,7 @@ export class EventManager {
     /**
      *  @description Register a native event, such as 'keydown'
      */
-    registerNativeEvent( eventID, once ) {
+    registerNativeEvent( eventID, loop, store ) {
 
         if( !( NativeEventList.includes( eventID ) ) ) {
 
@@ -93,7 +97,7 @@ export class EventManager {
 
         }
 
-		this.events[ eventID ] = new NativeEvent( eventID, this, once );
+		this.events[ eventID ] = new NativeEvent( eventID, this, loop, store );
 
     }
 
@@ -157,9 +161,29 @@ export class EventManager {
 
         }
 
-		return this.queue.hasOwnProperty( eventID );
+        return this.queue.hasOwnProperty( eventID );
 
 	}
+
+    /**
+	 * @description Get the value currently stored in this.store for this event
+	 * @param {String} eventID A string acting as identification for the event.
+	 * @return {Boolean}
+	 */
+    getStore( eventID ) {
+
+        if( !this.store.hasOwnProperty( eventID ) ) {
+
+            Console.warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
+
+            return false;
+
+        }
+
+        return this.store[ eventID ];
+
+	}
+
 
 
     /**
@@ -213,5 +237,3 @@ export class EventManager {
     }
 
 };
-
-export { ResizeRenderer } from './resize-renderer.js';
