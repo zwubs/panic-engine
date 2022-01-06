@@ -2,9 +2,12 @@
  *	@author zwubs
  */
 
+import { Canvas } from '../dom/canvas.js';
+import { Element } from '../dom/element.js';
+
 import { Camera } from './camera.js';
 
-import { Canvas } from '../dom/canvas.js';
+import { EventManager } from '../events/event-manager.js';
 
 import { WebGLRenderer, sRGBEncoding } from 'three';
 
@@ -17,9 +20,24 @@ class Renderer extends WebGLRenderer {
 		this.shadowMap.enabled = true;
 		this.outputEncoding = sRGBEncoding;
 
+		this.eventManager = new EventManager( window );
+
+		this.eventManager.registerNativeEvent( "resize" );
+		this.eventManager.on( "resize", this.onResize.bind(this) );
+
 	}
 
 	kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
+
+	onResize( e ) {
+
+	    Camera.aspect = Element.clientWidth / Element.clientHeight;
+	    Camera.updateProjectionMatrix();
+
+	    this.setPixelRatio( window.devicePixelRatio );
+	    this.setSize( Element.clientWidth, Element.clientHeight );
+
+	}
 
 	get canvas() { return this.domElement; }
 
