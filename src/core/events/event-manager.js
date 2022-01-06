@@ -141,8 +141,11 @@ export class EventManager {
 
     }
 
+
 	/**
-	 * 	@description Check if an event is currently in the queue
+	 * @description Check if an event is currently in the queue
+	 * @param  {String} eventID A string acting as identification for the event.
+	 * @return {Boolean}
 	 */
 	eventActive( eventID ) {
 
@@ -158,6 +161,10 @@ export class EventManager {
 
 	}
 
+
+    /**
+     * @param {String} eventID A string acting as identification for the event.
+     */
     breakLoop( eventID ) {
 
         if( eventID in this.events ) this.queue[ eventID ].loop = false;
@@ -165,8 +172,8 @@ export class EventManager {
     }
 
     /**
-     *  @param {String} eventID - A string acting as identification for the event.
-     *  @param {Function} func - Data to be passed to all listeners
+     *  @param {String} eventID A string acting as identification for the event.
+     *  @param {Function} func Data to be passed to all listeners
      */
     on( eventID, func ) {
 
