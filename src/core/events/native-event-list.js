@@ -96,5 +96,8 @@ export let NativeEventList = [
     "webkittransitionend",
     "error",
     "fullscreenchange",
-    "fullscreenerror"
+    "fullscreenerror",
+
+	"gamepadconnected",
+	"gamepaddisconnected"
 ]

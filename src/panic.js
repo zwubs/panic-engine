@@ -36,6 +36,7 @@ export { Element } from './core/dom/element.js';
 	 */
 	export { Keyboard } from './core/input/keyboard/keyboard.js';
 	export { Mouse } from './core/input/mouse/mouse.js';
+	// export { Gamepad } from './core/input/gamepad/gamepad.js';
 
 /**
  *	@filespace {ENTITIES}
