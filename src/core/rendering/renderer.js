@@ -25,6 +25,8 @@ class Renderer extends WebGLRenderer {
 		this.eventManager.registerNativeEvent( "resize" );
 		this.eventManager.on( "resize", this.onResize.bind(this) );
 
+		this.onResize();
+
 	}
 
 	kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
