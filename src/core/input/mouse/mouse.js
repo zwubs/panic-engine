@@ -222,11 +222,27 @@ class Mouse {
 	/**
 	 *	@HEADER {} WHEEL / SCROLL
 	 */
-	 handleScroll( e ) {
+
+	/**
+	 * 	@param {Event} e - Event from "wheel" event listener
+	 */
+	handleScroll( e ) {
 
 		 this.eventManager.emit( 'scroll_wheel', { direction: Math.sign( e.deltaY ) } );
 
-	 }
+	}
+
+	getScroll() {
+
+ 		return this.eventManager.eventActive( 'scroll_wheel' );
+
+ 	}
+
+	getScrollAmount() {
+
+		return this.eventManager.getStore( 'scroll_wheel' );
+
+	}
 
 	 /**
 	  * @param {Function} func Function to be executed when event is recieved
@@ -242,9 +258,9 @@ class Mouse {
 	 *	@HEADER {} MOVEMENT
 	 */
 
-	 /**
- 	 * 	@param {Event} e - Event from "mousemove" event listener
- 	 */
+	/**
+	 * 	@param {Event} e - Event from "mousemove" event listener
+	 */
  	handleMove( e ) {
 
   		this.eventManager.emit( 'move', { x: e.x, y: e.y } );
@@ -257,6 +273,12 @@ class Mouse {
 	onMove( func ) {
 
 		this.eventManager.on( 'move', func );
+
+	}
+
+	getMove() {
+
+		return this.eventManager.eventActive( 'move' );
 
 	}
 
