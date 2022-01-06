@@ -27,9 +27,14 @@ export { Element } from './core/dom/element.js';
 	export { Tileset } from './core/tileset/tileset.js';
 
 	/**
-	 *	@filespace {Events}
+	 *	@filespace {EVENTS}
 	 */
-	export * as Events from './core/events/events.js';
+	export { EventManager } from './core/events/event-manager.js';
+
+	/**
+	 *	@filespace {INPUT}
+	 */
+	export { Keyboard } from './core/input/keyboard/keyboard.js';
 
 /**
  *	@filespace {ENTITIES}

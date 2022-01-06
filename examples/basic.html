@@ -52,6 +52,8 @@
 
 			PANIC.Debug.Access.enable();
 
+			let Fish = null;
+
 			try {
 
 				// Add 'await' if seeking complete loading prior to rendering
@@ -63,7 +65,33 @@
 
 				PANIC.Loaders.Entity.load( "./presets/entities/debug/debug.json" );
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( (template) => PANIC.EntityRegistry.spawnEntity(template.id) );
+				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
+
+					Fish = PANIC.EntityRegistry.spawnEntity( template.id )
+
+					PANIC.Updater.add( Fish );
+
+					// ???
+
+					PANIC.Keyboard.onKey( "W", () => {
+                        Fish.position.x -= 0.0625 * Math.sin( Fish.rotation.y );
+                        Fish.position.z -= 0.0625 * Math.cos( Fish.rotation.y );
+                    } );
+					PANIC.Keyboard.onKey( "S", () => {
+                        Fish.position.x += 0.0625 * Math.sin( Fish.rotation.y );
+                        Fish.position.z += 0.0625 * Math.cos( Fish.rotation.y );
+                    } );
+
+					PANIC.Keyboard.onKey( "A", () => { Fish.rotation.y += 0.0625; } );
+					PANIC.Keyboard.onKey( "D", () => { Fish.rotation.y -= 0.0625; } );
+
+                    PANIC.Keyboard.onKey( "SPACE", () => { Fish.position.y += 0.0625 * 0.5; } );
+                    PANIC.Keyboard.onKey( "SHIFT", () => { Fish.position.y -= 0.0625 * 0.5; } );
+
+					// 60 fps
+					// if( PANIC.Keyboard.isKeyDown("W") ) { Fish.position.y += 0.01; }
+
+				} );
 
 				PANIC.Debug.Grid.toggle();
 				PANIC.Debug.Grid.scale = 16;
@@ -76,9 +104,9 @@
 
 				let Loop = function( time=0 ) {
 
-				    PANIC.Updater.update();
-
 				    PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
+
+					PANIC.Updater.update();
 
 				    requestAnimationFrame( Loop );
 

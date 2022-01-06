@@ -39,7 +39,7 @@ class Compass {
 
 			DebugElement.appendChild( this.element );
 
-			Updater.add( this.id, this, 'update', 15 );
+			Updater.add( this, 15 );
 
 		}
 
@@ -47,7 +47,7 @@ class Compass {
 
 			DebugElement.removeChild( this.element );
 
-			Updater.remove( this.id );
+			Updater.remove( this );
 
 		}
 
