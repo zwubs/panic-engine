@@ -141,6 +141,22 @@ export class EventManager {
 
     }
 
+	/**
+	 * 	@description Check if an event is currently in the queue
+	 */
+	eventActive( eventID ) {
+
+		if( !this.hasEvent( eventID ) ) {
+
+            Console.warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
+
+            return false;
+
+        }
+
+		return this.queue.hasOwnProperty( eventID );
+
+	}
 
     breakLoop( eventID ) {
 
