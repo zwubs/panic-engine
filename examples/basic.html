@@ -67,20 +67,20 @@
 
 					PANIC.Updater.add( Player );
 
-                    PANIC.Keyboard.onKey( "W", () => {
+                    PANIC.Input.Keyboard.onKey( "W", () => {
                         Player.position.x -= 0.0625 * Math.sin( Player.rotation.y );
                         Player.position.z -= 0.0625 * Math.cos( Player.rotation.y );
                     } );
-					PANIC.Keyboard.onKey( "S", () => {
+					PANIC.Input.Keyboard.onKey( "S", () => {
                         Player.position.x += 0.0625 * Math.sin( Player.rotation.y );
                         Player.position.z += 0.0625 * Math.cos( Player.rotation.y );
                     } );
 
-					PANIC.Keyboard.onKey( "A", () => { Player.rotation.y += 0.0625; } );
-					PANIC.Keyboard.onKey( "D", () => { Player.rotation.y -= 0.0625; } );
+					PANIC.Input.Keyboard.onKey( "A", () => { Player.rotation.y += 0.0625; } );
+					PANIC.Input.Keyboard.onKey( "D", () => { Player.rotation.y -= 0.0625; } );
 
-                    PANIC.Keyboard.onKey( "SPACE", () => { Player.position.y += 0.0625 * 0.5; } );
-                    PANIC.Keyboard.onKey( "SHIFT", () => { Player.position.y -= 0.0625 * 0.5; } );
+                    PANIC.Input.Keyboard.onKey( "SPACE", () => { Player.position.y += 0.0625 * 0.5; } );
+                    PANIC.Input.Keyboard.onKey( "SHIFT", () => { Player.position.y -= 0.0625 * 0.5; } );
 
                 });
 
@@ -92,15 +92,15 @@
 
 					PANIC.Updater.add( Fish );
 
-                    PANIC.Mouse.onButton( "R", () => { Fish.rotation.y += 0.0625; } );
-                    PANIC.Mouse.onButton( "L", () => { Fish.rotation.y -= 0.0625; } );
+                    PANIC.Input.Mouse.onButton( "R", () => { Fish.rotation.y += 0.0625; } );
+                    PANIC.Input.Mouse.onButton( "L", () => { Fish.rotation.y -= 0.0625; } );
 
-					PANIC.Mouse.onMove( ( e ) => {
+					PANIC.Input.Mouse.onMove( ( e ) => {
                         Fish.position.x = ( e.x - PANIC.Element.clientWidth / 2 ) / -1000 * Fish.scale.x;
                         Fish.position.z = ( e.y - PANIC.Element.clientHeight / 2 ) / -1000 * Fish.scale.x;
                     } );
 
-                    PANIC.Mouse.onScroll( ( e ) => { Fish.scale.addScalar( e.direction / 4 ); } );
+                    PANIC.Input.Mouse.onScroll( ( e ) => { Fish.scale.addScalar( e.direction / 4 ); } );
 
 				} );
 

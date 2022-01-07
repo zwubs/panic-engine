@@ -53,28 +53,28 @@
 			PANIC.Debug.Access.enable();
 
             // Test Event Base Input
-            PANIC.Keyboard.onKey( "1", () => { console.log( "onKey(): WORKS!" ) } );
-            PANIC.Keyboard.onKeyDown( "2", () => { console.log( "onKeyDown(): WORKS!" ) } );
-            PANIC.Keyboard.onKeyUp( "3", () => { console.log( "onKeyUp(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKey( "1", () => { console.log( "onKey(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKeyDown( "2", () => { console.log( "onKeyDown(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKeyUp( "3", () => { console.log( "onKeyUp(): WORKS!" ) } );
 
             // Test Registering "Fake" Event Keys
-            PANIC.Keyboard.onKey( "12", () => { console.log( "onKey(): WORKS!" ) } );
-            PANIC.Keyboard.onKeyDown( "23", () => { console.log( "onKeyDown(): WORKS!" ) } );
-            PANIC.Keyboard.onKeyUp( "34", () => { console.log( "onKeyUp(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKey( "12", () => { console.log( "onKey(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKeyDown( "23", () => { console.log( "onKeyDown(): WORKS!" ) } );
+            PANIC.Input.Keyboard.onKeyUp( "34", () => { console.log( "onKeyUp(): WORKS!" ) } );
 
             // Test Registering "Fake" Polling Keys
-            if( PANIC.Keyboard.getKey("45") ) { console.log( "getKey(): WORKS!"); }
-            if( PANIC.Keyboard.getKeyDown("56") ) { console.log( "getKeyDown(): WORKS!"); }
-            if( PANIC.Keyboard.getKeyUp("67") ) { console.log( "getKeyUp(): WORKS!"); }
+            if( PANIC.Input.Keyboard.getKey("45") ) { console.log( "getKey(): WORKS!"); }
+            if( PANIC.Input.Keyboard.getKeyDown("56") ) { console.log( "getKeyDown(): WORKS!"); }
+            if( PANIC.Input.Keyboard.getKeyUp("67") ) { console.log( "getKeyUp(): WORKS!"); }
 
             let Loop = function( time=0 ) {
 
                 PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
                 // Test Polling Keys
-                if( PANIC.Keyboard.getKey("4") ) { console.log( "getKey(): WORKS!"); }
-                if( PANIC.Keyboard.getKeyDown("5") ) { console.log( "getKeyDown(): WORKS!"); }
-                if( PANIC.Keyboard.getKeyUp("6") ) { console.log( "getKeyUp(): WORKS!"); }
+                if( PANIC.Input.Keyboard.getKey("4") ) { console.log( "getKey(): WORKS!"); }
+                if( PANIC.Input.Keyboard.getKeyDown("5") ) { console.log( "getKeyDown(): WORKS!"); }
+                if( PANIC.Input.Keyboard.getKeyUp("6") ) { console.log( "getKeyUp(): WORKS!"); }
 
                 PANIC.Updater.update();
 

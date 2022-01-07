@@ -53,48 +53,48 @@
 			PANIC.Debug.Access.enable();
 
             // Test Event Based Input
-            PANIC.Mouse.onButtonDown( "L", () => { console.log( "onButtonDown(): WORKS!" ) } );
-            PANIC.Mouse.onButton( "L", () => { console.log( "onButton(): WORKS!" ) } );
-            PANIC.Mouse.onButtonUp( "L", () => { console.log( "onButtonUp(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButtonDown( "L", () => { console.log( "onButtonDown(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButton( "L", () => { console.log( "onButton(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButtonUp( "L", () => { console.log( "onButtonUp(): WORKS!" ) } );
 
             // Test Registering "Fake" Event Buttons
-            PANIC.Mouse.onButtonDown( "B", () => { console.log( "onButtonDown(): WORKS!" ) } );
-            PANIC.Mouse.onButton( "A", () => { console.log( "onButton(): WORKS!" ) } );
-            PANIC.Mouse.onButtonUp( "C", () => { console.log( "onButtonUp(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButtonDown( "B", () => { console.log( "onButtonDown(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButton( "A", () => { console.log( "onButton(): WORKS!" ) } );
+            PANIC.Input.Mouse.onButtonUp( "C", () => { console.log( "onButtonUp(): WORKS!" ) } );
 
             // Test Registering "Fake" Polling Buttons
-            if( PANIC.Mouse.getButtonDown("B") ) { console.log( "getButtonDown(): WORKS!"); }
-            if( PANIC.Mouse.getButton("A") ) { console.log( "getButton(): WORKS!"); }
-            if( PANIC.Mouse.getButtonUp("C") ) { console.log( "getButtonUp(): WORKS!"); }
+            if( PANIC.Input.Mouse.getButtonDown("B") ) { console.log( "getButtonDown(): WORKS!"); }
+            if( PANIC.Input.Mouse.getButton("A") ) { console.log( "getButton(): WORKS!"); }
+            if( PANIC.Input.Mouse.getButtonUp("C") ) { console.log( "getButtonUp(): WORKS!"); }
 
-            PANIC.Mouse.onMove( ( e ) => { console.log( "onMove(): WORKS!" ) } );
-            PANIC.Mouse.onScroll( ( e ) => { console.log( "onScroll(): WORKS!" ) } );
+            PANIC.Input.Mouse.onMove( ( e ) => { console.log( "onMove(): WORKS!" ) } );
+            PANIC.Input.Mouse.onScroll( ( e ) => { console.log( "onScroll(): WORKS!" ) } );
 
             let Loop = function( time=0 ) {
 
                 PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
                 // Test Polling Buttons
-                if( PANIC.Mouse.getButtonDown("R") ) { console.log( "getButtonDown(R): WORKS!"); }
-                if( PANIC.Mouse.getButton("R") ) { console.log( "getButton(L): WORKS!"); }
-                if( PANIC.Mouse.getButtonUp("R") ) { console.log( "getButtonUp(M): WORKS!"); }
+                if( PANIC.Input.Mouse.getButtonDown("R") ) { console.log( "getButtonDown(R): WORKS!"); }
+                if( PANIC.Input.Mouse.getButton("R") ) { console.log( "getButton(L): WORKS!"); }
+                if( PANIC.Input.Mouse.getButtonUp("R") ) { console.log( "getButtonUp(M): WORKS!"); }
 
-                if( PANIC.Mouse.getButtonDown("R") ) { console.log( "getButtonDown(R): WORKS!"); }
-                if( PANIC.Mouse.getButton("R") ) { console.log( "getButton(L): WORKS!"); }
-                if( PANIC.Mouse.getButtonUp("R") ) { console.log( "getButtonUp(M): WORKS!"); }
+                if( PANIC.Input.Mouse.getButtonDown("R") ) { console.log( "getButtonDown(R): WORKS!"); }
+                if( PANIC.Input.Mouse.getButton("R") ) { console.log( "getButton(L): WORKS!"); }
+                if( PANIC.Input.Mouse.getButtonUp("R") ) { console.log( "getButtonUp(M): WORKS!"); }
 
-                if( PANIC.Mouse.getMove() ) {
+                if( PANIC.Input.Mouse.getMove() ) {
 
 					console.log( "getMove(): WORKS!");
 
-					if( PANIC.Mouse.getPosition() ) { console.log( "getPosition(): WORKS!"); }
+					if( PANIC.Input.Mouse.getPosition() ) { console.log( "getPosition(): WORKS!"); }
 
 				}
-                if( PANIC.Mouse.getScroll() ) {
+                if( PANIC.Input.Mouse.getScroll() ) {
 
 					console.log( "getScroll(): WORKS!");
 
-					if( PANIC.Mouse.getScrollAmount() ) { console.log( "getScrollAmount(): WORKS!"); }
+					if( PANIC.Input.Mouse.getScrollAmount() ) { console.log( "getScrollAmount(): WORKS!"); }
 
 				}
 
