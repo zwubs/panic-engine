@@ -16,7 +16,7 @@ export { Clock } from './core/clock.js';
 export { Updater } from './core/updater.js';
 export { Cube } from './core/cube.js';
 export { Texture } from './core/texture.js';
-export { Controls } from './core/input/controls.js';
+export { Controls as OrbitControls } from './core/input/orbit-controls.js';
 export { Element } from './core/dom/element.js';
 
 	/**
@@ -34,9 +34,7 @@ export { Element } from './core/dom/element.js';
 	/**
 	 *	@filespace {INPUT}
 	 */
-	export { Keyboard } from './core/input/keyboard/keyboard.js';
-	export { Mouse } from './core/input/mouse/mouse.js';
-	// export { Gamepad } from './core/input/gamepad/gamepad.js';
+	export * as Input from './core/input/input.js';
 
 /**
  *	@filespace {ENTITIES}
