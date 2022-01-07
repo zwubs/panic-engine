@@ -38,9 +38,9 @@ class Keyboard {
 
 		for ( let key in KeyCodes ) {
 
-			this.eventManager.registerEvent( `down_${key}` );
-			this.eventManager.registerEvent( `up_${key}` );
-			this.eventManager.registerEvent( `held_${key}` );
+			this.eventManager.registerEvent( `KEY_DOWN_${key}` );
+			this.eventManager.registerEvent( `KEY_UP_${key}` );
+			this.eventManager.registerEvent( `KEY_HELD_${key}` );
 
 		}
 
@@ -51,9 +51,9 @@ class Keyboard {
 	 */
 	handleKeyUp( e ) {
 
-		this.eventManager.emit( `up_${KeyMap[ e.keyCode ]}`, {} );
+		this.eventManager.emit( `KEY_UP_${KeyMap[ e.keyCode ]}`, {} );
 
-		this.eventManager.breakLoop( `held_${KeyMap[ e.keyCode ]}` );
+		this.eventManager.breakLoop( `KEY_HELD_${KeyMap[ e.keyCode ]}` );
 
 	}
 
@@ -64,9 +64,9 @@ class Keyboard {
 
 		if( e.repeat ) return;
 
-		this.eventManager.emit( `down_${KeyMap[ e.keyCode ]}`, {} );
+		this.eventManager.emit( `KEY_DOWN_${KeyMap[ e.keyCode ]}`, {} );
 
-		this.eventManager.emit( `held_${KeyMap[ e.keyCode ]}`, {}, true );
+		this.eventManager.emit( `KEY_HELD_${KeyMap[ e.keyCode ]}`, {}, true );
 
 	}
 
@@ -80,7 +80,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "onKey" ) ) { return; }
 
-		this.eventManager.on( `held_${ key }`, func );
+		this.eventManager.on( `KEY_HELD_${ key }`, func );
 
 	}
 
@@ -93,7 +93,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "onKeyDown" ) ) { return; }
 
-		this.eventManager.on( `down_${ key }`, func );
+		this.eventManager.on( `KEY_DOWN_${ key }`, func );
 
 	}
 
@@ -106,7 +106,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "onKeyUp" ) ) { return; }
 
-		this.eventManager.on( `up_${ key }`, func );
+		this.eventManager.on( `KEY_UP_${ key }`, func );
 
 	}
 
@@ -119,7 +119,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "getKey" ) ) { return; }
 
-		return this.eventManager.eventActive( `held_${ key }` );
+		return this.eventManager.eventActive( `KEY_HELD_${ key }` );
 
 	}
 
@@ -132,7 +132,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "getKeyDown" ) ) { return; }
 
-		return this.eventManager.eventActive( `down_${ key }` );
+		return this.eventManager.eventActive( `KEY_DOWN_${ key }` );
 
 	}
 
@@ -145,7 +145,7 @@ class Keyboard {
 
 		if( !this.checkValidKey( key, "getKeyUp" ) ) { return; }
 
-		return this.eventManager.eventActive( `up_${ key }` );
+		return this.eventManager.eventActive( `KEY_UP_${ key }` );
 
 	}
 

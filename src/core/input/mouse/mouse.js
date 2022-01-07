@@ -22,9 +22,9 @@ class Mouse {
 
 		this.eventManager.on( "mouseup", this.handleButtonUp.bind(this) );
 
-		this.eventManager.registerNativeEvent( "click" );
+		this.eventManager.registerNativeEvent( "MOUSE_CLICK" );
 
-		this.eventManager.on( "click", this.handleClick.bind(this) );
+		this.eventManager.on( "MOUSE_CLICK", this.handleClick.bind(this) );
 
 		this.eventManager.registerNativeEvent( "mousemove" );
 
@@ -50,16 +50,16 @@ class Mouse {
 
 		for ( let btn in MouseButtonCodes ) {
 
-			this.eventManager.registerEvent( `down_${btn}` );
-			this.eventManager.registerEvent( `up_${btn}` );
-			this.eventManager.registerEvent( `click_${btn}` );
-			this.eventManager.registerEvent( `held_${btn}` );
+			this.eventManager.registerEvent( `MOUSE_DOWN_${btn}` );
+			this.eventManager.registerEvent( `MOUSE_UP_${btn}` );
+			this.eventManager.registerEvent( `MOUSE_CLICK_${btn}` );
+			this.eventManager.registerEvent( `MOUSE_HELD_${btn}` );
 
 		}
 
-		this.eventManager.registerEvent( `scroll_wheel`, false, true );
+		this.eventManager.registerEvent( `MOUSE_SCROLL`, false, true );
 
-		this.eventManager.registerEvent( `move`, false, true );
+		this.eventManager.registerEvent( `MOUSE_MOVE`, false, true );
 
 	}
 
@@ -72,9 +72,9 @@ class Mouse {
 	 */
 	handleButtonUp( e ) {
 
-		this.eventManager.emit( `up_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `MOUSE_UP_${MouseButtonMap[ e.button ]}`, {} );
 
-		this.eventManager.breakLoop( `held_${MouseButtonMap[ e.button ]}` );
+		this.eventManager.breakLoop( `MOUSE_HELD_${MouseButtonMap[ e.button ]}` );
 
 	}
 
@@ -83,9 +83,9 @@ class Mouse {
 	 */
 	handleButtonDown( e ) {
 
-		this.eventManager.emit( `down_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `MOUSE_DOWN_${MouseButtonMap[ e.button ]}`, {} );
 
-		this.eventManager.emit( `held_${MouseButtonMap[ e.button ]}`, {}, true );
+		this.eventManager.emit( `MOUSE_HELD_${MouseButtonMap[ e.button ]}`, {}, true );
 
 	}
 
@@ -94,7 +94,7 @@ class Mouse {
 	 */
 	handleClick( e ) {
 
-		this.eventManager.emit( `click_${MouseButtonMap[ e.button ]}`, {} );
+		this.eventManager.emit( `MOUSE_CLICK_${MouseButtonMap[ e.button ]}`, {} );
 
 	}
 
@@ -108,7 +108,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButton" ) ) { return; }
 
-		this.eventManager.on( `held_${ btn }`, func );
+		this.eventManager.on( `MOUSE_HELD_${ btn }`, func );
 
 	}
 
@@ -121,7 +121,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButtonDown" ) ) { return; }
 
-		this.eventManager.on( `down_${ btn }`, func );
+		this.eventManager.on( `MOUSE_DOWN_${ btn }`, func );
 
 	}
 
@@ -134,7 +134,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onButtonUp" ) ) { return; }
 
-		this.eventManager.on( `up_${ btn }`, func );
+		this.eventManager.on( `MOUSE_UP_${ btn }`, func );
 
 	}
 
@@ -147,7 +147,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "onClick" ) ) { return; }
 
-		this.eventManager.on( `click_${ btn }`, func );
+		this.eventManager.on( `MOUSE_CLICK_${ btn }`, func );
 
 	}
 
@@ -160,7 +160,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButton" ) ) { return; }
 
-		return this.eventManager.eventActive( `held_${ btn }` );
+		return this.eventManager.eventActive( `MOUSE_HELD_${ btn }` );
 
 	}
 
@@ -173,7 +173,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButtonDown" ) ) { return; }
 
-		return this.eventManager.eventActive( `down_${ btn }` );
+		return this.eventManager.eventActive( `MOUSE_DOWN_${ btn }` );
 
 	}
 
@@ -186,7 +186,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getButtonUp" ) ) { return; }
 
-		return this.eventManager.eventActive( `up_${ btn }` );
+		return this.eventManager.eventActive( `MOUSE_UP_${ btn }` );
 
 	}
 
@@ -199,7 +199,7 @@ class Mouse {
 
 		if( !this.checkValidButton( btn, "getClick" ) ) { return; }
 
-		return this.eventManager.eventActive( `click_${ btn }` );
+		return this.eventManager.eventActive( `MOUSE_CLICK_${ btn }` );
 
 	}
 
@@ -228,19 +228,19 @@ class Mouse {
 	 */
 	handleScroll( e ) {
 
-		 this.eventManager.emit( 'scroll_wheel', { direction: Math.sign( e.deltaY ) } );
+		 this.eventManager.emit( `MOUSE_SCROLL`, { direction: Math.sign( e.deltaY ) } );
 
 	}
 
 	getScroll() {
 
- 		return this.eventManager.eventActive( 'scroll_wheel' );
+ 		return this.eventManager.eventActive( `MOUSE_SCROLL` );
 
  	}
 
 	getScrollAmount() {
 
-		return this.eventManager.getStore( 'scroll_wheel' );
+		return this.eventManager.getStore( `MOUSE_SCROLL` );
 
 	}
 
@@ -249,7 +249,7 @@ class Mouse {
 	  */
 	 onScroll( func ) {
 
-		 this.eventManager.on( 'scroll_wheel', func );
+		 this.eventManager.on( `MOUSE_SCROLL`, func );
 
 	 }
 
@@ -263,7 +263,7 @@ class Mouse {
 	 */
  	handleMove( e ) {
 
-  		this.eventManager.emit( 'move', { x: e.x, y: e.y } );
+  		this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
 
   	}
 
@@ -272,13 +272,13 @@ class Mouse {
 	 */
 	onMove( func ) {
 
-		this.eventManager.on( 'move', func );
+		this.eventManager.on( 'MOUSE_MOVE', func );
 
 	}
 
 	getMove() {
 
-		return this.eventManager.eventActive( 'move' );
+		return this.eventManager.eventActive( 'MOUSE_MOVE' );
 
 	}
 
