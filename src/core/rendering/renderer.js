@@ -9,7 +9,7 @@ import { Camera } from './camera.js';
 
 import { EventManager } from '../events/event-manager.js';
 
-import { WebGLRenderer, sRGBEncoding } from 'three';
+import { WebGLRenderer, sRGBEncoding, LinearToneMapping, BasicShadowMap } from 'three';
 
 class Renderer extends WebGLRenderer {
 
@@ -18,7 +18,12 @@ class Renderer extends WebGLRenderer {
 		super( { canvas: Canvas } );
 
 		this.shadowMap.enabled = true;
+		this.shadowMap.type = BasicShadowMap;
+		
 		this.outputEncoding = sRGBEncoding;
+
+		this.toneMapping = LinearToneMapping;
+		this.toneMappingExposure = 0.70;
 
 		this.eventManager = new EventManager( window );
 

@@ -11,9 +11,9 @@ class Scene extends THREE_Scene {
 		super();
 
 		this.background = new Color( 0x222222 );
-		this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
+		// this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
 
-		this.add( new HemisphereLight( 0xC9F8FF, 0xC9F8FF, 1.25 ) );
+		this.add( new HemisphereLight( 0xFFFFFF, 0xFFFFFF, 1.00 ) );
 
 		let dirLight = new DirectionalLight( 0xFFFFFF, 1.25 );
 		dirLight.castShadow = true;
