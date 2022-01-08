@@ -1,0 +1,49 @@
+{
+
+	"id": "angel-fish",
+	"name": "Angel Fish",
+	"version": "1.0.1",
+
+	"texture": "angel-fish.png",
+
+	"tileset": {
+
+		"body": {
+			"default": { "x": 0, "y": 0 },
+			"north": { "w": 1, "h": 4 },
+			"south": { "w": 1, "h": 4, "x": 3 },
+			"east" : { "h": 4, "w": 4, "t": { "flipX": true } },
+			"west" : { "h": 4, "w": 4 },
+			"up": { "w": 1, "h": 4, "x": 0, "t": { "flipY": true } },
+			"down": { "w": 1, "h": 4, "x": 3 }
+		},
+
+		"fin": {
+			"east" : { "x": 4, "y": 0, "h": 4, "w": 4, "t": { "flipX": true } },
+			"west" : { "x": 4, "y": 0, "h": 4, "w": 4 }
+		}
+
+    },
+
+	"armature": {
+		"root": {
+			"cubes": [
+
+				{
+					"size": [ 1, 4, 4 ],
+					"rotation": [ 45, 0, 0 ],
+					"faces": "body"
+				},
+
+				{
+					"size": [ 0, 4, 4 ],
+					"offset": [ 0, 0, 2.828 ],
+					"rotation": [ 45, 0, 0 ],
+					"faces": "fin"
+				}
+
+			]
+		}
+	}
+
+}
