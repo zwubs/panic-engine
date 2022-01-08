@@ -35,8 +35,8 @@ export class NativeEvent extends Event {
 
         this.manager.element.removeEventListener( this.id, this, true );
 
-        super.remove();
-
+        this.manager.unregisterEvent( this.id );
+        
     }
 
 }

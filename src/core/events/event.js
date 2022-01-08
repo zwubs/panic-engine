@@ -51,13 +51,4 @@ export class Event {
 
     }
 
-    /**
-     *  @description Remove even from EventManager
-     */
-    remove() {
-
-        this.manager.unregisterEvent( this.id );
-
-    }
-
 }
