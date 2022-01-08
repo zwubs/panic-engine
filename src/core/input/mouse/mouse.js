@@ -22,9 +22,9 @@ class Mouse {
 
 		this.eventManager.on( "mouseup", this.handleButtonUp.bind(this) );
 
-		this.eventManager.registerNativeEvent( "MOUSE_CLICK" );
+		this.eventManager.registerNativeEvent( "click" );
 
-		this.eventManager.on( "MOUSE_CLICK", this.handleClick.bind(this) );
+		this.eventManager.on( "click", this.handleClick.bind(this) );
 
 		this.eventManager.registerNativeEvent( "mousemove" );
 
