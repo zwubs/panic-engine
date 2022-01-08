@@ -18,6 +18,8 @@ export class Event {
 
         if( store ) this.manager.store[ this.id ] = null;
 
+        this.aliases = {};
+
         /**
          *  @description An array of functions that are listening for the emit.
          */
@@ -41,6 +43,10 @@ export class Event {
         this.functions.push( func );
 
     }
+
+    addAlias( eventAlias ) { this.aliases[ eventAlias.id ] = eventAlias; }
+
+    removeAlias( aliasID ) { delete this.aliases[ aliasID ]; this.manager.unregisterEventAlias( eventAlias.id ); }
 
     /**
      *  @description Empty the array

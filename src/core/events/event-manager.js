@@ -4,6 +4,7 @@
  */
 
 import { Event } from './event.js'
+import { EventAlias } from './event-alias.js'
 import { NativeEvent } from './native-event.js'
 
 import { NativeEventList } from './native-event-list.js'
@@ -58,6 +59,48 @@ export class EventManager {
 	}
 
     /**
+     *  @param {String} alias
+     *  @param {String} eventID
+     */
+     registerEventAlias( alias, eventID ) {
+
+         if( NativeEventList.includes( alias ) ) {
+
+             Console.warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
+
+             return false;
+
+         }
+
+         else if( NativeEventList.includes( eventID ) ) {
+
+             Console.warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
+
+             return false;
+
+         }
+
+         else if( alias in this.events ) {
+
+             Console.warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
+
+             return false;
+
+         }
+
+         else if( !(eventID in this.events ) ) {
+
+             Console.warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
+
+             return false;
+
+         }
+
+         this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
+
+     }
+
+    /**
      *  @description Remove an event from this EventManager
      */
     unregisterEvent( eventID ) {
@@ -69,10 +112,28 @@ export class EventManager {
             return false;
 
         }
+        
+        for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
 
         this.events[ eventID ].clear();
 
         delete this.events[ eventID ];
+
+    }
+
+    unregisterEventAlias( alias ) {
+
+        console.log( alias, this.events )
+
+        if( !( alias in this.events ) ) {
+
+            Console.warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
+
+            return false;
+
+        }
+
+        delete this.events[ alias ];
 
     }
 
@@ -150,7 +211,8 @@ export class EventManager {
 
         }
 
-        this.queue[ eventID ] = { loop: loop, data: data };
+        if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+        else this.queue[ eventID ] = { loop: loop, data: data };
 
     }
 
@@ -200,7 +262,12 @@ export class EventManager {
      */
     breakLoop( eventID ) {
 
-        if( eventID in this.queue ) this.queue[ eventID ].loop = false;
+        if( this.events[ eventID ] instanceof EventAlias ) {
+            if( this.events[ eventID ].event.id in this.queue ) {
+                this.queue[ this.events[ eventID ].event.id ].loop = false;
+            }
+        }
+        else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
 
     }
 
