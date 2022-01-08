@@ -24,6 +24,22 @@
 		}
 	},
 
+	"actions": {
+		
+		"MOVE_FORWARD": [
+			"KEY_W",
+			"KEY_UP",
+			"GAMEPAD_LSTICK_NORTH"
+		],
+
+		"MOVE_BACKWARD": [
+			"KEY_S",
+			"KEY_DOWN",
+			"GAMEPAD_LSTICK_SOUTH"
+		]
+
+	},
+
 	"collision": {
 		"cubes": [
 			{
