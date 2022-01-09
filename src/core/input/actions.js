@@ -7,6 +7,7 @@ import { EventManager } from '../events/event-manager.js'
 
 import { Keyboard } from './keyboard/keyboard.js'
 import { Mouse } from './mouse/mouse.js'
+import { Gamepad } from './gamepad/gamepad.js'
 
 export class Actions {
 
@@ -34,7 +35,11 @@ export class Actions {
             Mouse.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
 
         }
-        else if( binding.startsWith("GAMEPAD") ) {}
+        else if( binding.startsWith("GAMEPAD") ) {
+
+			Gamepad.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
+
+		}
 
     }
 

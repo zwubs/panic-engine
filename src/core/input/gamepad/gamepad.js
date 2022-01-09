@@ -2,6 +2,8 @@
  *	@author zwubs
  */
 
+import { GamepadEvents, GamepadButtons, GamepadAxes } from './gamepad-consts.js';
+
 import { EventManager } from '../../events/event-manager.js'
 
 import { Joypad } from './joypad.js';
@@ -10,31 +12,45 @@ class Gamepad {
 
 	constructor() {
 
-		this.eventManager = new EventManager( window );
+		this.eventManager = new EventManager();
 
-		this.eventManager.registerNativeEvent( "gamepadconnected" );
+		Joypad.set({ axisMovementThreshold: 0.3 });
 
-		this.eventManager.on( "gamepadconnected", this.handleConnect.bind(this) );
+        Joypad.on('connect', this.handleConnect.bind( this ) );
 
-		this.eventManager.registerNativeEvent( "gamepaddisconnected" );
+        Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
 
-		this.eventManager.on( "gamepaddisconnected", this.handleDisconnect.bind(this) );
+        Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
 
-		console.log( Joypad );
+		Joypad.on('button_press', this.handleButtonPress.bind( this ) );
 
-	}
-
-	handleConnect( e ) {
-
-		console.log( e );
+		this.registerEvents();
 
 	}
 
-	handleDisconnect( e ) {
+	registerEvents() {
 
-		console.log( e );
+		for ( let event of GamepadEvents ) {
+
+			this.eventManager.registerEvent( event );
+
+		}
 
 	}
+
+	handleConnect( e ) {  }
+
+	handleDisconnect( e ) {  }
+
+	handleAxisMove( e ) {
+
+		let direction = ( e.detail.directionOfMovement == "left" || e.detail.directionOfMovement == "bottom" ) ? 0 : 1;
+
+		this.eventManager.emit( GamepadAxes[ e.detail.axis ][ direction ] );
+
+	}
+
+	handleButtonPress( e ) { this.eventManager.emit( GamepadButtons[ e.detail.index ] ); }
 
 }
 

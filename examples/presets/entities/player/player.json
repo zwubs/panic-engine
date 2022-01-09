@@ -10,7 +10,7 @@
 			"default": { "x": 0, "y": 0, "w":8, "h": 8 },
 			"north": { "x": 8 }
 		}
-    },
+  },
 
 	"armature": {
 		"root": {
@@ -41,13 +41,13 @@
 		"ROTATE_LEFT": [
 			"KEY_HELD_A",
 			"KEY_HELD_LEFT",
-			"GAMEPAD_LSTICK_SOUTH"
+			"GAMEPAD_RSTICK_WEST"
 		],
 
 		"ROTATE_RIGHT": [
 			"KEY_HELD_D",
 			"KEY_HELD_RIGHT",
-			"GAMEPAD_LSTICK_SOUTH"
+			"GAMEPAD_RSTICK_EAST"
 		]
 
 	}
