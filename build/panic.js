@@ -50782,9 +50782,9 @@
 			super();
 
 			this.background = new Color( 0x222222 );
-			this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
+			// this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
 
-			this.add( new HemisphereLight( 0xC9F8FF, 0xC9F8FF, 1.25 ) );
+			this.add( new HemisphereLight( 0xFFFFFF, 0xFFFFFF, 1.00 ) );
 
 			let dirLight = new DirectionalLight( 0xFFFFFF, 1.25 );
 			dirLight.castShadow = true;
@@ -50806,7 +50806,7 @@
 
 	}
 
-	const instance$b = new Scene();
+	const instance$e = new Scene();
 
 	/**
 	 *	@author zwubs
@@ -50827,7 +50827,7 @@
 
 	}
 
-	const instance$a = new Camera();
+	const instance$d = new Camera();
 
 	/**
 	 *	@author zwubs
@@ -50861,6 +50861,671 @@
 	Element.appendChild( Canvas );
 
 	/**
+	 *  @author zwubs
+	 */
+
+	class Event {
+
+	    /**
+	     *  @param {String} id - A string acting as identification for this event.
+	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
+	     */
+	    constructor( id, manager, loop=false, store=false ) {
+
+			this.id = id;
+	        this.manager = manager;
+
+	        this.loop = loop;
+	        this.store = store;
+
+	        if( store ) this.manager.store[ this.id ] = null;
+
+	        this.aliases = {};
+
+	        /**
+	         *  @description An array of functions that are listening for the emit.
+	         */
+	        this.functions = [];
+
+	    }
+
+	    emit( data=null ) {
+
+	        if( this.store ) this.manager.store[ this.id ] = data;
+
+	        this.functions.forEach( ( func, index ) => func.apply( null, [ data ] ) );
+
+	    }
+
+	    /**
+	     *  @description Add a function into the functions variable to be alerted on an emit
+	     */
+	    add( func ) {
+
+	        this.functions.push( func );
+
+	    }
+
+	    addAlias( eventAlias ) { this.aliases[ eventAlias.id ] = eventAlias; }
+
+	    removeAlias( aliasID ) { delete this.aliases[ aliasID ]; this.manager.unregisterEventAlias( eventAlias.id ); }
+
+	    /**
+	     *  @description Empty the array
+	     */
+	    clear() {
+
+	        this.functions = [];
+
+	    }
+
+	}
+
+	/**
+	 *  @author zwubs
+	 */
+
+	class EventAlias {
+
+	    constructor( alias, event ) {
+
+	        this.id = alias;
+	        this.event = event;
+
+	        this.event.addAlias( this );
+
+	    }
+
+	    set loop( value ) { this.event.loop = value; }
+	    get loop() { return this.event.loop; }
+	    get store() { return this.event.store; }
+
+	    emit( data ) { this.event.emit( data ); }
+
+	    add( func ) { this.event.add( func ); }
+
+	    clear( ) { this.event.clear(); }
+
+	}
+
+	/**
+	 *  @author zwubs
+	 */
+
+	class NativeEvent extends Event {
+
+	    /**
+	     *  @param {String} id - A string acting as identification for this event.
+	     *  @param { EventManager } mananger - EventManager of this event
+	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
+	     */
+	    constructor( id, manager, loop, store ) {
+
+	        super( id, manager, loop, store );
+
+	        this.manager.element.addEventListener( this.id, this, { capture: true } );
+
+	    }
+
+	    /**
+	     *  @description Called by eventhandlers, but gives access to 'this'
+	     *  @param {Event} e - Event passed
+	     */
+	    handleEvent( e ) {
+
+	        e.preventDefault();
+
+	        this.emit( e );
+
+	    }
+
+	    remove() {
+
+	        this.manager.element.removeEventListener( this.id, this, true );
+
+	        this.manager.unregisterEvent( this.id );
+	        
+	    }
+
+	}
+
+	/**
+	 *  @description A list of all exclusively native events
+	 */
+	let NativeEventList = [
+	    "copy",
+	    "cut",
+	    "paste",
+	    "abort",
+	    "blur",
+	    "focus",
+	    "auxclick",
+	    "beforeinput",
+	    "canplay",
+	    "canplaythrough",
+	    "change",
+	    "click",
+	    "close",
+	    "contextmenu",
+	    "cuechange",
+	    "dblclick",
+	    "drag",
+	    "dragend",
+	    "dragenter",
+	    "dragexit",
+	    "dragleave",
+	    "dragover",
+	    "dragstart",
+	    "drop",
+	    "durationchange",
+	    "emptied",
+	    "ended",
+	    "formdata",
+	    "input",
+	    "invalid",
+	    "keydown",
+	    "keypress",
+	    "keyup",
+	    "load",
+	    "loadeddata",
+	    "loadedmetadata",
+	    "loadend",
+	    "loadstart",
+	    "mousedown",
+	    "mouseenter",
+	    "mouseleave",
+	    "mousemove",
+	    "mouseout",
+	    "mouseover",
+	    "mouseup",
+	    "wheel",
+	    "pause",
+	    "play",
+	    "playing",
+	    "progress",
+	    "ratechange",
+	    "reset",
+	    "resize",
+	    "scroll",
+	    "securitypolicyviolation",
+	    "seeked",
+	    "seeking",
+	    "select",
+	    "slotchange",
+	    "stalled",
+	    "submit",
+	    "suspend",
+	    "timeupdate",
+	    "volumechange",
+	    "waiting",
+	    "selectstart",
+	    "selectionchange",
+	    "toggle",
+	    "pointercancel",
+	    "pointerdown",
+	    "pointerup",
+	    "pointermove",
+	    "pointerout",
+	    "pointerover",
+	    "pointerenter",
+	    "pointerleave",
+	    "gotpointercapture",
+	    "lostpointercapture",
+	    "mozfullscreenchange",
+	    "mozfullscreenerror",
+	    "animationcancel",
+	    "animationend",
+	    "animationiteration",
+	    "animationstart",
+	    "transitioncancel",
+	    "transitionend",
+	    "transitionrun",
+	    "transitionstart",
+	    "webkitanimationend",
+	    "webkitanimationiteration",
+	    "webkitanimationstart",
+	    "webkittransitionend",
+	    "error",
+	    "fullscreenchange",
+	    "fullscreenerror",
+
+		"gamepadconnected",
+		"gamepaddisconnected"
+	];
+
+	/**
+	 *  @namespace PANIC.Updater
+	 */
+
+	/*
+	    Pass in either a function you want updated, or an object with an "update" function already defined
+	*/
+
+	class Updater {
+
+		constructor() {
+
+			this.data = [];
+
+			// The number of passes that the updater has gone through
+			this.pass = 0;
+
+		}
+
+	    update() {
+
+	        this.pass++;
+
+	        for( let i = 0; i < this.data.length; i++ ) {
+
+	            if( this.pass % this.data[ i ].interval == 0 ) {
+
+	                if( typeof this.data[i].object[ "update" ] === "function" ) {
+
+						this.data[i].object.update();
+
+					}
+
+	            }
+
+	        }
+
+	    }
+
+	    /**
+	     *  @param object {Object} - The object holding the function
+	     */
+	    add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
+
+		remove( object ) { }
+
+	}
+
+	const instance$c = new Updater();
+
+	/**
+	 *  @class
+	 */
+	class UpdaterFunction {
+
+		constructor( object, interval=1 ) {
+
+		    this.object = object;
+		    this.interval = ( interval <= 0 ) ? 1 : interval;
+
+		}
+
+	}
+
+	/**
+	 * 	@author zwubs
+	 */
+
+	let enabled = false;
+
+	function enable() {
+
+	 	enabled = true;
+
+	 	console.info("[PANIC] Debug Mode Enabled");
+
+	 }
+
+	 function disable() {
+
+	 	enabled = false;
+
+	 	console.info("[PANIC] Debug Mode Disabled");
+
+	 }
+
+	 function toggle() { enabled = !enabled; }
+
+	/**
+	 *	@author zwubs
+	 */
+
+	/**
+	 * 	@description Log a debug message to the console
+	 *	@param {String} txt Message to log
+	 */
+	function log( txt ) { if( enabled ) { console.log( txt ); } }
+
+	/**
+	 * 	@description Send a warning message to the console
+	 *	@param {String} txt warning to log
+	 */
+	function warn( txt ) { if( enabled ) { console.warn( txt ); } }
+
+	/**
+	 * 	@description Send an error message to the console
+	 *	@param {String} txt error to log
+	 */
+	function error( txt ) { if( enabled ) { console.error( txt ); } }
+
+	/**
+	 * 	@description Clear the console
+	 */
+	function clear() { if( enabled ) { console.clear(); } }
+
+	/**
+	 * 	@description Log a debug message to the
+	 *	@param {String} Text - Message to log
+	 *	@param {String} CSS - Styling to add to log message ( Chrome )
+	 */
+	function style( txt, css ) {
+
+		if( typeof css !== 'string' || !( css instanceof String ) ) { css = ""; }
+
+		if(  enabled  ) { console.log( txt, css ); }
+
+	}
+
+	/**
+	 *  @author zwubs
+	 *  @note Custom events are fired on update. NativeEvents are fired when available.
+	 */
+
+	class EventManager {
+
+	    constructor( element ) {
+
+	        this.events = {};
+
+	        // Storage events waiting for the next game update/tick
+			this.queue = {};
+
+	        // Storage of data for aquiring later
+	        this.store = {};
+
+	        this.element = element ? element : Element;
+
+	        instance$c.add( this );
+
+	    }
+
+	    /**
+	     *  @description Register a custom event
+	     */
+		registerEvent( eventID, loop, store ) {
+
+	        if( NativeEventList.includes( eventID ) ) {
+
+	            warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
+
+	            return false;
+
+	        }
+	        // If already registered, warn & skip
+	        else if( eventID in this.events ) {
+
+	            warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
+
+	            return false;
+
+	        }
+
+			this.events[ eventID ] = new Event( eventID, this, loop, store );
+
+		}
+
+	    /**
+	     *  @param {String} alias
+	     *  @param {String} eventID
+	     */
+	     registerEventAlias( alias, eventID ) {
+
+	         if( NativeEventList.includes( alias ) ) {
+
+	             warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
+
+	             return false;
+
+	         }
+
+	         else if( NativeEventList.includes( eventID ) ) {
+
+	             warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
+
+	             return false;
+
+	         }
+
+	         else if( alias in this.events ) {
+
+	             warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
+
+	             return false;
+
+	         }
+
+	         else if( !(eventID in this.events ) ) {
+
+	             warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
+
+	             return false;
+
+	         }
+
+	         this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
+
+	     }
+
+	    /**
+	     *  @description Remove an event from this EventManager
+	     */
+	    unregisterEvent( eventID ) {
+
+	        if( !( eventID in this.events ) ) {
+
+	            warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
+
+	            return false;
+
+	        }
+	        
+	        for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
+
+	        this.events[ eventID ].clear();
+
+	        delete this.events[ eventID ];
+
+	    }
+
+	    unregisterEventAlias( alias ) {
+
+	        console.log( alias, this.events );
+
+	        if( !( alias in this.events ) ) {
+
+	            warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
+
+	            return false;
+
+	        }
+
+	        delete this.events[ alias ];
+
+	    }
+
+	    /**
+	     *  @description Register a native event, such as 'keydown'
+	     */
+	    registerNativeEvent( eventID, loop, store ) {
+
+	        if( !( NativeEventList.includes( eventID ) ) ) {
+
+	            warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
+
+	            return false;
+
+	        }
+
+	        if( eventID in this.events ) {
+
+	            warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
+
+	            return false;
+
+	        }
+
+			this.events[ eventID ] = new NativeEvent( eventID, this, loop, store );
+
+	    }
+
+	    /**
+	     *  @description unregisters the event using the normal function
+	     */
+	    unregisterNativeEvent( eventID ) {
+
+	        this.unregisterEvent( eventID );
+
+	    }
+
+	    /**
+	     *  @description Clears the queue of all current events;
+	     */
+	    clearQueue() {
+
+	        this.queue = {};
+
+	    }
+
+		/**
+		 * 	@description
+		 */
+		hasEvent( eventID ) {
+
+			return this.events.hasOwnProperty( eventID );
+
+		}
+
+	    /**
+	     *  @param {String} eventID - A string acting as identification for the event.
+	     *  @param {Object} data - Data to be passed to all listeners
+	     */
+	    emit( eventID, data, loop=false ) {
+
+	        if( !( eventID in this.events ) ) {
+
+	            warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
+
+	            return false;
+
+	        }
+
+	        if( this.events[ eventID ] instanceof NativeEvent ) {
+
+	            warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
+
+	            return false;
+
+	        }
+
+	        if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+	        else this.queue[ eventID ] = { loop: loop, data: data };
+
+	    }
+
+
+		/**
+		 * @description Check if an event is currently in the queue
+		 * @param  {String} eventID A string acting as identification for the event.
+		 * @return {Boolean}
+		 */
+		eventActive( eventID ) {
+
+			if( !this.hasEvent( eventID ) ) {
+
+	            warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
+
+	            return false;
+
+	        }
+
+	        return this.queue.hasOwnProperty( eventID );
+
+		}
+
+	    /**
+		 * @description Get the value currently stored in this.store for this event
+		 * @param {String} eventID A string acting as identification for the event.
+		 * @return {Boolean}
+		 */
+	    getStore( eventID ) {
+
+	        if( !this.store.hasOwnProperty( eventID ) ) {
+
+	            warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
+
+	            return false;
+
+	        }
+
+	        return this.store[ eventID ];
+
+		}
+
+
+
+	    /**
+	     * @param {String} eventID A string acting as identification for the event.
+	     */
+	    breakLoop( eventID ) {
+
+	        if( this.events[ eventID ] instanceof EventAlias ) {
+	            if( this.events[ eventID ].event.id in this.queue ) {
+	                this.queue[ this.events[ eventID ].event.id ].loop = false;
+	            }
+	        }
+	        else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
+
+	    }
+
+	    /**
+	     *  @param {String} eventID A string acting as identification for the event.
+	     *  @param {Function} func Data to be passed to all listeners
+	     */
+	    on( eventID, func ) {
+
+	        if( !( eventID in this.events ) ) {
+
+	            warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
+
+	            return false;
+
+	        }
+
+	        if( typeof func !== "function" ) {
+
+	            warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
+
+	            return false;
+
+	        }
+
+	        this.events[ eventID ].add( func );
+
+	    }
+
+	    /**
+	     *  @description Called every frame to emit all events.
+	     */
+	    update() {
+
+	        for ( const [key, value] of Object.entries( this.queue ) ) {
+
+	            this.events[ key ].emit( value.data );
+
+	            if( value.loop == false ) { delete this.queue[ key ]; }
+
+	        }
+
+	    }
+
+	}
+
+	/**
 	 *	@author zwubs
 	 */
 
@@ -50871,17 +51536,39 @@
 			super( { canvas: Canvas } );
 
 			this.shadowMap.enabled = true;
+			this.shadowMap.type = BasicShadowMap;
+
 			this.outputEncoding = sRGBEncoding;
+
+			this.toneMapping = LinearToneMapping;
+			this.toneMappingExposure = 0.75;
+
+			this.eventManager = new EventManager( window );
+
+			this.eventManager.registerNativeEvent( "resize" );
+			this.eventManager.on( "resize", this.onResize.bind(this) );
+
+			this.onResize();
 
 		}
 
 		kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
 
+		onResize( e ) {
+
+		    instance$d.aspect = Element.clientWidth / Element.clientHeight;
+		    instance$d.updateProjectionMatrix();
+
+		    this.setPixelRatio( window.devicePixelRatio );
+		    this.setSize( Element.clientWidth, Element.clientHeight );
+
+		}
+
 		get canvas() { return this.domElement; }
 
 	}
 
-	const instance$9 = new Renderer();
+	const instance$b = new Renderer();
 
 	/**
 	 *  @author zwubs
@@ -50942,70 +51629,6 @@
 		get seconds() { return this.seconds(); }
 		get minutes() { return this.minutes(); }
 		get hours() { return this.hours(); }
-
-	}
-
-	/**
-	 *  @namespace PANIC.Updater
-	 */
-
-	/*
-	    Pass in either a function you want updated, or an object with an "update" function already defined
-	*/
-
-	class Updater {
-
-		constructor() {
-
-			this.data = [];
-
-			// The number of passes that the updater has gone through
-			this.pass = 0;
-
-		}
-
-	    update() {
-
-	        this.pass++;
-
-	        for( let i = 0; i < this.data.length; i++ ) {
-
-	            if( this.pass % this.data[ i ].interval == 0 ) {
-
-	                if( typeof this.data[i].object[ "update" ] === "function" ) {
-
-						this.data[i].object.update();
-
-					}
-
-	            }
-
-	        }
-
-	    }
-
-	    /**
-	     *  @param object {Object} - The object holding the function
-	     */
-	    add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
-
-		remove( object ) { }
-
-	}
-
-	const instance$8 = new Updater();
-
-	/**
-	 *  @class
-	 */
-	class UpdaterFunction {
-
-		constructor( object, interval=1 ) {
-
-		    this.object = object;
-		    this.interval = ( interval <= 0 ) ? 1 : interval;
-
-		}
 
 	}
 
@@ -52304,7 +52927,7 @@
 	 *	@todo Replace using custom input system
 	 */
 
-	let Controls = new OrbitControls( instance$a, Canvas );
+	let Controls = new OrbitControls( instance$d, Canvas );
 
 	Controls.traget = new Vector3( 0, 0, 0);
 	Controls.update();
@@ -52493,500 +53116,6 @@
 	}
 
 	/**
-	 *  @author zwubs
-	 */
-
-	class Event {
-
-	    /**
-	     *  @param {String} id - A string acting as identification for this event.
-	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
-	     */
-	    constructor( id, manager, type="" ) {
-
-			this.id = id;
-	        this.manager = manager;
-
-			// Either continual or once
-	        this.once = type == "once" ? true : false;
-	        this.loop = type == "loop" ? true : false;
-
-	        /**
-	         *  @description An array of functions that are listening for the emit.
-	         */
-	        this.functions = [];
-
-	    }
-
-	    emit( data ) {
-
-	        this.functions.forEach( ( func, index ) => func.apply( null, [ data ] ) );
-
-	        if( this.once ) this.remove();
-
-	    }
-
-	    /**
-	     *  @description Add a function into the functions variable to be alerted on an emit
-	     */
-	    add( func ) {
-
-	        this.functions.push( func );
-
-	    }
-
-	    /**
-	     *  @description Empty the array
-	     */
-	    clear() {
-
-	        this.functions = [];
-
-	    }
-
-	    /**
-	     *  @description Remove even from EventManager
-	     */
-	    remove() {
-
-	        this.manager.unregisterEvent( this.id );
-
-	    }
-
-	}
-
-	/**
-	 *  @author zwubs
-	 */
-
-	class NativeEvent extends Event {
-
-	    /**
-	     *  @param {String} id - A string acting as identification for this event.
-	     *  @param { EventManager } mananger - EventManager of this event
-	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
-	     */
-	    constructor( id, manager, type ) {
-
-	        super( id, manager, type );
-
-	        this.manager.element.addEventListener( this.id, this, { capture: true } );
-
-	    }
-
-	    /**
-	     *  @description Called by eventhandlers, but gives access to 'this'
-	     *  @param {Event} e - Event passed
-	     */
-	    handleEvent( e ) {
-
-	        e.preventDefault();
-
-	        this.emit( e );
-
-	        if( this.once ) this.manager.unregisterNativeEvent( this.id );
-
-	    }
-
-	    remove() {
-
-	        this.manager.element.removeEventListener( this.id, this, true );
-
-	        super.remove();
-
-	    }
-
-	}
-
-	/**
-	 *  @description A list of all exclusively native events
-	 */
-	let NativeEventList = [
-	    "copy",
-	    "cut",
-	    "paste",
-	    "abort",
-	    "blur",
-	    "focus",
-	    "auxclick",
-	    "beforeinput",
-	    "canplay",
-	    "canplaythrough",
-	    "change",
-	    "click",
-	    "close",
-	    "contextmenu",
-	    "cuechange",
-	    "dblclick",
-	    "drag",
-	    "dragend",
-	    "dragenter",
-	    "dragexit",
-	    "dragleave",
-	    "dragover",
-	    "dragstart",
-	    "drop",
-	    "durationchange",
-	    "emptied",
-	    "ended",
-	    "formdata",
-	    "input",
-	    "invalid",
-	    "keydown",
-	    "keypress",
-	    "keyup",
-	    "load",
-	    "loadeddata",
-	    "loadedmetadata",
-	    "loadend",
-	    "loadstart",
-	    "mousedown",
-	    "mouseenter",
-	    "mouseleave",
-	    "mousemove",
-	    "mouseout",
-	    "mouseover",
-	    "mouseup",
-	    "wheel",
-	    "pause",
-	    "play",
-	    "playing",
-	    "progress",
-	    "ratechange",
-	    "reset",
-	    "resize",
-	    "scroll",
-	    "securitypolicyviolation",
-	    "seeked",
-	    "seeking",
-	    "select",
-	    "slotchange",
-	    "stalled",
-	    "submit",
-	    "suspend",
-	    "timeupdate",
-	    "volumechange",
-	    "waiting",
-	    "selectstart",
-	    "selectionchange",
-	    "toggle",
-	    "pointercancel",
-	    "pointerdown",
-	    "pointerup",
-	    "pointermove",
-	    "pointerout",
-	    "pointerover",
-	    "pointerenter",
-	    "pointerleave",
-	    "gotpointercapture",
-	    "lostpointercapture",
-	    "mozfullscreenchange",
-	    "mozfullscreenerror",
-	    "animationcancel",
-	    "animationend",
-	    "animationiteration",
-	    "animationstart",
-	    "transitioncancel",
-	    "transitionend",
-	    "transitionrun",
-	    "transitionstart",
-	    "webkitanimationend",
-	    "webkitanimationiteration",
-	    "webkitanimationstart",
-	    "webkittransitionend",
-	    "error",
-	    "fullscreenchange",
-	    "fullscreenerror"
-	];
-
-	/**
-	 * 	@author zwubs
-	 */
-
-	let enabled = false;
-
-	function enable() {
-
-	 	enabled = true;
-
-	 	console.info("[PANIC] Debug Mode Enabled");
-
-	 }
-
-	 function disable() {
-
-	 	enabled = false;
-
-	 	console.info("[PANIC] Debug Mode Disabled");
-
-	 }
-
-	 function toggle() { enabled = !enabled; }
-
-	/**
-	 *	@author zwubs
-	 */
-
-	/**
-	 * 	@description Log a debug message to the console
-	 *	@param {String} txt Message to log
-	 */
-	function log( txt ) { if( enabled ) { console.log( txt ); } }
-
-	/**
-	 * 	@description Send a warning message to the console
-	 *	@param {String} txt warning to log
-	 */
-	function warn( txt ) { if( enabled ) { console.warn( txt ); } }
-
-	/**
-	 * 	@description Send an error message to the console
-	 *	@param {String} txt error to log
-	 */
-	function error( txt ) { if( enabled ) { console.error( txt ); } }
-
-	/**
-	 * 	@description Clear the console
-	 */
-	function clear() { if( enabled ) { console.clear(); } }
-
-	/**
-	 * 	@description Log a debug message to the
-	 *	@param {String} Text - Message to log
-	 *	@param {String} CSS - Styling to add to log message ( Chrome )
-	 */
-	function style( txt, css ) {
-
-		if( typeof css !== 'string' || !( css instanceof String ) ) { css = ""; }
-
-		if(  enabled  ) { console.log( txt, css ); }
-
-	}
-
-	/**
-	 *  @author zwubs
-	 */
-
-	let ResizeRenderer = function() {
-
-	    instance$a.aspect = Element.clientWidth / Element.clientHeight;
-	    instance$a.updateProjectionMatrix();
-
-	    instance$9.setPixelRatio( window.devicePixelRatio );
-	    instance$9.setSize( Element.clientWidth, Element.clientHeight );
-
-	};
-
-	window.addEventListener("resize", ResizeRenderer, false);
-
-	ResizeRenderer();
-
-	/**
-	 *  @author zwubs
-	 *  @note Custom events are fired on update. NativeEvents are fired when available.
-	 */
-
-	class EventManager {
-
-	    constructor( element ) {
-
-	        this.events = {};
-
-			this.queue = {};
-
-	        this.element = Element;
-
-	        instance$8.add( this );
-
-	    }
-
-	    /**
-	     *  @description Register a custom event
-	     */
-		registerEvent( eventID, once ) {
-
-	        if( NativeEventList.includes( eventID ) ) {
-
-	            warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
-
-	            return false;
-
-	        }
-	        // If already registered, warn & skip
-	        else if( eventID in this.events ) {
-
-	            warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
-
-	            return false;
-
-	        }
-
-			this.events[ eventID ] = new Event( eventID, this, once );
-
-		}
-
-	    /**
-	     *  @description Remove an event from this EventManager
-	     */
-	    unregisterEvent( eventID ) {
-
-	        if( !( eventID in this.events ) ) {
-
-	            warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
-
-	            return false;
-
-	        }
-
-	        this.events[ eventID ].clear();
-
-	        delete this.events[ eventID ];
-
-	    }
-
-	    /**
-	     *  @description Register a native event, such as 'keydown'
-	     */
-	    registerNativeEvent( eventID, once ) {
-
-	        if( !( NativeEventList.includes( eventID ) ) ) {
-
-	            warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
-
-	            return false;
-
-	        }
-
-	        if( eventID in this.events ) {
-
-	            warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
-
-	            return false;
-
-	        }
-
-			this.events[ eventID ] = new NativeEvent( eventID, this, once );
-
-	    }
-
-	    /**
-	     *  @description unregisters the event using the normal function
-	     */
-	    unregisterNativeEvent( eventID ) {
-
-	        this.unregisterEvent( eventID );
-
-	    }
-
-		/**
-		 * 	@description
-		 */
-		hasEvent( eventID ) {
-
-			return this.events.hasOwnProperty( eventID );
-
-		}
-
-	    /**
-	     *  @param {String} eventID - A string acting as identification for the event.
-	     *  @param {Object} data - Data to be passed to all listeners
-	     */
-	    emit( eventID, data, loop=false ) {
-
-	        if( !( eventID in this.events ) ) {
-
-	            warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
-
-	            return false;
-
-	        }
-
-	        if( this.events[ eventID ] instanceof NativeEvent ) {
-
-	            warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
-
-	            return false;
-
-	        }
-
-	        this.queue[ eventID ] = { loop: loop, data: data };
-
-	    }
-
-
-		/**
-		 * @description Check if an event is currently in the queue
-		 * @param  {String} eventID A string acting as identification for the event.
-		 * @return {Boolean}
-		 */
-		eventActive( eventID ) {
-
-			if( !this.hasEvent( eventID ) ) {
-
-	            warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
-
-	            return false;
-
-	        }
-
-			return this.queue.hasOwnProperty( eventID );
-
-		}
-
-
-	    /**
-	     * @param {String} eventID A string acting as identification for the event.
-	     */
-	    breakLoop( eventID ) {
-
-	        if( eventID in this.events ) this.queue[ eventID ].loop = false;
-
-	    }
-
-	    /**
-	     *  @param {String} eventID A string acting as identification for the event.
-	     *  @param {Function} func Data to be passed to all listeners
-	     */
-	    on( eventID, func ) {
-
-	        if( !( eventID in this.events ) ) {
-
-	            warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
-
-	            return false;
-
-	        }
-
-	        if( typeof func !== "function" ) {
-
-	            warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
-
-	            return false;
-
-	        }
-
-	        this.events[ eventID ].add( func );
-
-	    }
-
-	    /**
-	     *  @description Called every frame to emit all events.
-	     */
-	    update() {
-
-	        for ( const [key, value] of Object.entries( this.queue ) ) {
-
-	            this.events[ key ].emit( value.data );
-
-	            if( value.loop == false ) { delete this.queue[ key ]; }
-
-	        }
-
-	    }
-
-	}
-
-	/**
 	 *  @reference https://github.com/vaalentin/keycodes
 	 */
 
@@ -53005,22 +53134,22 @@
 	    PAGE_DOWN: 34,
 	    END: 35,
 	    HOME: 36,
-	    LEFT_ARROW: 37,
-	    UP_ARROW: 38,
-	    RIGHT_ARROW: 39,
-	    DOWN_ARROW: 40,
+	    LEFT: 37,
+	    UP: 38,
+	    RIGHT: 39,
+	    DOWN: 40,
 	    INSERT: 45,
 	    DELETE: 46,
-	    NUM_0: 48,
-	    NUM_1: 49,
-	    NUM_2: 50,
-	    NUM_3: 51,
-	    NUM_4: 52,
-	    NUM_5: 53,
-	    NUM_6: 54,
-	    NUM_7: 55,
-	    NUM_8: 56,
-	    NUM_9: 57,
+	    0: 48,
+	    1: 49,
+	    2: 50,
+	    3: 51,
+	    4: 52,
+	    5: 53,
+	    6: 54,
+	    7: 55,
+	    8: 56,
+	    9: 57,
 	    A: 65,
 	    B: 66,
 	    C: 67,
@@ -53092,10 +53221,6 @@
 	    SINGLE_QUOTE: 222
 	};
 
-	/**
-	 *
-	 */
-
 	let KeyMap = {};
 
 	for (var key in KeyCodes) {
@@ -53124,7 +53249,9 @@
 
 			this.registerKeyEvents();
 
-			this.keys = {};
+			this.eventManager.registerNativeEvent( "blur" );
+
+			this.eventManager.on( "blur", this.handleBlur.bind(this) );
 
 		}
 
@@ -53136,9 +53263,9 @@
 
 			for ( let key in KeyCodes ) {
 
-				this.eventManager.registerEvent( `keydown_${key}` );
-				this.eventManager.registerEvent( `keyup_${key}` );
-				this.eventManager.registerEvent( `keyheld_${key}` );
+				this.eventManager.registerEvent( `KEY_DOWN_${key}` );
+				this.eventManager.registerEvent( `KEY_UP_${key}` );
+				this.eventManager.registerEvent( `KEY_HELD_${key}` );
 
 			}
 
@@ -53149,9 +53276,9 @@
 		 */
 		handleKeyUp( e ) {
 
-			this.eventManager.emit( `keyup_${KeyMap[ e.keyCode ]}`, {} );
+			this.eventManager.emit( `KEY_UP_${KeyMap[ e.keyCode ]}`, {} );
 
-			this.eventManager.breakLoop( `keyheld_${KeyMap[ e.keyCode ]}` );
+			this.eventManager.breakLoop( `KEY_HELD_${KeyMap[ e.keyCode ]}` );
 
 		}
 
@@ -53162,9 +53289,9 @@
 
 			if( e.repeat ) return;
 
-			this.eventManager.emit( `keydown_${KeyMap[ e.keyCode ]}`, {} );
+			this.eventManager.emit( `KEY_DOWN_${KeyMap[ e.keyCode ]}`, {} );
 
-			this.eventManager.emit( `keyheld_${KeyMap[ e.keyCode ]}`, {}, true );
+			this.eventManager.emit( `KEY_HELD_${KeyMap[ e.keyCode ]}`, {}, true );
 
 		}
 
@@ -53178,7 +53305,7 @@
 
 			if( !this.checkValidKey( key, "onKey" ) ) { return; }
 
-			this.eventManager.on( `keyheld_${ key }`, func );
+			this.eventManager.on( `KEY_HELD_${ key }`, func );
 
 		}
 
@@ -53191,7 +53318,7 @@
 
 			if( !this.checkValidKey( key, "onKeyDown" ) ) { return; }
 
-			this.eventManager.on( `keydown_${ key }`, func );
+			this.eventManager.on( `KEY_DOWN_${ key }`, func );
 
 		}
 
@@ -53204,7 +53331,7 @@
 
 			if( !this.checkValidKey( key, "onKeyUp" ) ) { return; }
 
-			this.eventManager.on( `keyup_${ key }`, func );
+			this.eventManager.on( `KEY_UP_${ key }`, func );
 
 		}
 
@@ -53217,7 +53344,7 @@
 
 			if( !this.checkValidKey( key, "getKey" ) ) { return; }
 
-			return this.eventManager.eventActive( `keyheld_${ key }` );
+			return this.eventManager.eventActive( `KEY_HELD_${ key }` );
 
 		}
 
@@ -53230,7 +53357,7 @@
 
 			if( !this.checkValidKey( key, "getKeyDown" ) ) { return; }
 
-			return this.eventManager.eventActive( `keydown_${ key }` );
+			return this.eventManager.eventActive( `KEY_DOWN_${ key }` );
 
 		}
 
@@ -53243,7 +53370,7 @@
 
 			if( !this.checkValidKey( key, "getKeyUp" ) ) { return; }
 
-			return this.eventManager.eventActive( `keyup_${ key }` );
+			return this.eventManager.eventActive( `KEY_UP_${ key }` );
 
 		}
 
@@ -53264,9 +53391,469 @@
 
 		}
 
+
+		/**
+		 *	@HEADER {} BLUR
+		 */
+		handleBlur( e ) {
+
+			this.eventManager.clearQueue();
+
+		}
+
 	}
 
-	const instance$7 = new Keyboard();
+	const instance$a = new Keyboard();
+
+	const MouseButtonCodes = {
+	    L: 0,
+	    M: 1,
+	    R: 2
+	};
+
+	const MouseButtonMap = {
+	    0: "L",
+	    1: "M",
+	    2: "R"
+	};
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class Mouse {
+
+		constructor() {
+
+			this.eventManager = new EventManager();
+
+			this.eventManager.registerNativeEvent( "mousedown" );
+
+			this.eventManager.on( "mousedown", this.handleButtonDown.bind(this) );
+
+			this.eventManager.registerNativeEvent( "mouseup" );
+
+			this.eventManager.on( "mouseup", this.handleButtonUp.bind(this) );
+
+			this.eventManager.registerNativeEvent( "click" );
+
+			this.eventManager.on( "click", this.handleClick.bind(this) );
+
+			this.eventManager.registerNativeEvent( "mousemove" );
+
+			this.eventManager.on( "mousemove", this.handleMove.bind(this) );
+
+			this.eventManager.registerNativeEvent( "wheel" );
+
+			this.eventManager.on( "wheel", this.handleScroll.bind(this) );
+
+			this.registerMouseEvents();
+
+			this.eventManager.registerNativeEvent( "blur" );
+
+			this.eventManager.on( "blur", this.handleBlur.bind(this) );
+
+		}
+
+		/**
+		 * 	@description Registers all events for the
+		 * 	@todo Optimize to only use necessary events
+		 */
+		registerMouseEvents() {
+
+			for ( let btn in MouseButtonCodes ) {
+
+				this.eventManager.registerEvent( `MOUSE_DOWN_${btn}` );
+				this.eventManager.registerEvent( `MOUSE_UP_${btn}` );
+				this.eventManager.registerEvent( `MOUSE_CLICK_${btn}` );
+				this.eventManager.registerEvent( `MOUSE_HELD_${btn}` );
+
+			}
+
+			this.eventManager.registerEvent( `MOUSE_SCROLL`, false, true );
+
+			this.eventManager.registerEvent( `MOUSE_MOVE`, false, true );
+
+		}
+
+		/**
+		 *	@HEADER {} BUTTONS
+		 */
+
+		/**
+		 * 	@param {Event} e - Event from "mouseup" event listener
+		 */
+		handleButtonUp( e ) {
+
+			this.eventManager.emit( `MOUSE_UP_${MouseButtonMap[ e.button ]}`, {} );
+
+			this.eventManager.breakLoop( `MOUSE_HELD_${MouseButtonMap[ e.button ]}` );
+
+		}
+
+		/**
+		 * 	@param {Event} e - Event from "mousedown" event listener
+		 */
+		handleButtonDown( e ) {
+
+			this.eventManager.emit( `MOUSE_DOWN_${MouseButtonMap[ e.button ]}`, {} );
+
+			this.eventManager.emit( `MOUSE_HELD_${MouseButtonMap[ e.button ]}`, {}, true );
+
+		}
+
+		/**
+		 * 	@param {Event} e - Event from "mousedown" event listener
+		 */
+		handleClick( e ) {
+
+			this.eventManager.emit( `MOUSE_CLICK_${MouseButtonMap[ e.button ]}`, {} );
+
+		}
+
+
+		/**
+		 * @description Event is fired as long as the button is held down
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @param {Function} func Function to be executed when event is recieved
+		 */
+		onButton( btn, func ) {
+
+			if( !this.checkValidButton( btn, "onButton" ) ) { return; }
+
+			this.eventManager.on( `MOUSE_HELD_${ btn }`, func );
+
+		}
+
+		/**
+		 * @description Event is fired only on the first instance of the button being pressed
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @param {Function} func Function to be executed when event is recieved
+		 */
+		onButtonDown( btn, func ) {
+
+			if( !this.checkValidButton( btn, "onButtonDown" ) ) { return; }
+
+			this.eventManager.on( `MOUSE_DOWN_${ btn }`, func );
+
+		}
+
+		/**
+		 * @description Event is fired only on the first instance of the button being unpressed
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @param {Function} func Function to be executed when event is recieved
+		 */
+		onButtonUp( btn, func ) {
+
+			if( !this.checkValidButton( btn, "onButtonUp" ) ) { return; }
+
+			this.eventManager.on( `MOUSE_UP_${ btn }`, func );
+
+		}
+
+		/**
+		 * @description Event is fired when the button is pressed and released successfully
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @param {Function} func Function to be executed when event is recieved
+		 */
+		onClick( btn, func ) {
+
+			if( !this.checkValidButton( btn, "onClick" ) ) { return; }
+
+			this.eventManager.on( `MOUSE_CLICK_${ btn }`, func );
+
+		}
+
+		/**
+		 * @description Returns a Boolean based on wether the button is being held down
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @return {Boolean}
+		 */
+		getButton( btn ) {
+
+			if( !this.checkValidButton( btn, "getButton" ) ) { return; }
+
+			return this.eventManager.eventActive( `MOUSE_HELD_${ btn }` );
+
+		}
+
+		/**
+		 * @description Returns a Boolean based on the first instance of a button being pressed
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @return {Boolean}
+		 */
+		getButtonDown( btn ) {
+
+			if( !this.checkValidButton( btn, "getButtonDown" ) ) { return; }
+
+			return this.eventManager.eventActive( `MOUSE_DOWN_${ btn }` );
+
+		}
+
+		/**
+		 * @description Returns a Boolean based on the first instance of a button being unpressed
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @return {Boolean}
+		 */
+		getButtonUp( btn ) {
+
+			if( !this.checkValidButton( btn, "getButtonUp" ) ) { return; }
+
+			return this.eventManager.eventActive( `MOUSE_UP_${ btn }` );
+
+		}
+
+		/**
+		 * @description Returns a Boolean based on wether a successful down and up event occured
+		 * @param {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @return {Boolean}
+		 */
+		getClick( btn ) {
+
+			if( !this.checkValidButton( btn, "getClick" ) ) { return; }
+
+			return this.eventManager.eventActive( `MOUSE_CLICK_${ btn }` );
+
+		}
+
+		/**
+		 * @description Checks that a given buttonID is valid
+		 * @param  {String} btn ID used is signify the button, values available in MouseButtonCodes
+		 * @param  {String} functionName Function name to be logged is something goes wrong
+		 * @return {Boolean}
+		 */
+		checkValidButton( btn, functionName ) {
+
+			if( btn in MouseButtonCodes ) return true;
+
+			warn(`Mouse.${functionName}(): '${ btn }' is not a valid button`);
+
+			return false;
+
+		}
+
+		/**
+		 *	@HEADER {} WHEEL / SCROLL
+		 */
+
+		/**
+		 * 	@param {Event} e - Event from "wheel" event listener
+		 */
+		handleScroll( e ) {
+
+			 this.eventManager.emit( `MOUSE_SCROLL`, { direction: Math.sign( e.deltaY ) } );
+
+		}
+
+		getScroll() {
+
+	 		return this.eventManager.eventActive( `MOUSE_SCROLL` );
+
+	 	}
+
+		getScrollAmount() {
+
+			return this.eventManager.getStore( `MOUSE_SCROLL` );
+
+		}
+
+		 /**
+		  * @param {Function} func Function to be executed when event is recieved
+		  */
+		 onScroll( func ) {
+
+			 this.eventManager.on( `MOUSE_SCROLL`, func );
+
+		 }
+
+
+		/**
+		 *	@HEADER {} MOVEMENT
+		 */
+
+		/**
+		 * 	@param {Event} e - Event from "mousemove" event listener
+		 */
+	 	handleMove( e ) {
+
+	  		this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
+
+	  	}
+
+		/**
+		 * @param {Function} func Function to be executed when event is recieved
+		 */
+		onMove( func ) {
+
+			this.eventManager.on( 'MOUSE_MOVE', func );
+
+		}
+
+		getMove() {
+
+			return this.eventManager.eventActive( 'MOUSE_MOVE' );
+
+		}
+
+		/**
+		 *
+		 */
+		getPosition() {
+
+			return this.eventManager.getStore( 'move' );
+
+		}
+
+
+		/**
+		 *	@HEADER {} BLUR
+		 */
+		handleBlur( e ) {
+
+			this.eventManager.clearQueue();
+
+		}
+
+	}
+
+	const instance$9 = new Mouse();
+
+	/**
+	 *  @reference https://github.com/vaalentin/keycodes
+	 */
+
+	const GamepadEvents = [
+		"GAMEPAD_LSTICK_NORTH",
+		"GAMEPAD_LSTICK_SOUTH",
+		"GAMEPAD_LSTICK_EAST",
+		"GAMEPAD_LSTICK_WEST",
+		"GAMEPAD_LSTICK_PRESS",
+
+		"GAMEPAD_RSTICK_NORTH",
+		"GAMEPAD_RSTICK_SOUTH",
+		"GAMEPAD_RSTICK_EAST",
+		"GAMEPAD_RSTICK_WEST",
+		"GAMEPAD_RSTICK_PRESS",
+
+		"GAMEPAD_DPAD_NORTH",
+		"GAMEPAD_DPAD_SOUTH",
+		"GAMEPAD_DPAD_EAST",
+		"GAMEPAD_DPAD_WEST",
+
+		"GAMEPAD_RTRIGGER_TOP",
+		"GAMEPAD_RTRIGGER_BOTTOM",
+
+		"GAMEPAD_LTRIGGER_TOP",
+		"GAMEPAD_LTRIGGER_BOTTOM",
+
+		"GAMEPAD_BUTTON_NORTH",
+		"GAMEPAD_BUTTON_SOUTH",
+		"GAMEPAD_BUTTON_EAST",
+		"GAMEPAD_BUTTON_WEST",
+
+		"GAMEPAD_BUTTON_START",
+		"GAMEPAD_BUTTON_SELECT",
+	];
+
+	const GamepadButtons = {
+		0: "GAMEPAD_BUTTON_SOUTH",
+		1: "GAMEPAD_BUTTON_EAST",
+		2: "GAMEPAD_BUTTON_WEST",
+		3: "GAMEPAD_BUTTON_NORTH",
+		4: "GAMEPAD_RTRIGGER_TOP",
+		5: "GAMEPAD_LTRIGGER_TOP",
+		6: "GAMEPAD_RTRIGGER_BOTTOM",
+		7: "GAMEPAD_LTRIGGER_BOTTOM",
+		8: "GAMEPAD_BUTTON_SELECT",
+		9: "GAMEPAD_BUTTON_START",
+		10: "GAMEPAD_LSTICK_PRESS",
+		11: "GAMEPAD_RSTICK_PRESS",
+		12: "GAMEPAD_DPAD_NORTH",
+		13: "GAMEPAD_DPAD_SOUTH",
+		14: "GAMEPAD_DPAD_EAST",
+		15: "GAMEPAD_DPAD_WEST",
+	};
+
+	const GamepadAxes = {
+		0: [ "GAMEPAD_LSTICK_WEST", "GAMEPAD_LSTICK_EAST" ],
+		1: [ "GAMEPAD_LSTICK_SOUTH", "GAMEPAD_LSTICK_NORTH" ],
+		2: [ "GAMEPAD_RSTICK_WEST", "GAMEPAD_RSTICK_EAST" ],
+		3: [ "GAMEPAD_RSTICK_SOUTH", "GAMEPAD_RSTICK_NORTH" ],
+	};
+
+	/*	
+	    joypad.js v2.2.5	
+	    Copyright (c) 2019 Arun Michael Dsouza (amdsouza92@gmail.com)	
+	    Licence: MIT	
+	*/
+	!function(t){var e={};function n(o){if(e[o])return e[o].exports;var i=e[o]={i:o,l:!1,exports:{}};return t[o].call(i.exports,i,i.exports,n),i.l=!0,i.exports}n.m=t,n.c=e,n.d=function(t,e,o){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o});},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0});},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)n.d(o,i,function(e){return t[e]}.bind(null,i));return o},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=0);}([function(t,e,n){n.r(e);var o={events:{},publish:function(t,e){this.events.hasOwnProperty(t)&&this.events[t].forEach(t=>t(e));},subscribe:function(t,e){return this.events.hasOwnProperty(t)||(this.events[t]=[]),this.events[t].push(e),{unsubscribe:function(){this.events[t].splice(this.events[t].indexOf(e),1);}.bind(this)}}};const i={NATIVE:"gamepadconnected",ALIAS:"connect"},s={NATIVE:"gamepaddisconnected",ALIAS:"disconnect"},r={NATIVE:null,ALIAS:"button_press"},a={NATIVE:null,ALIAS:"axis_move"},u={NAME:"left_stick",AXES:{X:0,Y:1}},d={NAME:"right_stick",AXES:{X:2,Y:3}},c="left",p="right",l="top",b="bottom",A={button_0:0,button_1:1,button_2:2,button_3:3,button_4:4,button_5:5,button_6:6,button_7:7,button_8:8,button_9:9,button_10:10,button_11:11,button_12:12,button_13:13,button_14:14,button_15:15,button_16:16,button_17:17},f=t=>{console.warn&&"function"==typeof console.warn?console.warn(t):console.log(t);};var h={loopStarted:!1,instances:{},buttonEvents:{joypad:[]},settings:{axisMovementThreshold:.8},remove:function(t){return delete this.instances[t]},on:function(t,e){switch(t){case i.ALIAS:return o.subscribe(i.ALIAS,e);case s.ALIAS:return o.subscribe(s.ALIAS,e);case r.ALIAS:return o.subscribe(r.ALIAS,e);case a.ALIAS:return o.subscribe(a.ALIAS,e)}},vibrate:function(t,e){const{vibrationActuator:n}=t,o=e||this.settings.vibration;if((t=>!!(t&&t.type&&t.playEffect&&"function"==typeof t.playEffect))(n)){const{type:e}=n;return t.vibrationActuator.playEffect(e,o)}f("No vibration actuator interface found - https://developer.mozilla.org/en-US/docs/Web/API/GamepadHapticActuator");},set:function(t){const{axisMovementThreshold:e,vibration:n,customButtonMapping:o}=t,i=parseFloat(e);isNaN(i)||(this.settings.axisMovementThreshold=i),this.settings.vibration=n,this.settings.customButtonMapping=o;},trigger:function(t,e){return o.publish(t,e)}};var v={id:null,start:function(){const t=window.requestAnimationFrame||window.webkitRequestAnimationFrame,{buttonEvents:e}=h;let n=window.navigator.getGamepads();(n=Array.prototype.slice.call(n)).forEach((t,n)=>{t&&(e.joypad[n]||(e.joypad[n]={}),h.instances[n]=t,m(t),y(t));}),e.joypad.forEach(t=>{t&&Object.keys(t).forEach(e=>{w(e,t);});}),this.id=t(this.start.bind(this));},stop:function(t){return (window.cancelAnimationFrame||window.webkitCancelAnimationFrame)(t)}};const m=t=>{t.buttons.forEach((e,n)=>{const{customButtonMapping:o}=h.settings,i=((t,e)=>{let n=[];return Object.keys(e).forEach(o=>{e[o]===t?n.push(o):Array.isArray(e[o])&&-1!==e[o].indexOf(t)&&n.push(o);}),n})(n,o||A),{buttonEvents:s}=h;i&&i.length&&i.forEach(o=>{e.pressed?(s.joypad[t.index][o]||(s.joypad[t.index][o]={pressed:!0,hold:!1,released:!1}),s.joypad[t.index][o].button=e,s.joypad[t.index][o].index=n,s.joypad[t.index][o].gamepad=t):!e.pressed&&s.joypad[t.index][o]&&(s.joypad[t.index][o].released=!0,s.joypad[t.index][o].hold=!1);});});},y=t=>{const{axisMovementThreshold:e}=h.settings,{axes:n}=t,o=n.length/2;n.forEach((n,i)=>{if(Math.abs(n)>e){let e=null,s=null,r=n;e=i<o?u.NAME:d.NAME,i!==u.AXES.X&&i!==d.AXES.X||(s=n<0?c:p),i!==u.AXES.Y&&i!==d.AXES.Y||(s=n<0?l:b);const A={gamepad:t,totalSticks:o,stickMoved:e,directionOfMovement:s,axisMovementValue:r,axis:i};return window.dispatchEvent((t=>new CustomEvent(a.ALIAS,{detail:t}))(A))}});},w=(t,e)=>{if(e[t].pressed){const n=t=>new CustomEvent(r.ALIAS,{detail:t}),{index:o,gamepad:i}=e[t],s={buttonName:t,button:e[t].button,index:o,gamepad:i};window.dispatchEvent(n(s)),e[t].pressed=!1,e[t].hold=!0;}else e[t].hold||e[t].released&&delete e[t];};window.addEventListener(i.NATIVE,t=>{if(o.publish(i.ALIAS,t),!h.loopStarted)return h.loopStarted=!0,v.start()}),window.addEventListener(s.NATIVE,t=>{if(o.publish(s.ALIAS,t),h.remove(t.gamepad.index),h.buttonEvents.joypad[t.gamepad.index]=null,!Object.keys(h.instances).length)return h.loopStarted=!1,v.stop(v.id)}),window.addEventListener(r.ALIAS,t=>o.publish(r.ALIAS,t)),window.addEventListener(a.ALIAS,t=>o.publish(a.ALIAS,t)),(()=>!(!window.navigator.getGamepads||"function"!=typeof window.navigator.getGamepads))()?window.joypad=h:(window.joypad={},f("Your browser does not support the Gamepad API - https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API"));}]);
+
+	let Joypad = window.joypad;
+
+	delete window.joypad;
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class Gamepad {
+
+		constructor() {
+
+			this.eventManager = new EventManager();
+
+			Joypad.set({ axisMovementThreshold: 0.3 });
+
+	        Joypad.on('connect', this.handleConnect.bind( this ) );
+
+	        Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
+
+	        Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
+
+			Joypad.on('button_press', this.handleButtonPress.bind( this ) );
+
+			this.registerEvents();
+
+		}
+
+		registerEvents() {
+
+			for ( let event of GamepadEvents ) {
+
+				this.eventManager.registerEvent( event );
+
+			}
+
+		}
+
+		handleConnect( e ) {  }
+
+		handleDisconnect( e ) {  }
+
+		handleAxisMove( e ) {
+
+			let direction = ( e.detail.directionOfMovement == "left" || e.detail.directionOfMovement == "bottom" ) ? 0 : 1;
+
+			this.eventManager.emit( GamepadAxes[ e.detail.axis ][ direction ] );
+
+		}
+
+		handleButtonPress( e ) { this.eventManager.emit( GamepadButtons[ e.detail.index ] ); }
+
+	}
+
+	const instance$8 = new Gamepad();
+
+	/**
+	 *	@author zwubs
+	 */
+
+	var input = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		Keyboard: instance$a,
+		Mouse: instance$9,
+		Gamepad: instance$8
+	});
 
 	/**
 	 *   @namespace PANIC.Tools
@@ -53310,7 +53897,7 @@
 		}
 
 	}
-	let instance$6 = new Tools();
+	let instance$7 = new Tools();
 
 	/**
 	 *	@typedef {Object} PANIC.Entity
@@ -53322,7 +53909,7 @@
 		constructor( template ) {
 
 			// Unique Entity Identifier
-			this.uuid = instance$6.generateUUID();
+			this.uuid = instance$7.generateUUID();
 
 			// Assign template for future access
 			this.template = template;
@@ -53330,7 +53917,9 @@
 			// Transformation Variables
 			this.position = new Vector3( 0, 0, 0 );
 			this.rotation = new Vector3( 0, 0, 0 );
-			this.scale = new Vector3( 0, 0, 0 );
+			this.scale = new Vector3( 1, 1, 1 );
+
+			this.actions = template.actions;
 
 			// Skeleton
 			this.skeleton = new Skeleton();
@@ -53352,14 +53941,20 @@
 			// Bind skeleton to mesh
 			// this.mesh.bind( this.skeleton );
 
-			instance$b.add( this.mesh );
+			instance$e.add( this.mesh );
 
 		}
+
+		/**
+		 * 	@description Remap to Actions.on
+		 */
+		on( action, func ) { this.actions.on( action, func ); }
 
 		update() {
 
 			this.mesh.position.copy( this.position );
 			this.mesh.rotation.setFromVector3( this.rotation );
+			this.mesh.scale.copy( this.scale );
 
 		}
 
@@ -53547,6 +54142,8 @@
 			this.bones = [];
 			this.geometry = null;
 
+			this.actions = null;
+
 			this.shader = Entity;
 
 			this.uniforms = null;
@@ -53660,7 +54257,7 @@
 		}
 
 	}
-	let instance$5 = new EntityRegistry();
+	let instance$6 = new EntityRegistry();
 
 	/**
 	 *	@namespace PANIC.Shaders.DebugAxes
@@ -54394,6 +54991,88 @@
 
 	/**
 	 *	@author zwubs
+	 *  // TODO: Add warnings for all functions
+	 */
+
+	class Actions {
+
+	    constructor() {
+
+	        this.eventManager = new EventManager();
+
+	    }
+
+	    registerAction( actionID ) {
+
+	        this.eventManager.registerEvent( actionID );
+
+	    }
+
+	    addInputBinding( actionID, binding ) {
+
+	        if( binding.split("_")[0] == "KEY" ) {
+
+	            instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+
+	        }
+	        else if( binding.startsWith("MOUSE") ) {
+
+	            instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+
+	        }
+	        else if( binding.startsWith("GAMEPAD") ) {
+
+				instance$8.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+
+			}
+
+	    }
+
+	    on( actionID, func ) {
+
+	        this.eventManager.on( actionID, func );
+
+	    }
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class ActionsParser {
+
+	    consturctor() {}
+
+	    /**
+	     *  @param {Object} json
+	     */
+		parse( json ) {
+
+	        let actions = new Actions;
+
+	        for( const [ action, bindings ] of Object.entries( json ) ) {
+
+	            actions.registerAction( action );
+
+	            for( let binding of bindings ) {
+
+	                actions.addInputBinding( action, binding );
+
+	            }
+
+	        }
+
+	        return actions;
+
+		}
+
+	}
+
+	let instance$5 = new ActionsParser();
+
+	/**
+	 *	@author zwubs
 	 *	@namespace PANIC.Parsers
 	 */
 
@@ -54403,7 +55082,8 @@
 		Tileset: TilesetParser,
 		CubeUV: CubeUVParser,
 		EntityModel: EntityModelParser,
-		EntityArmature: EntityArmatureParser
+		EntityArmature: EntityArmatureParser,
+		Actions: instance$5
 	});
 
 	/**
@@ -54426,6 +55106,8 @@
 			template.id = json.id;
 			template.name = json.name;
 
+	        if( json.actions ) template.actions = await instance$5.parse( json.actions );
+
 			// Load Image & Create Texture
 			template.texture = await TextureLoader.load( baseURL + json.texture );
 
@@ -54439,7 +55121,7 @@
 			template.setup();
 
 			// Register Entity Template
-			instance$5.registerEntity( template );
+			instance$6.registerEntity( template );
 
 			return template;
 
@@ -54652,9 +55334,9 @@
 
 			if( !this.active ) {
 
-				if( instance$b.getObjectByName( this.id ) == null ) {
+				if( instance$e.getObjectByName( this.id ) == null ) {
 
-					instance$b.add( this.mesh );
+					instance$e.add( this.mesh );
 
 				}
 
@@ -54662,9 +55344,9 @@
 
 			else {
 
-				if( instance$b.getObjectByName( this.id ) ) {
+				if( instance$e.getObjectByName( this.id ) ) {
 
-					instance$b.remove( this.mesh );
+					instance$e.remove( this.mesh );
 
 				}
 
@@ -54773,9 +55455,9 @@
 
 			if( !this.active ) {
 
-				if( instance$b.getObjectByName( this.id ) == null ) {
+				if( instance$e.getObjectByName( this.id ) == null ) {
 
-					instance$b.add( this.mesh );
+					instance$e.add( this.mesh );
 
 				}
 
@@ -54783,9 +55465,9 @@
 
 			else {
 
-				if( instance$b.getObjectByName( this.id ) ) {
+				if( instance$e.getObjectByName( this.id ) ) {
 
-					instance$b.remove( this.mesh );
+					instance$e.remove( this.mesh );
 
 				}
 
@@ -54888,7 +55570,7 @@
 
 				DebugElement.appendChild( this.element );
 
-				instance$8.add( this, 15 );
+				instance$c.add( this, 15 );
 
 			}
 
@@ -54896,7 +55578,7 @@
 
 				DebugElement.removeChild( this.element );
 
-				instance$8.remove( this );
+				instance$c.remove( this );
 
 			}
 
@@ -54906,7 +55588,7 @@
 
 			var string = "";
 			var direction = new Vector3( 0, 0, 0 );
-			instance$a.getWorldDirection( direction );
+			instance$d.getWorldDirection( direction );
 
 			if( this.state == 0 ) {
 
@@ -54990,57 +55672,57 @@
 	 *	@todo Decide what actually needs to be visible to the user.
 	 */
 
-	let Version = "0.0.2";
+	let Version = "0.0.3dev";
 
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		Version: Version,
-		Scene: instance$b,
-		Camera: instance$a,
-		Renderer: instance$9,
+		Scene: instance$e,
+		Camera: instance$d,
+		Renderer: instance$b,
 		Clock: Clock,
-		Updater: instance$8,
+		Updater: instance$c,
 		Cube: Cube,
 		Texture: Texture,
-		Controls: Controls,
+		OrbitControls: Controls,
 		Element: Element,
 		Tile: Tile,
 		TileGroup: TileGroup,
 		Tileset: Tileset,
 		EventManager: EventManager,
-		Keyboard: instance$7,
+		Input: input,
 		Entity: Entity$1,
 		EntityTemplate: EntityTemplate,
-		EntityRegistry: instance$5,
+		EntityRegistry: instance$6,
 		Shaders: shaders,
 		Loaders: loaders,
 		Parsers: parsers,
-		Tools: instance$6,
+		Tools: instance$7,
 		Debug: debug
 	});
 
-	exports.Camera = instance$a;
+	exports.Camera = instance$d;
 	exports.Clock = Clock;
-	exports.Controls = Controls;
 	exports.Cube = Cube;
 	exports.Debug = debug;
 	exports.Element = Element;
 	exports.Entity = Entity$1;
-	exports.EntityRegistry = instance$5;
+	exports.EntityRegistry = instance$6;
 	exports.EntityTemplate = EntityTemplate;
 	exports.EventManager = EventManager;
-	exports.Keyboard = instance$7;
+	exports.Input = input;
 	exports.Loaders = loaders;
+	exports.OrbitControls = Controls;
 	exports.Parsers = parsers;
-	exports.Renderer = instance$9;
-	exports.Scene = instance$b;
+	exports.Renderer = instance$b;
+	exports.Scene = instance$e;
 	exports.Shaders = shaders;
 	exports.Texture = Texture;
 	exports.Tile = Tile;
 	exports.TileGroup = TileGroup;
 	exports.Tileset = Tileset;
-	exports.Tools = instance$6;
-	exports.Updater = instance$8;
+	exports.Tools = instance$7;
+	exports.Updater = instance$c;
 	exports.Version = Version;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
