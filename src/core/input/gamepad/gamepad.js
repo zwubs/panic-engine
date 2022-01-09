@@ -4,7 +4,7 @@
 
 import { EventManager } from '../../events/event-manager.js'
 
-import * as Console from '../../../debug/debug-console.js';
+import { Joypad } from './joypad.js';
 
 class Gamepad {
 
@@ -19,6 +19,8 @@ class Gamepad {
 		this.eventManager.registerNativeEvent( "gamepaddisconnected" );
 
 		this.eventManager.on( "gamepaddisconnected", this.handleDisconnect.bind(this) );
+
+		console.log( Joypad );
 
 	}
 
