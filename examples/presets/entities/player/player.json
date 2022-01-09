@@ -25,29 +25,31 @@
 	},
 
 	"actions": {
-		
+
 		"MOVE_FORWARD": [
-			"KEY_W",
-			"KEY_UP",
+			"KEY_HELD_W",
+			"KEY_HELD_UP",
 			"GAMEPAD_LSTICK_NORTH"
 		],
 
 		"MOVE_BACKWARD": [
-			"KEY_S",
-			"KEY_DOWN",
+			"KEY_HELD_S",
+			"KEY_HELD_DOWN",
+			"GAMEPAD_LSTICK_SOUTH"
+		],
+
+		"ROTATE_LEFT": [
+			"KEY_HELD_A",
+			"KEY_HELD_LEFT",
+			"GAMEPAD_LSTICK_SOUTH"
+		],
+
+		"ROTATE_RIGHT": [
+			"KEY_HELD_D",
+			"KEY_HELD_RIGHT",
 			"GAMEPAD_LSTICK_SOUTH"
 		]
 
-	},
-
-	"collision": {
-		"cubes": [
-			{
-				"size": [ 8, 8, 8 ],
-				"offset": [ 0, 0, 0 ],
-				"rotation": [ 0, 0, 0 ]
-			}
-		]
 	}
 
 }

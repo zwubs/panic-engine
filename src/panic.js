@@ -31,6 +31,12 @@ export { Element } from './core/dom/element.js';
 	 */
 	export { EventManager } from './core/events/event-manager.js';
 
+	/**
+	 *	@filespace {INPUT}
+	 */
+	export * as Input from './core/input/input.js';
+
+
 /**
  *	@filespace {ENTITIES}
  */

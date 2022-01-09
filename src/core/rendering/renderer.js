@@ -19,11 +19,11 @@ class Renderer extends WebGLRenderer {
 
 		this.shadowMap.enabled = true;
 		this.shadowMap.type = BasicShadowMap;
-		
+
 		this.outputEncoding = sRGBEncoding;
 
 		this.toneMapping = LinearToneMapping;
-		this.toneMappingExposure = 0.70;
+		this.toneMappingExposure = 0.75;
 
 		this.eventManager = new EventManager( window );
 
