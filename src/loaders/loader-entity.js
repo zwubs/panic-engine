@@ -26,6 +26,8 @@ export let EntityLoader = new function() {
 		template.id = json.id;
 		template.name = json.name;
 
+        template.actions = await Parsers.Actions.parse( json.actions );
+
 		// Load Image & Create Texture
 		template.texture = await TextureLoader.load( baseURL + json.texture );
 

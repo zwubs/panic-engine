@@ -23,6 +23,8 @@ class Entity {
 		this.rotation = new Vector3( 0, 0, 0 );
 		this.scale = new Vector3( 1, 1, 1 );
 
+		this.actions = template.actions;
+
 		// Skeleton
 		this.skeleton = new Skeleton();
 
@@ -46,6 +48,11 @@ class Entity {
 		Scene.add( this.mesh );
 
 	}
+
+	/**
+	 * 	@description Remap to Actions.on
+	 */
+	on( action, func ) { this.actions.on( action, func ); }
 
 	update() {
 

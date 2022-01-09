@@ -23,6 +23,8 @@ class EntityTemplate {
 		this.bones = [];
 		this.geometry = null;
 
+		this.actions = null;
+
 		this.shader = EntityShader;
 
 		this.uniforms = null;
