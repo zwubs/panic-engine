@@ -17,7 +17,7 @@ import * as Console from '../../debug/debug-console.js';
 
 export class EventManager {
 
-    constructor( element ) {
+    constructor( element, binding ) {
 
         this.events = {};
 
@@ -28,6 +28,7 @@ export class EventManager {
         this.store = {};
 
         this.element = element ? element : Element;
+        this.binding = binding ? binding : window;
 
         Updater.add( this );
 
@@ -112,7 +113,7 @@ export class EventManager {
             return false;
 
         }
-        
+
         for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
 
         this.events[ eventID ].clear();

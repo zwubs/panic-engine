@@ -31,7 +31,7 @@ export class Event {
 
         if( this.store ) this.manager.store[ this.id ] = data;
 
-        this.functions.forEach( ( func, index ) => func.apply( null, [ data ] ) );
+        this.functions.forEach( ( func, index ) => func.bind( this.manager.binding, data ).apply( null, null ) );
 
     }
 
