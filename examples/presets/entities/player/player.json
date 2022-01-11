@@ -26,6 +26,19 @@
 
 	"actions": {
 
+		"UPDATE": "./scripts/update.js",
+
+		"MOVE_FORWARD": "./scripts/move-forward.js",
+		"MOVE_BACKWARD": "./scripts/move-backward.js",
+		"ROTATE_LEFT": "./scripts/rotate-left.js",
+		"ROTATE_RIGHT": "./scripts/rotate-right.js",
+
+		"JUMP": "./scripts/jump.js"
+
+	},
+
+	"bindings": {
+
 		"MOVE_FORWARD": [
 			"KEY_HELD_W",
 			"KEY_HELD_UP",
@@ -41,13 +54,18 @@
 		"ROTATE_LEFT": [
 			"KEY_HELD_A",
 			"KEY_HELD_LEFT",
-			"GAMEPAD_RSTICK_WEST"
+			"GAMEPAD_LSTICK_WEST"
 		],
 
 		"ROTATE_RIGHT": [
 			"KEY_HELD_D",
 			"KEY_HELD_RIGHT",
-			"GAMEPAD_RSTICK_EAST"
+			"GAMEPAD_LSTICK_EAST"
+		],
+
+		"JUMP": [
+			"KEY_DOWN_SPACE",
+			"GAMEPAD_BUTTON_WEST"
 		]
 
 	}

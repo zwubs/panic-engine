@@ -58,21 +58,7 @@
 
 				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
 
-                    Player = PANIC.EntityRegistry.spawnEntity( template.id )
-
-					PANIC.Updater.add( Player );
-
-                    Player.on( "MOVE_FORWARD", () => {
-                        Player.position.x -= 0.0625 * Math.sin( Player.rotation.y );
-                        Player.position.z -= 0.0625 * Math.cos( Player.rotation.y );
-                    } );
-					Player.on( "MOVE_BACKWARD", () => {
-                        Player.position.x += 0.0625 * Math.sin( Player.rotation.y );
-                        Player.position.z += 0.0625 * Math.cos( Player.rotation.y );
-                    } );
-
-					Player.on( "ROTATE_LEFT", () => { Player.rotation.y += 0.0625; } );
-					Player.on( "ROTATE_RIGHT", () => { Player.rotation.y -= 0.0625; } );
+                    Player = PANIC.EntityRegistry.spawnEntity( template.id );
 
                 });
 
