@@ -82,12 +82,6 @@
 		}
 	},
 
-	"collision": {
-		"cubes": [
-			{
-				"size": [ 8, 8, 8 ]
-			}
-		]
-	}
+	"actions": {}
 
 }

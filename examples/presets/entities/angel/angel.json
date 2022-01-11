@@ -126,14 +126,6 @@
 
     ],
 
-	"collision": {
-		"cubes": [
-			{
-				"size": [ 8, 8, 8 ],
-				"offset": [ 0, 0, 0 ],
-				"rotation": [ 0, 0, 0 ]
-			}
-		]
-	}
+	"actions": {}
 
 }
