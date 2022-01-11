@@ -4,6 +4,7 @@
  */
 
 import { Scene } from '../core/rendering/scene.js';
+import { Updater } from '../core/updater.js';
 import { Tools } from '../tools/tools.js'
 
 import { Vector3, Skeleton, Mesh, MeshDepthMaterial, RGBADepthPacking } from 'three';
@@ -24,6 +25,9 @@ class Entity {
 		this.scale = new Vector3( 1, 1, 1 );
 
 		this.actions = template.actions;
+		this.actions.eventManager.binding = this;
+
+		this.store = {};
 
 		// Skeleton
 		this.skeleton = new Skeleton();
@@ -47,14 +51,13 @@ class Entity {
 
 		Scene.add( this.mesh );
 
+		Updater.add( this );
+
 	}
 
-	/**
-	 * 	@description Remap to Actions.on
-	 */
-	on( action, func ) { this.actions.on( action, func ); }
-
 	update() {
+
+		this.actions.eventManager.emit( "UPDATE" );
 
 		this.mesh.position.copy( this.position );
 		this.mesh.rotation.setFromVector3( this.rotation );
