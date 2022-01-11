@@ -40,7 +40,8 @@
 
 			try {
 
-				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
+                // Replace this file name with your own!
+				PANIC.Loaders.Entity.load( "your-entity.json" ).then( ( template ) => {
 
                     Player = PANIC.EntityRegistry.spawnEntity( template.id );
 

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c ./utils/build/rollup-full.config.js",
-    "serve": "rollup -c ./utils/build/rollup-dev.config.js -w"
+    "develop": "rollup -c ./utils/build/rollup-dev.config.js -w",
+    "start": "http-server"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/ZWubs/PANIC-Engine#readme",
   "dependencies": {
+    "http-server": "^14.1.0",
     "joypad.js": "^2.2.5",
     "rollup": "^2.62.0",
     "three": "^0.136.0"
