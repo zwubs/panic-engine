@@ -4,6 +4,8 @@
 
 import { Actions } from '../core/input/actions.js'
 
+import { ActionScriptLoader } from '../loaders/loader-action-script.js'
+
 class ActionsParser {
 
     consturctor() {}
@@ -11,13 +13,25 @@ class ActionsParser {
     /**
      *  @param {Object} json
      */
-	parse( json ) {
+	async parse( actionsJSON, bindingsJSON, baseURL ) {
 
         let actions = new Actions;
 
-        for( const [ action, bindings ] of Object.entries( json ) ) {
+        for( const [ action, url ] of Object.entries( actionsJSON ) ) {
 
-            actions.registerAction( action );
+            if( action != "bindings" ) {
+
+                actions.registerAction( action );
+
+                let scriptString = await ActionScriptLoader.load( baseURL + url );
+
+                actions.on( action, new Function( scriptString )() );
+
+            }
+
+        }
+
+        for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
 
             for( let binding of bindings ) {
 
