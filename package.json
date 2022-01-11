@@ -1,6 +1,6 @@
 {
   "name": "panic-engine",
-  "version": "0.0.3dev",
+  "version": "0.0.3",
   "description": "A WebGL & THREEjs based game engine",
   "main": "index.js",
   "scripts": {

@@ -50893,7 +50893,7 @@
 
 	        if( this.store ) this.manager.store[ this.id ] = data;
 
-	        this.functions.forEach( ( func, index ) => func.apply( null, [ data ] ) );
+	        this.functions.forEach( ( func, index ) => func.bind( this.manager.binding, data ).apply( null, null ) );
 
 	    }
 
@@ -51228,7 +51228,7 @@
 
 	class EventManager {
 
-	    constructor( element ) {
+	    constructor( element, binding ) {
 
 	        this.events = {};
 
@@ -51239,6 +51239,7 @@
 	        this.store = {};
 
 	        this.element = element ? element : Element;
+	        this.binding = binding ? binding : window;
 
 	        instance$c.add( this );
 
@@ -51323,7 +51324,7 @@
 	            return false;
 
 	        }
-	        
+
 	        for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
 
 	        this.events[ eventID ].clear();
@@ -53920,6 +53921,9 @@
 			this.scale = new Vector3( 1, 1, 1 );
 
 			this.actions = template.actions;
+			this.actions.eventManager.binding = this;
+
+			this.store = {};
 
 			// Skeleton
 			this.skeleton = new Skeleton();
@@ -53943,14 +53947,13 @@
 
 			instance$e.add( this.mesh );
 
+			instance$c.add( this );
+
 		}
 
-		/**
-		 * 	@description Remap to Actions.on
-		 */
-		on( action, func ) { this.actions.on( action, func ); }
-
 		update() {
+
+			this.actions.eventManager.emit( "UPDATE" );
 
 			this.mesh.position.copy( this.position );
 			this.mesh.rotation.setFromVector3( this.rotation );
@@ -55040,6 +55043,24 @@
 	 *	@author zwubs
 	 */
 
+	let ActionScriptLoader = new function() {
+
+	 	this.load = async function( url ) {
+
+			url.substring(0, url.lastIndexOf("/") + 1 );
+
+			let file = await FileLoader.load( url );
+
+	        return file;
+
+		};
+
+	};
+
+	/**
+	 *	@author zwubs
+	 */
+
 	class ActionsParser {
 
 	    consturctor() {}
@@ -55047,13 +55068,25 @@
 	    /**
 	     *  @param {Object} json
 	     */
-		parse( json ) {
+		async parse( actionsJSON, bindingsJSON, baseURL ) {
 
 	        let actions = new Actions;
 
-	        for( const [ action, bindings ] of Object.entries( json ) ) {
+	        for( const [ action, url ] of Object.entries( actionsJSON ) ) {
 
-	            actions.registerAction( action );
+	            if( action != "bindings" ) {
+
+	                actions.registerAction( action );
+
+	                let scriptString = await ActionScriptLoader.load( baseURL + url );
+
+	                actions.on( action, new Function( scriptString )() );
+
+	            }
+
+	        }
+
+	        for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
 
 	            for( let binding of bindings ) {
 
@@ -55106,7 +55139,7 @@
 			template.id = json.id;
 			template.name = json.name;
 
-	        if( json.actions ) template.actions = await instance$5.parse( json.actions );
+	        if( json.actions ) template.actions = await instance$5.parse( json.actions, json.bindings, baseURL );
 
 			// Load Image & Create Texture
 			template.texture = await TextureLoader.load( baseURL + json.texture );
@@ -55139,7 +55172,8 @@
 		File: FileLoader,
 		Image: ImageLoader,
 		Texture: TextureLoader,
-		Entity: EntityLoader
+		Entity: EntityLoader,
+		ActionScript: ActionScriptLoader
 	});
 
 	/**
@@ -55672,7 +55706,7 @@
 	 *	@todo Decide what actually needs to be visible to the user.
 	 */
 
-	let Version = "0.0.3dev";
+	let Version = "0.0.3";
 
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
