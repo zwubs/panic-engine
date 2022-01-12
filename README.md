@@ -7,6 +7,7 @@ or build it yourself.
 ```bash
 npm install
 npm run build
+npm start
 ```
 
 ## Version 0.0.3
