@@ -16,11 +16,11 @@ class Gamepad {
 
 		Joypad.set({ axisMovementThreshold: 0.3 });
 
-        Joypad.on('connect', this.handleConnect.bind( this ) );
+		Joypad.on('connect', this.handleConnect.bind( this ) );
 
-        Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
+		Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
 
-        Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
+		Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
 
 		Joypad.on('button_press', this.handleButtonPress.bind( this ) );
 

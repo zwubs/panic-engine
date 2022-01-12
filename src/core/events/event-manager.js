@@ -17,169 +17,169 @@ import * as Console from '../../debug/debug-console.js';
 
 export class EventManager {
 
-    constructor( element, binding ) {
+	constructor( element, binding ) {
 
-        this.events = {};
+		this.events = {};
 
-        // Storage events waiting for the next game update/tick
+		// Storage events waiting for the next game update/tick
 		this.queue = {};
 
-        // Storage of data for aquiring later
-        this.store = {};
+		// Storage of data for aquiring later
+		this.store = {};
 
-        this.element = element ? element : Element;
-        this.binding = binding ? binding : window;
+		this.element = element ? element : Element;
+		this.binding = binding ? binding : window;
 
-        Updater.add( this );
+		Updater.add( this );
 
-    }
+	}
 
-    /**
-     *  @description Register a custom event
-     */
+	/**
+	 *  @description Register a custom event
+	 */
 	registerEvent( eventID, loop, store ) {
 
-        if( NativeEventList.includes( eventID ) ) {
+		if( NativeEventList.includes( eventID ) ) {
 
-            Console.warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
+			Console.warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
 
-            return false;
+			return false;
 
-        }
-        // If already registered, warn & skip
-        else if( eventID in this.events ) {
+		}
+		// If already registered, warn & skip
+		else if( eventID in this.events ) {
 
-            Console.warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
+			Console.warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
 		this.events[ eventID ] = new Event( eventID, this, loop, store );
 
 	}
 
-    /**
-     *  @param {String} alias
-     *  @param {String} eventID
-     */
-     registerEventAlias( alias, eventID ) {
+	/**
+	 *  @param {String} alias
+	 *  @param {String} eventID
+	 */
+	 registerEventAlias( alias, eventID ) {
 
-         if( NativeEventList.includes( alias ) ) {
+		 if( NativeEventList.includes( alias ) ) {
 
-             Console.warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
+			 Console.warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
 
-             return false;
+			 return false;
 
-         }
+		 }
 
-         else if( NativeEventList.includes( eventID ) ) {
+		 else if( NativeEventList.includes( eventID ) ) {
 
-             Console.warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
+			 Console.warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
 
-             return false;
+			 return false;
 
-         }
+		 }
 
-         else if( alias in this.events ) {
+		 else if( alias in this.events ) {
 
-             Console.warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
+			 Console.warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
 
-             return false;
+			 return false;
 
-         }
+		 }
 
-         else if( !(eventID in this.events ) ) {
+		 else if( !(eventID in this.events ) ) {
 
-             Console.warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
+			 Console.warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
 
-             return false;
+			 return false;
 
-         }
+		 }
 
-         this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
+		 this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
 
-     }
+	 }
 
-    /**
-     *  @description Remove an event from this EventManager
-     */
-    unregisterEvent( eventID ) {
+	/**
+	 *  @description Remove an event from this EventManager
+	 */
+	unregisterEvent( eventID ) {
 
-        if( !( eventID in this.events ) ) {
+		if( !( eventID in this.events ) ) {
 
-            Console.warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
+			Console.warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
+		for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
 
-        this.events[ eventID ].clear();
+		this.events[ eventID ].clear();
 
-        delete this.events[ eventID ];
+		delete this.events[ eventID ];
 
-    }
+	}
 
-    unregisterEventAlias( alias ) {
+	unregisterEventAlias( alias ) {
 
-        console.log( alias, this.events )
+		console.log( alias, this.events )
 
-        if( !( alias in this.events ) ) {
+		if( !( alias in this.events ) ) {
 
-            Console.warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
+			Console.warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        delete this.events[ alias ];
+		delete this.events[ alias ];
 
-    }
+	}
 
-    /**
-     *  @description Register a native event, such as 'keydown'
-     */
-    registerNativeEvent( eventID, loop, store ) {
+	/**
+	 *  @description Register a native event, such as 'keydown'
+	 */
+	registerNativeEvent( eventID, loop, store ) {
 
-        if( !( NativeEventList.includes( eventID ) ) ) {
+		if( !( NativeEventList.includes( eventID ) ) ) {
 
-            Console.warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
+			Console.warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        if( eventID in this.events ) {
+		if( eventID in this.events ) {
 
-            Console.warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
+			Console.warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
 		this.events[ eventID ] = new NativeEvent( eventID, this, loop, store );
 
-    }
+	}
 
-    /**
-     *  @description unregisters the event using the normal function
-     */
-    unregisterNativeEvent( eventID ) {
+	/**
+	 *  @description unregisters the event using the normal function
+	 */
+	unregisterNativeEvent( eventID ) {
 
-        this.unregisterEvent( eventID );
+		this.unregisterEvent( eventID );
 
-    }
+	}
 
-    /**
-     *  @description Clears the queue of all current events;
-     */
-    clearQueue() {
+	/**
+	 *  @description Clears the queue of all current events;
+	 */
+	clearQueue() {
 
-        this.queue = {};
+		this.queue = {};
 
-    }
+	}
 
 	/**
 	 * 	@description
@@ -190,32 +190,32 @@ export class EventManager {
 
 	}
 
-    /**
-     *  @param {String} eventID - A string acting as identification for the event.
-     *  @param {Object} data - Data to be passed to all listeners
-     */
-    emit( eventID, data, loop=false ) {
+	/**
+	 *  @param {String} eventID - A string acting as identification for the event.
+	 *  @param {Object} data - Data to be passed to all listeners
+	 */
+	emit( eventID, data, loop=false ) {
 
-        if( !( eventID in this.events ) ) {
+		if( !( eventID in this.events ) ) {
 
-            Console.warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
+			Console.warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        if( this.events[ eventID ] instanceof NativeEvent ) {
+		if( this.events[ eventID ] instanceof NativeEvent ) {
 
-            Console.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
+			Console.warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
-        else this.queue[ eventID ] = { loop: loop, data: data };
+		if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+		else this.queue[ eventID ] = { loop: loop, data: data };
 
-    }
+	}
 
 
 	/**
@@ -227,90 +227,90 @@ export class EventManager {
 
 		if( !this.hasEvent( eventID ) ) {
 
-            Console.warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
+			Console.warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        return this.queue.hasOwnProperty( eventID );
+		return this.queue.hasOwnProperty( eventID );
 
 	}
 
-    /**
+	/**
 	 * @description Get the value currently stored in this.store for this event
 	 * @param {String} eventID A string acting as identification for the event.
 	 * @return {Boolean}
 	 */
-    getStore( eventID ) {
+	getStore( eventID ) {
 
-        if( !this.store.hasOwnProperty( eventID ) ) {
+		if( !this.store.hasOwnProperty( eventID ) ) {
 
-            Console.warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
+			Console.warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        return this.store[ eventID ];
+		return this.store[ eventID ];
 
 	}
 
 
 
-    /**
-     * @param {String} eventID A string acting as identification for the event.
-     */
-    breakLoop( eventID ) {
+	/**
+	 * @param {String} eventID A string acting as identification for the event.
+	 */
+	breakLoop( eventID ) {
 
-        if( this.events[ eventID ] instanceof EventAlias ) {
-            if( this.events[ eventID ].event.id in this.queue ) {
-                this.queue[ this.events[ eventID ].event.id ].loop = false;
-            }
-        }
-        else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
+		if( this.events[ eventID ] instanceof EventAlias ) {
+			if( this.events[ eventID ].event.id in this.queue ) {
+				this.queue[ this.events[ eventID ].event.id ].loop = false;
+			}
+		}
+		else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
 
-    }
+	}
 
-    /**
-     *  @param {String} eventID A string acting as identification for the event.
-     *  @param {Function} func Data to be passed to all listeners
-     */
-    on( eventID, func ) {
+	/**
+	 *  @param {String} eventID A string acting as identification for the event.
+	 *  @param {Function} func Data to be passed to all listeners
+	 */
+	on( eventID, func ) {
 
-        if( !( eventID in this.events ) ) {
+		if( !( eventID in this.events ) ) {
 
-            Console.warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
+			Console.warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        if( typeof func !== "function" ) {
+		if( typeof func !== "function" ) {
 
-            Console.warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
+			Console.warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
 
-            return false;
+			return false;
 
-        }
+		}
 
-        this.events[ eventID ].add( func );
+		this.events[ eventID ].add( func );
 
-    }
+	}
 
-    /**
-     *  @description Called every frame to emit all events.
-     */
-    update() {
+	/**
+	 *  @description Called every frame to emit all events.
+	 */
+	update() {
 
-        for ( const [key, value] of Object.entries( this.queue ) ) {
+		for ( const [key, value] of Object.entries( this.queue ) ) {
 
-            this.events[ key ].emit( value.data );
+			this.events[ key ].emit( value.data );
 
-            if( value.loop == false ) { delete this.queue[ key ]; }
+			if( value.loop == false ) { delete this.queue[ key ]; }
 
-        }
+		}
 
-    }
+	}
 
 };

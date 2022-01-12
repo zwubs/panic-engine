@@ -11,9 +11,8 @@ class Camera extends PerspectiveCamera {
 		super( 45, 1920/1080, 0.1, 1000 );
 
 		this.position.set( 0, 1, -4 );
-
 		this.aspect = window.innerWidth / window.innerHeight;
-	    this.updateProjectionMatrix();
+		this.updateProjectionMatrix();
 
 	}
 

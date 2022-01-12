@@ -19,7 +19,7 @@ class Texture extends TEXTURE {
 		this.minFilter = LinearFilter;
 
 		this.wrapS = RepeatWrapping;
-    	this.wrapT = RepeatWrapping;
+		this.wrapT = RepeatWrapping;
 
 		// TODO: Check if necessary
 		this.premultiplyAlpha = true;

@@ -38,11 +38,11 @@ class Renderer extends WebGLRenderer {
 
 	onResize( e ) {
 
-	    Camera.aspect = Element.clientWidth / Element.clientHeight;
-	    Camera.updateProjectionMatrix();
+		Camera.aspect = Element.clientWidth / Element.clientHeight;
+		Camera.updateProjectionMatrix();
 
-	    this.setPixelRatio( window.devicePixelRatio );
-	    this.setSize( Element.clientWidth, Element.clientHeight );
+		this.setPixelRatio( window.devicePixelRatio );
+		this.setSize( Element.clientWidth, Element.clientHeight );
 
 	}
 

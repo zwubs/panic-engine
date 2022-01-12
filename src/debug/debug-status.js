@@ -6,17 +6,17 @@ export let enabled = false;
 
 export function enable() {
 
- 	enabled = true;
+	enabled = true;
 
- 	console.info("[PANIC] Debug Mode Enabled");
+	console.info("[PANIC] Debug Mode Enabled");
 
  }
 
  export function disable() {
 
- 	enabled = false;
+	enabled = false;
 
- 	console.info("[PANIC] Debug Mode Disabled");
+	console.info("[PANIC] Debug Mode Disabled");
 
  }
 

@@ -58,17 +58,17 @@ export let EntityModelParser = new function() {
 	}
 
 	/**
-     *  @param {THREE.Geometry} box
-     *  @param {Integer} index
-     */
-    this.setupSkinning = function( box, index ) {
+	 *  @param {THREE.Geometry} box
+	 *  @param {Integer} index
+	 */
+	this.setupSkinning = function( box, index ) {
 
-        var skinIndices = new Float32Array( box.attributes.position.count );
+		var skinIndices = new Float32Array( box.attributes.position.count );
 
-        for( var i = 0; i < skinIndices.length; i++ ) skinIndices.set( [index], i );
+		for( var i = 0; i < skinIndices.length; i++ ) skinIndices.set( [index], i );
 
-        box.setAttribute( "skinIndices", new BufferAttribute( skinIndices, 1 ) );
+		box.setAttribute( "skinIndices", new BufferAttribute( skinIndices, 1 ) );
 
-    }
+	}
 
 }

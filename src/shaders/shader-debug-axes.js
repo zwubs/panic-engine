@@ -53,6 +53,6 @@ export let DebugAxes = {
 
 		}
 
-  	`
+	`
 
 }

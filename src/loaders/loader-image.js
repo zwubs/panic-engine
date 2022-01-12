@@ -8,13 +8,13 @@ export let ImageLoader = new function() {
 
 		return await new Promise(resolve => {
 
-             let image = new Image();
+			 let image = new Image();
 
-	         image.addEventListener( 'load', () => { resolve( image ); } );
+			 image.addEventListener( 'load', () => { resolve( image ); } );
 
-	         image.src = url;
+			 image.src = url;
 
-	    });
+		});
 
 	}
 

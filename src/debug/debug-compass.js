@@ -16,7 +16,7 @@ class Compass {
 
 		this.id = "PANIC-Debug-Compass";
 
-	    this.element = document.createElement("div");
+		this.element = document.createElement("div");
 		this.element.id = this.id;
 
 		this.active = false;

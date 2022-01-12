@@ -121,8 +121,8 @@ export let TilesetParser = new function() {
 
 					if( tile.t.rotate ) {
 						if( tile.t.rotate == 1 ) tileGroup[ dir ].editPattern( 4, 5, 0, 1, 6, 7, 2, 3 );
-	                    else if( tile.t.rotate == 2 ) tileGroup[ dir ].editPattern( 6, 7, 4, 5, 2, 3, 0, 1 );
-	                    else if( tile.t.rotate == 3 ) tileGroup[ dir ].editPattern( 2, 3, 6, 7, 0, 1, 4, 5 );
+						else if( tile.t.rotate == 2 ) tileGroup[ dir ].editPattern( 6, 7, 4, 5, 2, 3, 0, 1 );
+						else if( tile.t.rotate == 3 ) tileGroup[ dir ].editPattern( 2, 3, 6, 7, 0, 1, 4, 5 );
 					}
 
 				}

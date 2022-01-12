@@ -8,40 +8,40 @@ import { ActionScriptLoader } from '../loaders/loader-action-script.js'
 
 class ActionsParser {
 
-    consturctor() {}
+	consturctor() {}
 
-    /**
-     *  @param {Object} json
-     */
+	/**
+	 *  @param {Object} json
+	 */
 	async parse( actionsJSON, bindingsJSON, baseURL ) {
 
-        let actions = new Actions;
+		let actions = new Actions;
 
-        for( const [ action, url ] of Object.entries( actionsJSON ) ) {
+		for( const [ action, url ] of Object.entries( actionsJSON ) ) {
 
-            if( action != "bindings" ) {
+			if( action != "bindings" ) {
 
-                actions.registerAction( action );
+				actions.registerAction( action );
 
-                let scriptString = await ActionScriptLoader.load( baseURL + url );
+				let scriptString = await ActionScriptLoader.load( baseURL + url );
 
-                actions.on( action, new Function( scriptString )() );
+				actions.on( action, new Function( scriptString )() );
 
-            }
+			}
 
-        }
+		}
 
-        for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
+		for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
 
-            for( let binding of bindings ) {
+			for( let binding of bindings ) {
 
-                actions.addInputBinding( action, binding );
+				actions.addInputBinding( action, binding );
 
-            }
+			}
 
-        }
+		}
 
-        return actions;
+		return actions;
 
 	}
 

@@ -3,7 +3,7 @@
  */
 
 /*
-    Pass in either a function you want updated, or an object with an "update" function already defined
+	Pass in either a function you want updated, or an object with an "update" function already defined
 */
 
 class Updater {
@@ -17,30 +17,30 @@ class Updater {
 
 	}
 
-    update() {
+	update() {
 
-        this.pass++;
+		this.pass++;
 
-        for( let i = 0; i < this.data.length; i++ ) {
+		for( let i = 0; i < this.data.length; i++ ) {
 
-            if( this.pass % this.data[ i ].interval == 0 ) {
+			if( this.pass % this.data[ i ].interval == 0 ) {
 
-                if( typeof this.data[i].object[ "update" ] === "function" ) {
+				if( typeof this.data[i].object[ "update" ] === "function" ) {
 
 					this.data[i].object.update();
 
 				}
 
-            }
+			}
 
-        }
+		}
 
-    }
+	}
 
-    /**
-     *  @param object {Object} - The object holding the function
-     */
-    add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
+	/**
+	 *  @param object {Object} - The object holding the function
+	 */
+	add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
 
 	remove( object ) { }
 
@@ -56,8 +56,8 @@ class UpdaterFunction {
 
 	constructor( object, interval=1 ) {
 
-	    this.object = object;
-	    this.interval = ( interval <= 0 ) ? 1 : interval;
+		this.object = object;
+		this.interval = ( interval <= 0 ) ? 1 : interval;
 
 	}
 

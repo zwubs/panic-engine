@@ -65,8 +65,8 @@ class Axes {
 			depthWrite: false,
 
 			extensions: {
-	        	derivatives: true
-	        }
+				derivatives: true
+			}
 
 		});
 
@@ -154,7 +154,7 @@ class Axes {
 
 	}
 
- 	/**
+	/**
 	 *	@todo Implement
 	 */
 	setColors( axes, color ) {

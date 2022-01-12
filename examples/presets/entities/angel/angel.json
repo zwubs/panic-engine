@@ -20,36 +20,36 @@
 		"feather_up4": { "x": 0, "y": 0, "width": 4, "height": 1 },
 		"feather_side4": { "x": 0, "y": 0, "width": 4, "height": 2 }
 
-    },
+	},
 
-    "armature": [
-        {
-			"name": "root"
-        },
+	"armature": [
 		{
-            "name": "halo",
+			"name": "root"
+		},
+		{
+			"name": "halo",
 			"parent": "root",
 			"offset": [ 0, 6, 0 ],
 			"rotation": [ 0, 45, 0 ],
-            "cubes": [
-                {
+			"cubes": [
+				{
 					"offset": [ 0, 0, 2.5 ],
-                    "size": [ 6, 1, 1 ],
+					"size": [ 6, 1, 1 ],
 					"faces": { "all": { "uv": "halo" } }
-                },{
+				},{
 					"offset": [ 0, 0, -2.5 ],
-                    "size": [ 6, 1, 1 ],
+					"size": [ 6, 1, 1 ],
 					"faces": { "all": { "uv": "halo" } }
-                },{
+				},{
 					"offset": [ 2.5, 0, 0 ],
-                    "size": [ 1, 1, 6 ],
+					"size": [ 1, 1, 6 ],
 					"faces": { "all": { "uv": "halo" } }
-                },{
+				},{
 					"offset": [ -2.5, 0, 0 ],
-                    "size": [ 1, 1, 6 ],
+					"size": [ 1, 1, 6 ],
 					"faces": { "all": { "uv": "halo" } }
-                }
-            ]
+				}
+			]
 		},
 
 		{
@@ -124,7 +124,7 @@
 			]
 		}
 
-    ],
+	],
 
 	"actions": {}
 

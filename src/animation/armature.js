@@ -14,7 +14,7 @@ PANIC.Armature = function() {
 	// Relational Setup of Bones
 	// Trace bones using root's 'children' variable
 	this.tree = this.bones[ "root" ];
-	
+
 }
 
 /**

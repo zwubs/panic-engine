@@ -234,9 +234,9 @@ class Mouse {
 
 	getScroll() {
 
- 		return this.eventManager.eventActive( `MOUSE_SCROLL` );
+		return this.eventManager.eventActive( `MOUSE_SCROLL` );
 
- 	}
+	}
 
 	getScrollAmount() {
 
@@ -261,11 +261,11 @@ class Mouse {
 	/**
 	 * 	@param {Event} e - Event from "mousemove" event listener
 	 */
- 	handleMove( e ) {
+	handleMove( e ) {
 
-  		this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
+		this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
 
-  	}
+	}
 
 	/**
 	 * @param {Function} func Function to be executed when event is recieved

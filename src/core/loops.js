@@ -6,16 +6,16 @@
  */
 let Loop = function( time=0 ) {
 
-    // Updating
+	// Updating
 
-    PANIC.Clock.update( time );
+	PANIC.Clock.update( time );
 
-    PANIC.Updater.update();
+	PANIC.Updater.update();
 
-    // Rendering
+	// Rendering
 
-    PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
+	PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
-    requestAnimationFrame( PANIC.Loop );
+	requestAnimationFrame( PANIC.Loop );
 
 }

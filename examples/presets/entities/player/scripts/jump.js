@@ -1,10 +1,10 @@
 return function() {
 
-    if( !this.store.air ) {
+	if( !this.store.air ) {
 
-        this.store.jump = true;
-        this.store.air = true;
+		this.store.jump = true;
+		this.store.air = true;
 
-    }
+	}
 
 }

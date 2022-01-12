@@ -11,42 +11,42 @@ import { Gamepad } from './gamepad/gamepad.js'
 
 export class Actions {
 
-    constructor() {
+	constructor() {
 
-        this.eventManager = new EventManager();
+		this.eventManager = new EventManager();
 
-    }
+	}
 
-    registerAction( actionID ) {
+	registerAction( actionID ) {
 
-        this.eventManager.registerEvent( actionID );
+		this.eventManager.registerEvent( actionID );
 
-    }
+	}
 
-    addInputBinding( actionID, binding ) {
+	addInputBinding( actionID, binding ) {
 
-        if( binding.split("_")[0] == "KEY" ) {
+		if( binding.split("_")[0] == "KEY" ) {
 
-            Keyboard.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
+			Keyboard.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
 
-        }
-        else if( binding.startsWith("MOUSE") ) {
+		}
+		else if( binding.startsWith("MOUSE") ) {
 
-            Mouse.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
+			Mouse.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
 
-        }
-        else if( binding.startsWith("GAMEPAD") ) {
+		}
+		else if( binding.startsWith("GAMEPAD") ) {
 
 			Gamepad.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
 
 		}
 
-    }
+	}
 
-    on( actionID, func ) {
+	on( actionID, func ) {
 
-        this.eventManager.on( actionID, func );
+		this.eventManager.on( actionID, func );
 
-    }
+	}
 
 }
