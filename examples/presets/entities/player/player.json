@@ -26,6 +26,7 @@
 
 	"actions": {
 
+		"INIT": "./scripts/init.js",
 		"UPDATE": "./scripts/update.js",
 
 		"MOVE_FORWARD": "./scripts/move-forward.js",

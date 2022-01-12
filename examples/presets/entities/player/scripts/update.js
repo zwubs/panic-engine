@@ -19,4 +19,8 @@ return function() {
 
 	}
 
+	this.position.x += this.store.velocity.x;
+	this.position.y += this.store.velocity.y;
+	this.position.z += this.store.velocity.z;
+
 }
