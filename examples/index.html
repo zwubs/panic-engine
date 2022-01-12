@@ -41,7 +41,7 @@
             try {
 
                 // Replace this file name with your own!
-                PANIC.Loaders.Entity.load( "your-entity.json" ).then( ( template ) => {
+                PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
 
                     Player = PANIC.EntityRegistry.spawnEntity( template.id );
 
@@ -77,7 +77,7 @@
             }
 
         </script>
-        
+
     </body>
 
 </html>

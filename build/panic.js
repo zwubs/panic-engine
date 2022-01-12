@@ -50782,7 +50782,7 @@
 			super();
 
 			this.background = new Color( 0x222222 );
-			// this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
+			this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
 
 			this.add( new HemisphereLight( 0xFFFFFF, 0xFFFFFF, 1.00 ) );
 
@@ -50819,9 +50819,8 @@
 			super( 45, 1920/1080, 0.1, 1000 );
 
 			this.position.set( 0, 1, -4 );
-
 			this.aspect = window.innerWidth / window.innerHeight;
-		    this.updateProjectionMatrix();
+			this.updateProjectionMatrix();
 
 		}
 
@@ -50866,58 +50865,58 @@
 
 	class Event {
 
-	    /**
-	     *  @param {String} id - A string acting as identification for this event.
-	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
-	     */
-	    constructor( id, manager, loop=false, store=false ) {
+		/**
+		 *  @param {String} id - A string acting as identification for this event.
+		 *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
+		 */
+		constructor( id, manager, loop=false, store=false ) {
 
 			this.id = id;
-	        this.manager = manager;
+			this.manager = manager;
 
-	        this.loop = loop;
-	        this.store = store;
+			this.loop = loop;
+			this.store = store;
 
-	        if( store ) this.manager.store[ this.id ] = null;
+			if( store ) this.manager.store[ this.id ] = null;
 
-	        this.aliases = {};
+			this.aliases = {};
 
-	        /**
-	         *  @description An array of functions that are listening for the emit.
-	         */
-	        this.functions = [];
+			/**
+			 *  @description An array of functions that are listening for the emit.
+			 */
+			this.functions = [];
 
-	    }
+		}
 
-	    emit( data=null ) {
+		emit( data=null ) {
 
-	        if( this.store ) this.manager.store[ this.id ] = data;
+			if( this.store ) this.manager.store[ this.id ] = data;
 
-	        this.functions.forEach( ( func, index ) => func.bind( this.manager.binding, data ).apply( null, null ) );
+			this.functions.forEach( ( func, index ) => func.bind( this.manager.binding, data ).apply( null, null ) );
 
-	    }
+		}
 
-	    /**
-	     *  @description Add a function into the functions variable to be alerted on an emit
-	     */
-	    add( func ) {
+		/**
+		 *  @description Add a function into the functions variable to be alerted on an emit
+		 */
+		add( func ) {
 
-	        this.functions.push( func );
+			this.functions.push( func );
 
-	    }
+		}
 
-	    addAlias( eventAlias ) { this.aliases[ eventAlias.id ] = eventAlias; }
+		addAlias( eventAlias ) { this.aliases[ eventAlias.id ] = eventAlias; }
 
-	    removeAlias( aliasID ) { delete this.aliases[ aliasID ]; this.manager.unregisterEventAlias( eventAlias.id ); }
+		removeAlias( aliasID ) { delete this.aliases[ aliasID ]; this.manager.unregisterEventAlias( eventAlias.id ); }
 
-	    /**
-	     *  @description Empty the array
-	     */
-	    clear() {
+		/**
+		 *  @description Empty the array
+		 */
+		clear() {
 
-	        this.functions = [];
+			this.functions = [];
 
-	    }
+		}
 
 	}
 
@@ -50927,24 +50926,24 @@
 
 	class EventAlias {
 
-	    constructor( alias, event ) {
+		constructor( alias, event ) {
 
-	        this.id = alias;
-	        this.event = event;
+			this.id = alias;
+			this.event = event;
 
-	        this.event.addAlias( this );
+			this.event.addAlias( this );
 
-	    }
+		}
 
-	    set loop( value ) { this.event.loop = value; }
-	    get loop() { return this.event.loop; }
-	    get store() { return this.event.store; }
+		set loop( value ) { this.event.loop = value; }
+		get loop() { return this.event.loop; }
+		get store() { return this.event.store; }
 
-	    emit( data ) { this.event.emit( data ); }
+		emit( data ) { this.event.emit( data ); }
 
-	    add( func ) { this.event.add( func ); }
+		add( func ) { this.event.add( func ); }
 
-	    clear( ) { this.event.clear(); }
+		clear( ) { this.event.clear(); }
 
 	}
 
@@ -50954,38 +50953,38 @@
 
 	class NativeEvent extends Event {
 
-	    /**
-	     *  @param {String} id - A string acting as identification for this event.
-	     *  @param { EventManager } mananger - EventManager of this event
-	     *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
-	     */
-	    constructor( id, manager, loop, store ) {
+		/**
+		 *  @param {String} id - A string acting as identification for this event.
+		 *  @param { EventManager } mananger - EventManager of this event
+		 *  @param { Boolean } once - Optional boolean signifying the event should only ever run once.
+		 */
+		constructor( id, manager, loop, store ) {
 
-	        super( id, manager, loop, store );
+			super( id, manager, loop, store );
 
-	        this.manager.element.addEventListener( this.id, this, { capture: true } );
+			this.manager.element.addEventListener( this.id, this, { capture: true } );
 
-	    }
+		}
 
-	    /**
-	     *  @description Called by eventhandlers, but gives access to 'this'
-	     *  @param {Event} e - Event passed
-	     */
-	    handleEvent( e ) {
+		/**
+		 *  @description Called by eventhandlers, but gives access to 'this'
+		 *  @param {Event} e - Event passed
+		 */
+		handleEvent( e ) {
 
-	        e.preventDefault();
+			e.preventDefault();
 
-	        this.emit( e );
+			this.emit( e );
 
-	    }
+		}
 
-	    remove() {
+		remove() {
 
-	        this.manager.element.removeEventListener( this.id, this, true );
+			this.manager.element.removeEventListener( this.id, this, true );
 
-	        this.manager.unregisterEvent( this.id );
-	        
-	    }
+			this.manager.unregisterEvent( this.id );
+
+		}
 
 	}
 
@@ -50993,101 +50992,101 @@
 	 *  @description A list of all exclusively native events
 	 */
 	let NativeEventList = [
-	    "copy",
-	    "cut",
-	    "paste",
-	    "abort",
-	    "blur",
-	    "focus",
-	    "auxclick",
-	    "beforeinput",
-	    "canplay",
-	    "canplaythrough",
-	    "change",
-	    "click",
-	    "close",
-	    "contextmenu",
-	    "cuechange",
-	    "dblclick",
-	    "drag",
-	    "dragend",
-	    "dragenter",
-	    "dragexit",
-	    "dragleave",
-	    "dragover",
-	    "dragstart",
-	    "drop",
-	    "durationchange",
-	    "emptied",
-	    "ended",
-	    "formdata",
-	    "input",
-	    "invalid",
-	    "keydown",
-	    "keypress",
-	    "keyup",
-	    "load",
-	    "loadeddata",
-	    "loadedmetadata",
-	    "loadend",
-	    "loadstart",
-	    "mousedown",
-	    "mouseenter",
-	    "mouseleave",
-	    "mousemove",
-	    "mouseout",
-	    "mouseover",
-	    "mouseup",
-	    "wheel",
-	    "pause",
-	    "play",
-	    "playing",
-	    "progress",
-	    "ratechange",
-	    "reset",
-	    "resize",
-	    "scroll",
-	    "securitypolicyviolation",
-	    "seeked",
-	    "seeking",
-	    "select",
-	    "slotchange",
-	    "stalled",
-	    "submit",
-	    "suspend",
-	    "timeupdate",
-	    "volumechange",
-	    "waiting",
-	    "selectstart",
-	    "selectionchange",
-	    "toggle",
-	    "pointercancel",
-	    "pointerdown",
-	    "pointerup",
-	    "pointermove",
-	    "pointerout",
-	    "pointerover",
-	    "pointerenter",
-	    "pointerleave",
-	    "gotpointercapture",
-	    "lostpointercapture",
-	    "mozfullscreenchange",
-	    "mozfullscreenerror",
-	    "animationcancel",
-	    "animationend",
-	    "animationiteration",
-	    "animationstart",
-	    "transitioncancel",
-	    "transitionend",
-	    "transitionrun",
-	    "transitionstart",
-	    "webkitanimationend",
-	    "webkitanimationiteration",
-	    "webkitanimationstart",
-	    "webkittransitionend",
-	    "error",
-	    "fullscreenchange",
-	    "fullscreenerror",
+		"copy",
+		"cut",
+		"paste",
+		"abort",
+		"blur",
+		"focus",
+		"auxclick",
+		"beforeinput",
+		"canplay",
+		"canplaythrough",
+		"change",
+		"click",
+		"close",
+		"contextmenu",
+		"cuechange",
+		"dblclick",
+		"drag",
+		"dragend",
+		"dragenter",
+		"dragexit",
+		"dragleave",
+		"dragover",
+		"dragstart",
+		"drop",
+		"durationchange",
+		"emptied",
+		"ended",
+		"formdata",
+		"input",
+		"invalid",
+		"keydown",
+		"keypress",
+		"keyup",
+		"load",
+		"loadeddata",
+		"loadedmetadata",
+		"loadend",
+		"loadstart",
+		"mousedown",
+		"mouseenter",
+		"mouseleave",
+		"mousemove",
+		"mouseout",
+		"mouseover",
+		"mouseup",
+		"wheel",
+		"pause",
+		"play",
+		"playing",
+		"progress",
+		"ratechange",
+		"reset",
+		"resize",
+		"scroll",
+		"securitypolicyviolation",
+		"seeked",
+		"seeking",
+		"select",
+		"slotchange",
+		"stalled",
+		"submit",
+		"suspend",
+		"timeupdate",
+		"volumechange",
+		"waiting",
+		"selectstart",
+		"selectionchange",
+		"toggle",
+		"pointercancel",
+		"pointerdown",
+		"pointerup",
+		"pointermove",
+		"pointerout",
+		"pointerover",
+		"pointerenter",
+		"pointerleave",
+		"gotpointercapture",
+		"lostpointercapture",
+		"mozfullscreenchange",
+		"mozfullscreenerror",
+		"animationcancel",
+		"animationend",
+		"animationiteration",
+		"animationstart",
+		"transitioncancel",
+		"transitionend",
+		"transitionrun",
+		"transitionstart",
+		"webkitanimationend",
+		"webkitanimationiteration",
+		"webkitanimationstart",
+		"webkittransitionend",
+		"error",
+		"fullscreenchange",
+		"fullscreenerror",
 
 		"gamepadconnected",
 		"gamepaddisconnected"
@@ -51098,7 +51097,7 @@
 	 */
 
 	/*
-	    Pass in either a function you want updated, or an object with an "update" function already defined
+		Pass in either a function you want updated, or an object with an "update" function already defined
 	*/
 
 	class Updater {
@@ -51112,30 +51111,30 @@
 
 		}
 
-	    update() {
+		update() {
 
-	        this.pass++;
+			this.pass++;
 
-	        for( let i = 0; i < this.data.length; i++ ) {
+			for( let i = 0; i < this.data.length; i++ ) {
 
-	            if( this.pass % this.data[ i ].interval == 0 ) {
+				if( this.pass % this.data[ i ].interval == 0 ) {
 
-	                if( typeof this.data[i].object[ "update" ] === "function" ) {
+					if( typeof this.data[i].object[ "update" ] === "function" ) {
 
 						this.data[i].object.update();
 
 					}
 
-	            }
+				}
 
-	        }
+			}
 
-	    }
+		}
 
-	    /**
-	     *  @param object {Object} - The object holding the function
-	     */
-	    add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
+		/**
+		 *  @param object {Object} - The object holding the function
+		 */
+		add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
 
 		remove( object ) { }
 
@@ -51150,8 +51149,8 @@
 
 		constructor( object, interval=1 ) {
 
-		    this.object = object;
-		    this.interval = ( interval <= 0 ) ? 1 : interval;
+			this.object = object;
+			this.interval = ( interval <= 0 ) ? 1 : interval;
 
 		}
 
@@ -51165,17 +51164,17 @@
 
 	function enable() {
 
-	 	enabled = true;
+		enabled = true;
 
-	 	console.info("[PANIC] Debug Mode Enabled");
+		console.info("[PANIC] Debug Mode Enabled");
 
 	 }
 
 	 function disable() {
 
-	 	enabled = false;
+		enabled = false;
 
-	 	console.info("[PANIC] Debug Mode Disabled");
+		console.info("[PANIC] Debug Mode Disabled");
 
 	 }
 
@@ -51228,169 +51227,169 @@
 
 	class EventManager {
 
-	    constructor( element, binding ) {
+		constructor( element, binding ) {
 
-	        this.events = {};
+			this.events = {};
 
-	        // Storage events waiting for the next game update/tick
+			// Storage events waiting for the next game update/tick
 			this.queue = {};
 
-	        // Storage of data for aquiring later
-	        this.store = {};
+			// Storage of data for aquiring later
+			this.store = {};
 
-	        this.element = element ? element : Element;
-	        this.binding = binding ? binding : window;
+			this.element = element ? element : Element;
+			this.binding = binding ? binding : window;
 
-	        instance$c.add( this );
+			instance$c.add( this );
 
-	    }
+		}
 
-	    /**
-	     *  @description Register a custom event
-	     */
+		/**
+		 *  @description Register a custom event
+		 */
 		registerEvent( eventID, loop, store ) {
 
-	        if( NativeEventList.includes( eventID ) ) {
+			if( NativeEventList.includes( eventID ) ) {
 
-	            warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
+				warn(`EventManager.registerEvent(): '${eventID}' is a NativeEvent and cannot be registered`);
 
-	            return false;
+				return false;
 
-	        }
-	        // If already registered, warn & skip
-	        else if( eventID in this.events ) {
+			}
+			// If already registered, warn & skip
+			else if( eventID in this.events ) {
 
-	            warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
+				warn(`EventManager.registerEvent(): '${eventID}' already registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
 			this.events[ eventID ] = new Event( eventID, this, loop, store );
 
 		}
 
-	    /**
-	     *  @param {String} alias
-	     *  @param {String} eventID
-	     */
-	     registerEventAlias( alias, eventID ) {
+		/**
+		 *  @param {String} alias
+		 *  @param {String} eventID
+		 */
+		 registerEventAlias( alias, eventID ) {
 
-	         if( NativeEventList.includes( alias ) ) {
+			 if( NativeEventList.includes( alias ) ) {
 
-	             warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
+				 warn(`EventManager.registerEventAlias(): '${alias}' is a NativeEvent and cannot be registered`);
 
-	             return false;
+				 return false;
 
-	         }
+			 }
 
-	         else if( NativeEventList.includes( eventID ) ) {
+			 else if( NativeEventList.includes( eventID ) ) {
 
-	             warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
+				 warn(`EventManager.registerEventAlias(): NativeEvent '${eventID}' cannot be given an alias`);
 
-	             return false;
+				 return false;
 
-	         }
+			 }
 
-	         else if( alias in this.events ) {
+			 else if( alias in this.events ) {
 
-	             warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
+				 warn(`EventManager.registerEventAlias(): '${alias}' is already registered`);
 
-	             return false;
+				 return false;
 
-	         }
+			 }
 
-	         else if( !(eventID in this.events ) ) {
+			 else if( !(eventID in this.events ) ) {
 
-	             warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
+				 warn(`EventManager.registerEventAlias(): '${eventID}' isnt' registered`);
 
-	             return false;
+				 return false;
 
-	         }
+			 }
 
-	         this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
+			 this.events[ alias ] = new EventAlias( alias, this.events[ eventID ] );
 
-	     }
+		 }
 
-	    /**
-	     *  @description Remove an event from this EventManager
-	     */
-	    unregisterEvent( eventID ) {
+		/**
+		 *  @description Remove an event from this EventManager
+		 */
+		unregisterEvent( eventID ) {
 
-	        if( !( eventID in this.events ) ) {
+			if( !( eventID in this.events ) ) {
 
-	            warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
+				warn(`EventManager.unregisterEvent(): '${eventID}' isn't registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
+			for( let eventAlias in this.events[ eventID ].aliases ) this.unregisterEventAlias( this.events[ eventID ].aliases[ eventAlias ].id );
 
-	        this.events[ eventID ].clear();
+			this.events[ eventID ].clear();
 
-	        delete this.events[ eventID ];
+			delete this.events[ eventID ];
 
-	    }
+		}
 
-	    unregisterEventAlias( alias ) {
+		unregisterEventAlias( alias ) {
 
-	        console.log( alias, this.events );
+			console.log( alias, this.events );
 
-	        if( !( alias in this.events ) ) {
+			if( !( alias in this.events ) ) {
 
-	            warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
+				warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        delete this.events[ alias ];
+			delete this.events[ alias ];
 
-	    }
+		}
 
-	    /**
-	     *  @description Register a native event, such as 'keydown'
-	     */
-	    registerNativeEvent( eventID, loop, store ) {
+		/**
+		 *  @description Register a native event, such as 'keydown'
+		 */
+		registerNativeEvent( eventID, loop, store ) {
 
-	        if( !( NativeEventList.includes( eventID ) ) ) {
+			if( !( NativeEventList.includes( eventID ) ) ) {
 
-	            warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
+				warn(`EventManager.registerNativeEvent(): '${eventID}' is not a NativeEvent`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        if( eventID in this.events ) {
+			if( eventID in this.events ) {
 
-	            warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
+				warn(`EventManager.registerNativeEvent(): ${eventID} already registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
 			this.events[ eventID ] = new NativeEvent( eventID, this, loop, store );
 
-	    }
+		}
 
-	    /**
-	     *  @description unregisters the event using the normal function
-	     */
-	    unregisterNativeEvent( eventID ) {
+		/**
+		 *  @description unregisters the event using the normal function
+		 */
+		unregisterNativeEvent( eventID ) {
 
-	        this.unregisterEvent( eventID );
+			this.unregisterEvent( eventID );
 
-	    }
+		}
 
-	    /**
-	     *  @description Clears the queue of all current events;
-	     */
-	    clearQueue() {
+		/**
+		 *  @description Clears the queue of all current events;
+		 */
+		clearQueue() {
 
-	        this.queue = {};
+			this.queue = {};
 
-	    }
+		}
 
 		/**
 		 * 	@description
@@ -51401,32 +51400,32 @@
 
 		}
 
-	    /**
-	     *  @param {String} eventID - A string acting as identification for the event.
-	     *  @param {Object} data - Data to be passed to all listeners
-	     */
-	    emit( eventID, data, loop=false ) {
+		/**
+		 *  @param {String} eventID - A string acting as identification for the event.
+		 *  @param {Object} data - Data to be passed to all listeners
+		 */
+		emit( eventID, data, loop=false ) {
 
-	        if( !( eventID in this.events ) ) {
+			if( !( eventID in this.events ) ) {
 
-	            warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
+				warn(`EventManager.emit(): '${eventID}' isn't registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        if( this.events[ eventID ] instanceof NativeEvent ) {
+			if( this.events[ eventID ] instanceof NativeEvent ) {
 
-	            warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
+				warn(`EventManager.emit(): NativeEvent '${eventID}' cannot be emitted by user.`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
-	        else this.queue[ eventID ] = { loop: loop, data: data };
+			if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+			else this.queue[ eventID ] = { loop: loop, data: data };
 
-	    }
+		}
 
 
 		/**
@@ -51438,91 +51437,91 @@
 
 			if( !this.hasEvent( eventID ) ) {
 
-	            warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
+				warn(`EventManager.hasEvent(): '${eventID}' isn't registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        return this.queue.hasOwnProperty( eventID );
+			return this.queue.hasOwnProperty( eventID );
 
 		}
 
-	    /**
+		/**
 		 * @description Get the value currently stored in this.store for this event
 		 * @param {String} eventID A string acting as identification for the event.
 		 * @return {Boolean}
 		 */
-	    getStore( eventID ) {
+		getStore( eventID ) {
 
-	        if( !this.store.hasOwnProperty( eventID ) ) {
+			if( !this.store.hasOwnProperty( eventID ) ) {
 
-	            warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
+				warn(`EventManager.getStore(): '${eventID}' isn't registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        return this.store[ eventID ];
+			return this.store[ eventID ];
 
 		}
 
 
 
-	    /**
-	     * @param {String} eventID A string acting as identification for the event.
-	     */
-	    breakLoop( eventID ) {
+		/**
+		 * @param {String} eventID A string acting as identification for the event.
+		 */
+		breakLoop( eventID ) {
 
-	        if( this.events[ eventID ] instanceof EventAlias ) {
-	            if( this.events[ eventID ].event.id in this.queue ) {
-	                this.queue[ this.events[ eventID ].event.id ].loop = false;
-	            }
-	        }
-	        else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
+			if( this.events[ eventID ] instanceof EventAlias ) {
+				if( this.events[ eventID ].event.id in this.queue ) {
+					this.queue[ this.events[ eventID ].event.id ].loop = false;
+				}
+			}
+			else if( eventID in this.queue ) this.queue[ eventID ].loop = false;
 
-	    }
+		}
 
-	    /**
-	     *  @param {String} eventID A string acting as identification for the event.
-	     *  @param {Function} func Data to be passed to all listeners
-	     */
-	    on( eventID, func ) {
+		/**
+		 *  @param {String} eventID A string acting as identification for the event.
+		 *  @param {Function} func Data to be passed to all listeners
+		 */
+		on( eventID, func ) {
 
-	        if( !( eventID in this.events ) ) {
+			if( !( eventID in this.events ) ) {
 
-	            warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
+				warn(`EventManager.on(): '${eventID}' isn't registered in EventManager`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        if( typeof func !== "function" ) {
+			if( typeof func !== "function" ) {
 
-	            warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
+				warn(`EventManager.on( '${eventID}', ${func} ): 2nd paramater must be Function`);
 
-	            return false;
+				return false;
 
-	        }
+			}
 
-	        this.events[ eventID ].add( func );
+			this.events[ eventID ].add( func );
 
-	    }
+		}
 
-	    /**
-	     *  @description Called every frame to emit all events.
-	     */
-	    update() {
+		/**
+		 *  @description Called every frame to emit all events.
+		 */
+		update() {
 
-	        for ( const [key, value] of Object.entries( this.queue ) ) {
+			for ( const [key, value] of Object.entries( this.queue ) ) {
 
-	            this.events[ key ].emit( value.data );
+				this.events[ key ].emit( value.data );
 
-	            if( value.loop == false ) { delete this.queue[ key ]; }
+				if( value.loop == false ) { delete this.queue[ key ]; }
 
-	        }
+			}
 
-	    }
+		}
 
 	}
 
@@ -51557,11 +51556,11 @@
 
 		onResize( e ) {
 
-		    instance$d.aspect = Element.clientWidth / Element.clientHeight;
-		    instance$d.updateProjectionMatrix();
+			instance$d.aspect = Element.clientWidth / Element.clientHeight;
+			instance$d.updateProjectionMatrix();
 
-		    this.setPixelRatio( window.devicePixelRatio );
-		    this.setSize( Element.clientWidth, Element.clientHeight );
+			this.setPixelRatio( window.devicePixelRatio );
+			this.setSize( Element.clientWidth, Element.clientHeight );
 
 		}
 
@@ -51583,46 +51582,46 @@
 		consturctor() {
 
 			this.time = 0.0; // Current Time
-		    this.past = 0.0; // Last Time
-		    this.delta = 0.0; // Time Difference
+			this.past = 0.0; // Last Time
+			this.delta = 0.0; // Time Difference
 
-		    this.framecap = 60;
+			this.framecap = 60;
 
 		}
 
-	    /**
-	     *  @param time {Number} - time variable passed from requestAnimationFrame
-	     */
-	    update( time ) {
+		/**
+		 *  @param time {Number} - time variable passed from requestAnimationFrame
+		 */
+		update( time ) {
 
-	        this.past = this.time;
-	        this.time = time;
+			this.past = this.time;
+			this.time = time;
 
-	        // delta = time difference / perfect framerate
-	        this.delta = ( this.time - this.past ) / ( 1000 / this.framecap );
+			// delta = time difference / perfect framerate
+			this.delta = ( this.time - this.past ) / ( 1000 / this.framecap );
 
-	    }
+		}
 
-	    /**
-	     *  @param round {Boolean} - should the number be rounded
-	     */
-	    seconds( round = false ) {
+		/**
+		 *  @param round {Boolean} - should the number be rounded
+		 */
+		seconds( round = false ) {
 
-	        return ( round ? Math.floor( this.time / ( 1000 ) ) : this.time / ( 1000 ));
+			return ( round ? Math.floor( this.time / ( 1000 ) ) : this.time / ( 1000 ));
 
-	    }
+		}
 
-	    minutes( round = false ) {
+		minutes( round = false ) {
 
-	        return ( round ? Math.floor( this.time / ( 1000 * 60 ) ) : this.time / ( 1000 * 60 ) );
+			return ( round ? Math.floor( this.time / ( 1000 * 60 ) ) : this.time / ( 1000 * 60 ) );
 
-	    }
+		}
 
-	    hours( round = false ) {
+		hours( round = false ) {
 
-	        return ( round ? Math.floor( this.time / ( 1000 * 60 * 60 ) ) : this.time / ( 1000 * 60 * 60 ) );
+			return ( round ? Math.floor( this.time / ( 1000 * 60 * 60 ) ) : this.time / ( 1000 * 60 * 60 ) );
 
-	    }
+		}
 
 		/**
 		 *
@@ -51685,7 +51684,7 @@
 			this.minFilter = LinearFilter;
 
 			this.wrapS = RepeatWrapping;
-	    	this.wrapT = RepeatWrapping;
+			this.wrapT = RepeatWrapping;
 
 			// TODO: Check if necessary
 			this.premultiplyAlpha = true;
@@ -53121,105 +53120,105 @@
 	 */
 
 	const KeyCodes = {
-	    BACKSPACE: 8,
-	    TAB: 9,
-	    ENTER: 13,
-	    SHIFT: 16,
-	    CTRL: 17,
-	    ALT: 18,
-	    PAUSE_BREAK: 19,
-	    CAPS_LOCK: 20,
-	    ESCAPE: 27,
-	    SPACE: 32,
-	    PAGE_UP: 33,
-	    PAGE_DOWN: 34,
-	    END: 35,
-	    HOME: 36,
-	    LEFT: 37,
-	    UP: 38,
-	    RIGHT: 39,
-	    DOWN: 40,
-	    INSERT: 45,
-	    DELETE: 46,
-	    0: 48,
-	    1: 49,
-	    2: 50,
-	    3: 51,
-	    4: 52,
-	    5: 53,
-	    6: 54,
-	    7: 55,
-	    8: 56,
-	    9: 57,
-	    A: 65,
-	    B: 66,
-	    C: 67,
-	    D: 68,
-	    E: 69,
-	    F: 70,
-	    G: 71,
-	    H: 72,
-	    I: 73,
-	    J: 74,
-	    K: 75,
-	    L: 76,
-	    M: 77,
-	    N: 78,
-	    O: 79,
-	    P: 80,
-	    Q: 81,
-	    R: 82,
-	    S: 83,
-	    T: 84,
-	    U: 85,
-	    V: 86,
-	    W: 87,
-	    X: 88,
-	    Y: 89,
-	    Z: 90,
-	    LEFT_WINDOW_KEY: 91,
-	    RIGHT_WINDOW_KEY: 92,
-	    SELECT_KEY: 93,
-	    NUMPAD_0: 96,
-	    NUMPAD_1: 97,
-	    NUMPAD_2: 98,
-	    NUMPAD_3: 99,
-	    NUMPAD_4: 100,
-	    NUMPAD_5: 101,
-	    NUMPAD_6: 102,
-	    NUMPAD_7: 103,
-	    NUMPAD_8: 104,
-	    NUMPAD_9: 105,
-	    MULTIPLY: 106,
-	    ADD: 107,
-	    SUBTRACT: 109,
-	    DECIMAL_POINT: 110,
-	    DIVIDE: 111,
-	    F1: 112,
-	    F2: 113,
-	    F3: 114,
-	    F4: 115,
-	    F5: 116,
-	    F6: 117,
-	    F7: 118,
-	    F8: 119,
-	    F9: 120,
-	    F10: 121,
-	    F11: 122,
-	    F12: 123,
-	    NUM_LOCK: 144,
-	    SCROLL_LOCK: 145,
-	    SEMI_COLON: 186,
-	    EQUAL_SIGN: 187,
-	    COMMA: 188,
-	    DASH: 189,
-	    PERIOD: 190,
-	    FORWARD_SLASH: 191,
-	    GRAVE_ACCENT: 192,
-	    OPEN_BRACKET: 219,
-	    BACK_SLASH: 220,
-	    CLOSE_BRAKET: 221,
-	    SINGLE_QUOTE: 222
+		BACKSPACE: 8,
+		TAB: 9,
+		ENTER: 13,
+		SHIFT: 16,
+		CTRL: 17,
+		ALT: 18,
+		PAUSE_BREAK: 19,
+		CAPS_LOCK: 20,
+		ESCAPE: 27,
+		SPACE: 32,
+		PAGE_UP: 33,
+		PAGE_DOWN: 34,
+		END: 35,
+		HOME: 36,
+		LEFT: 37,
+		UP: 38,
+		RIGHT: 39,
+		DOWN: 40,
+		INSERT: 45,
+		DELETE: 46,
+		0: 48,
+		1: 49,
+		2: 50,
+		3: 51,
+		4: 52,
+		5: 53,
+		6: 54,
+		7: 55,
+		8: 56,
+		9: 57,
+		A: 65,
+		B: 66,
+		C: 67,
+		D: 68,
+		E: 69,
+		F: 70,
+		G: 71,
+		H: 72,
+		I: 73,
+		J: 74,
+		K: 75,
+		L: 76,
+		M: 77,
+		N: 78,
+		O: 79,
+		P: 80,
+		Q: 81,
+		R: 82,
+		S: 83,
+		T: 84,
+		U: 85,
+		V: 86,
+		W: 87,
+		X: 88,
+		Y: 89,
+		Z: 90,
+		LEFT_WINDOW_KEY: 91,
+		RIGHT_WINDOW_KEY: 92,
+		SELECT_KEY: 93,
+		NUMPAD_0: 96,
+		NUMPAD_1: 97,
+		NUMPAD_2: 98,
+		NUMPAD_3: 99,
+		NUMPAD_4: 100,
+		NUMPAD_5: 101,
+		NUMPAD_6: 102,
+		NUMPAD_7: 103,
+		NUMPAD_8: 104,
+		NUMPAD_9: 105,
+		MULTIPLY: 106,
+		ADD: 107,
+		SUBTRACT: 109,
+		DECIMAL_POINT: 110,
+		DIVIDE: 111,
+		F1: 112,
+		F2: 113,
+		F3: 114,
+		F4: 115,
+		F5: 116,
+		F6: 117,
+		F7: 118,
+		F8: 119,
+		F9: 120,
+		F10: 121,
+		F11: 122,
+		F12: 123,
+		NUM_LOCK: 144,
+		SCROLL_LOCK: 145,
+		SEMI_COLON: 186,
+		EQUAL_SIGN: 187,
+		COMMA: 188,
+		DASH: 189,
+		PERIOD: 190,
+		FORWARD_SLASH: 191,
+		GRAVE_ACCENT: 192,
+		OPEN_BRACKET: 219,
+		BACK_SLASH: 220,
+		CLOSE_BRAKET: 221,
+		SINGLE_QUOTE: 222
 	};
 
 	let KeyMap = {};
@@ -53407,15 +53406,15 @@
 	const instance$a = new Keyboard();
 
 	const MouseButtonCodes = {
-	    L: 0,
-	    M: 1,
-	    R: 2
+		L: 0,
+		M: 1,
+		R: 2
 	};
 
 	const MouseButtonMap = {
-	    0: "L",
-	    1: "M",
-	    2: "R"
+		0: "L",
+		1: "M",
+		2: "R"
 	};
 
 	/**
@@ -53648,9 +53647,9 @@
 
 		getScroll() {
 
-	 		return this.eventManager.eventActive( `MOUSE_SCROLL` );
+			return this.eventManager.eventActive( `MOUSE_SCROLL` );
 
-	 	}
+		}
 
 		getScrollAmount() {
 
@@ -53675,11 +53674,11 @@
 		/**
 		 * 	@param {Event} e - Event from "mousemove" event listener
 		 */
-	 	handleMove( e ) {
+		handleMove( e ) {
 
-	  		this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
+			this.eventManager.emit( 'MOUSE_MOVE', { x: e.x, y: e.y } );
 
-	  	}
+		}
 
 		/**
 		 * @param {Function} func Function to be executed when event is recieved
@@ -53805,11 +53804,11 @@
 
 			Joypad.set({ axisMovementThreshold: 0.3 });
 
-	        Joypad.on('connect', this.handleConnect.bind( this ) );
+			Joypad.on('connect', this.handleConnect.bind( this ) );
 
-	        Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
+			Joypad.on('disconnect', this.handleDisconnect.bind( this ) );
 
-	        Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
+			Joypad.on('axis_move', this.handleAxisMove.bind( this ) );
 
 			Joypad.on('button_press', this.handleButtonPress.bind( this ) );
 
@@ -54224,16 +54223,16 @@
 		getEntityByName( name ) { return this.data.find( o => o.name == name ); }
 		getEntityByID( id ) { return this.data.find( o => o.id == id ); }
 
-	    /**
-	     *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
-	     */
-	    registerEntity( template ) {
+		/**
+		 *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
+		 */
+		registerEntity( template ) {
 
-	        if( this.getEntityByID( template.id ) == undefined ) this.data.push( template );
+			if( this.getEntityByID( template.id ) == undefined ) this.data.push( template );
 
-	        else warn("Entity \"" + entity.id + "\" is already registered");
+			else warn("Entity \"" + entity.id + "\" is already registered");
 
-	    }
+		}
 
 		/**
 		 *	@param {String} id
@@ -54317,7 +54316,7 @@
 
 		}
 
-  	`
+	`
 
 	};
 
@@ -54440,13 +54439,13 @@
 
 			return await new Promise(resolve => {
 
-	             let image = new Image();
+				 let image = new Image();
 
-		         image.addEventListener( 'load', () => { resolve( image ); } );
+				 image.addEventListener( 'load', () => { resolve( image ); } );
 
-		         image.src = url;
+				 image.src = url;
 
-		    });
+			});
 
 		};
 
@@ -54599,8 +54598,8 @@
 
 						if( tile.t.rotate ) {
 							if( tile.t.rotate == 1 ) tileGroup[ dir ].editPattern( 4, 5, 0, 1, 6, 7, 2, 3 );
-		                    else if( tile.t.rotate == 2 ) tileGroup[ dir ].editPattern( 6, 7, 4, 5, 2, 3, 0, 1 );
-		                    else if( tile.t.rotate == 3 ) tileGroup[ dir ].editPattern( 2, 3, 6, 7, 0, 1, 4, 5 );
+							else if( tile.t.rotate == 2 ) tileGroup[ dir ].editPattern( 6, 7, 4, 5, 2, 3, 0, 1 );
+							else if( tile.t.rotate == 3 ) tileGroup[ dir ].editPattern( 2, 3, 6, 7, 0, 1, 4, 5 );
 						}
 
 					}
@@ -54970,18 +54969,18 @@
 		};
 
 		/**
-	     *  @param {THREE.Geometry} box
-	     *  @param {Integer} index
-	     */
-	    this.setupSkinning = function( box, index ) {
+		 *  @param {THREE.Geometry} box
+		 *  @param {Integer} index
+		 */
+		this.setupSkinning = function( box, index ) {
 
-	        var skinIndices = new Float32Array( box.attributes.position.count );
+			var skinIndices = new Float32Array( box.attributes.position.count );
 
-	        for( var i = 0; i < skinIndices.length; i++ ) skinIndices.set( [index], i );
+			for( var i = 0; i < skinIndices.length; i++ ) skinIndices.set( [index], i );
 
-	        box.setAttribute( "skinIndices", new BufferAttribute( skinIndices, 1 ) );
+			box.setAttribute( "skinIndices", new BufferAttribute( skinIndices, 1 ) );
 
-	    };
+		};
 
 	};
 
@@ -54999,43 +54998,43 @@
 
 	class Actions {
 
-	    constructor() {
+		constructor() {
 
-	        this.eventManager = new EventManager();
+			this.eventManager = new EventManager();
 
-	    }
+		}
 
-	    registerAction( actionID ) {
+		registerAction( actionID ) {
 
-	        this.eventManager.registerEvent( actionID );
+			this.eventManager.registerEvent( actionID );
 
-	    }
+		}
 
-	    addInputBinding( actionID, binding ) {
+		addInputBinding( actionID, binding ) {
 
-	        if( binding.split("_")[0] == "KEY" ) {
+			if( binding.split("_")[0] == "KEY" ) {
 
-	            instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
-	        }
-	        else if( binding.startsWith("MOUSE") ) {
+			}
+			else if( binding.startsWith("MOUSE") ) {
 
-	            instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
-	        }
-	        else if( binding.startsWith("GAMEPAD") ) {
+			}
+			else if( binding.startsWith("GAMEPAD") ) {
 
 				instance$8.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 
-	    }
+		}
 
-	    on( actionID, func ) {
+		on( actionID, func ) {
 
-	        this.eventManager.on( actionID, func );
+			this.eventManager.on( actionID, func );
 
-	    }
+		}
 
 	}
 
@@ -55045,13 +55044,13 @@
 
 	let ActionScriptLoader = new function() {
 
-	 	this.load = async function( url ) {
+		this.load = async function( url ) {
 
 			url.substring(0, url.lastIndexOf("/") + 1 );
 
 			let file = await FileLoader.load( url );
 
-	        return file;
+			return file;
 
 		};
 
@@ -55063,40 +55062,40 @@
 
 	class ActionsParser {
 
-	    consturctor() {}
+		consturctor() {}
 
-	    /**
-	     *  @param {Object} json
-	     */
+		/**
+		 *  @param {Object} json
+		 */
 		async parse( actionsJSON, bindingsJSON, baseURL ) {
 
-	        let actions = new Actions;
+			let actions = new Actions;
 
-	        for( const [ action, url ] of Object.entries( actionsJSON ) ) {
+			for( const [ action, url ] of Object.entries( actionsJSON ) ) {
 
-	            if( action != "bindings" ) {
+				if( action != "bindings" ) {
 
-	                actions.registerAction( action );
+					actions.registerAction( action );
 
-	                let scriptString = await ActionScriptLoader.load( baseURL + url );
+					let scriptString = await ActionScriptLoader.load( baseURL + url );
 
-	                actions.on( action, new Function( scriptString )() );
+					actions.on( action, new Function( scriptString )() );
 
-	            }
+				}
 
-	        }
+			}
 
-	        for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
+			for( const [ action, bindings ] of Object.entries( bindingsJSON ) ) {
 
-	            for( let binding of bindings ) {
+				for( let binding of bindings ) {
 
-	                actions.addInputBinding( action, binding );
+					actions.addInputBinding( action, binding );
 
-	            }
+				}
 
-	        }
+			}
 
-	        return actions;
+			return actions;
 
 		}
 
@@ -55125,7 +55124,7 @@
 
 	let EntityLoader = new function() {
 
-	 	this.load = async function( url ) {
+		this.load = async function( url ) {
 
 			let baseURL = url.substring(0, url.lastIndexOf("/") + 1 );
 
@@ -55139,7 +55138,7 @@
 			template.id = json.id;
 			template.name = json.name;
 
-	        if( json.actions ) template.actions = await instance$5.parse( json.actions, json.bindings, baseURL );
+			if( json.actions ) template.actions = await instance$5.parse( json.actions, json.bindings, baseURL );
 
 			// Load Image & Create Texture
 			template.texture = await TextureLoader.load( baseURL + json.texture );
@@ -55467,8 +55466,8 @@
 				depthWrite: false,
 
 				extensions: {
-		        	derivatives: true
-		        }
+					derivatives: true
+				}
 
 			});
 
@@ -55556,7 +55555,7 @@
 
 		}
 
-	 	/**
+		/**
 		 *	@todo Implement
 		 */
 		setColors( axes, color ) {
@@ -55581,7 +55580,7 @@
 
 			this.id = "PANIC-Debug-Compass";
 
-		    this.element = document.createElement("div");
+			this.element = document.createElement("div");
 			this.element.id = this.id;
 
 			this.active = false;

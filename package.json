@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup -c ./utils/build/rollup-full.config.js",
     "develop": "rollup -c ./utils/build/rollup-dev.config.js -w",
-    "start": "http-server"
+    "start": "http-server -o examples"
   },
   "repository": {
     "type": "git",
