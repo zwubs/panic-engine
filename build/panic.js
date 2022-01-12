@@ -53921,6 +53921,7 @@
 
 			this.actions = template.actions;
 			this.actions.eventManager.binding = this;
+			this.actions.eventManager.emit( "INIT" );
 
 			this.store = {};
 
