@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
+	<head>
 
-        <title>PANIC Engine</title>
+		<title>PANIC Engine</title>
 
-        <meta charset="UTF-8">
+		<meta charset="UTF-8">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="icon" type="image/png" href="../logo.png"/>
+		<link rel="icon" type="image/png" href="../logo.png"/>
 
-        <style>
+		<style>
 
-            body {
+			body {
 
-                width: 100vw;
-                height: 100vh;
+				width: 100vw;
+				height: 100vh;
 
-                margin: 0;
+				margin: 0;
 
-                overflow: hidden;
+				overflow: hidden;
 
-            }
+			}
 
-        </style>
+		</style>
 
-    </head>
+	</head>
 
-    <body>
+	<body>
 
-        <script src="../build/panic.js"></script>
+		<script src="../build/panic.js"></script>
 
-        <script>
+		<script>
 
-            PANIC.Debug.enable();
+			PANIC.Debug.enable();
 
-            PANIC.Debug.Access.enable();
+			PANIC.Debug.Access.enable();
 
-            try {
+			try {
 
-                // Replace this file name with your own!
-                PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
+				// Replace this file name with your own!
+				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
 
-                    Player = PANIC.EntityRegistry.spawnEntity( template.id );
+					Player = PANIC.EntityRegistry.spawnEntity( template.id );
 
-                });
+				});
 
-                PANIC.Debug.Grid.toggle();
-                PANIC.Debug.Grid.scale = 16;
-                PANIC.Debug.Grid.subdivisions = 16;
-                PANIC.Debug.Grid.color = 0x888888;
+				PANIC.Debug.Grid.toggle();
+				PANIC.Debug.Grid.scale = 16;
+				PANIC.Debug.Grid.subdivisions = 16;
+				PANIC.Debug.Grid.color = 0x888888;
 
-                PANIC.Debug.Axes.toggle();
+				PANIC.Debug.Axes.toggle();
 
-                PANIC.Debug.Compass.toggle();
+				PANIC.Debug.Compass.toggle();
 
-                let Loop = function( time=0 ) {
+				let Loop = function( time=0 ) {
 
-                    PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
+					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
-                    PANIC.Updater.update();
+					PANIC.Updater.update();
 
-                    requestAnimationFrame( Loop );
+					requestAnimationFrame( Loop );
 
-                }
+				}
 
-                requestAnimationFrame( Loop );
+				requestAnimationFrame( Loop );
 
-            }
+			}
 
-            catch( error ) {
+			catch( error ) {
 
-                PANIC.Debug.error( error );
+				PANIC.Debug.error( error );
 
-            }
+			}
 
-        </script>
+		</script>
 
-    </body>
+	</body>
 
 </html>
