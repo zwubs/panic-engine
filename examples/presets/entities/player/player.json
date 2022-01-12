@@ -65,7 +65,7 @@
 		],
 
 		"JUMP": [
-			"KEY_DOWN_SPACE",
+			"KEY_HELD_SPACE",
 			"GAMEPAD_BUTTON_WEST"
 		]
 

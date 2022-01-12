@@ -1,26 +1,17 @@
 return function() {
 
-	if( this.store.jump ) {
+	this.position.x += this.store.velocity[0];
+	this.position.y += this.store.velocity[1];
+	this.position.z += this.store.velocity[2];
 
-		this.position.y += 0.1;
+	this.store.velocity[0] /= 2;
+	this.store.velocity[1] -= 0.01;
+	this.store.velocity[2] /= 2;
 
-		if( this.position.y > 1 ) {
-
-			this.store.jump = false;
-		}
-
+	if( this.position.y <= 0 ) {
+		this.store.air = false;
+		this.position.y = 0;
+		this.store.velocity[1] = 0;
 	}
-
-	else if( this.store.air ) {
-
-		this.position.y -= 0.1;
-
-		if( this.position.y <= 0 ) this.store.air = false;
-
-	}
-
-	this.position.x += this.store.velocity.x;
-	this.position.y += this.store.velocity.y;
-	this.position.z += this.store.velocity.z;
 
 }
