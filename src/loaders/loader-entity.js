@@ -6,6 +6,7 @@ import { FileLoader } from './loader-file.js';
 import { TextureLoader } from './loader-texture.js';
 
 import * as Parsers from '../parsers/parsers.js';
+import { Actions } from '../core/input/actions.js';
 
 import { EntityTemplate } from '../entities/entity-template.js';
 import { EntityRegistry } from '../entities/entity-registry.js';
@@ -27,6 +28,7 @@ export let EntityLoader = new function() {
 		template.name = json.name;
 
 		if( json.actions ) template.actions = await Parsers.Actions.parse( json.actions, json.bindings, baseURL );
+		else template.actions = new Actions();
 
 		// Load Image & Create Texture
 		template.texture = await TextureLoader.load( baseURL + json.texture );
