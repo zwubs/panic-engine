@@ -30,6 +30,8 @@ export let EntityLoader = new function() {
 		if( json.actions ) template.actions = await Parsers.Actions.parse( json.actions, json.bindings, baseURL );
 		else template.actions = new Actions();
 
+		if( json.collision ) template.collider = await Parsers.Collision.parse( json.collision );
+
 		// Load Image & Create Texture
 		template.texture = await TextureLoader.load( baseURL + json.texture );
 
