@@ -44,6 +44,12 @@ export { Entity } from './entities/entity.js';
 export { EntityTemplate } from './entities/entity-template.js';
 export { EntityRegistry } from './entities/entity-registry.js';
 
+
+/**
+ *	@filespace {COLLISION}
+ */
+export * as Collision from './collision/collision.js';
+
 /**
  *	@filespace {SHADERS}
  */
