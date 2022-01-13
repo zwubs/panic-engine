@@ -46,6 +46,48 @@
 		}
 	},
 
-	"actions": {}
+	"actions": {
+
+		"INIT": "./scripts/init.js",
+		"UPDATE": "./scripts/update.js",
+
+		"COLLIDE": "./scripts/collide.js",
+
+		"MOVE_FORWARD": "./scripts/move-forward.js",
+		"ROTATE_LEFT": "./scripts/rotate-left.js",
+		"ROTATE_RIGHT": "./scripts/rotate-right.js"
+
+	},
+
+	"bindings": {
+
+		"MOVE_FORWARD": [
+			"KEY_HELD_UP",
+			"GAMEPAD_RSTICK_NORTH"
+		],
+
+		"ROTATE_LEFT": [
+			"KEY_HELD_LEFT",
+			"GAMEPAD_RSTICK_WEST"
+		],
+
+		"ROTATE_RIGHT": [
+			"KEY_HELD_RIGHT",
+			"GAMEPAD_RSTICK_EAST"
+		]
+
+	},
+
+	"collision": {
+		"boxes": {
+			"body": {
+				"size": [ 1, 3, 5 ]
+			},
+			"tail": {
+				"size": [ 0.5, 2, 3 ],
+				"offset": [ 0, 0, 3 ]
+			}
+		}
+	}
 
 }
