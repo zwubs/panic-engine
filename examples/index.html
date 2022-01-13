@@ -41,9 +41,19 @@
 			try {
 
 				// Replace this file name with your own!
-				PANIC.Loaders.Entity.load( "./presets/entities/player/player.json" ).then( ( template ) => {
+				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
 
-					Player = PANIC.EntityRegistry.spawnEntity( template.id );
+					Fish = PANIC.EntityRegistry.spawnEntity( template.id );
+
+					// PANIC.Debug.Entity( Fish ).collision = true;
+
+				});
+
+				PANIC.Loaders.Entity.load( "./presets/entities/fish/angel-fish.json" ).then( ( template ) => {
+
+					AngelFish = PANIC.EntityRegistry.spawnEntity( template.id );
+
+					// PANIC.Debug.Entity( Player ).collision = true;
 
 				});
 
