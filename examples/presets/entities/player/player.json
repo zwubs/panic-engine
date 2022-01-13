@@ -69,6 +69,14 @@
 			"GAMEPAD_BUTTON_WEST"
 		]
 
+	},
+
+	"collision": {
+		"boxes": {
+			"default": {
+				"size": [ 8, 8, 8 ]
+			}
+		}
 	}
 
 }
