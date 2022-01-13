@@ -15,3 +15,5 @@ export { Grid } from './debug-grid.js';
 export { Axes } from './debug-axes.js';
 
 export { Compass } from './debug-compass.js';
+
+export { EntityDebug as Entity } from './entity/debug-entity.js';
