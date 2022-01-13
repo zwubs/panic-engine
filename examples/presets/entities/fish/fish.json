@@ -82,6 +82,43 @@
 		}
 	},
 
-	"actions": {}
+	"actions": {
+
+		"INIT": "./scripts/init.js",
+		"UPDATE": "./scripts/update.js",
+
+		"COLLIDE": "./scripts/collide.js",
+
+		"MOVE_FORWARD": "./scripts/move-forward.js",
+		"ROTATE_LEFT": "./scripts/rotate-left.js",
+		"ROTATE_RIGHT": "./scripts/rotate-right.js",
+
+		"SPEED": "./scripts/speed.js"
+
+	},
+
+	"bindings": {
+
+		"MOVE_FORWARD": [
+			"KEY_HELD_W",
+			"GAMEPAD_LSTICK_NORTH"
+		],
+
+		"ROTATE_LEFT": [
+			"KEY_HELD_A",
+			"GAMEPAD_LSTICK_WEST"
+		],
+
+		"ROTATE_RIGHT": [
+			"KEY_HELD_D",
+			"GAMEPAD_LSTICK_EAST"
+		],
+
+		"SPEED": [
+			"KEY_HELD_SPACE",
+			"GAMEPAD_BUTTON_WEST"
+		]
+
+	}
 
 }
