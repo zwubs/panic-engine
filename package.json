@@ -4,7 +4,8 @@
   "description": "A WebGL & THREEjs based game engine",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c ./utils/build/rollup-full.config.js",
+    "build": "rollup -c ./utils/build/rollup-basic.config.js",
+    "build-full": "rollup -c ./utils/build/rollup-full.config.js",
     "develop": "rollup -c ./utils/build/rollup-dev.config.js -w",
     "start": "http-server -o examples -c-1"
   },
