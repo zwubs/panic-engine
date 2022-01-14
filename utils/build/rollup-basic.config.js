@@ -4,6 +4,8 @@
 
 import resolve from '@rollup/plugin-node-resolve';
 
+import { terser } from 'rollup-plugin-terser';
+
 export default [
 
 	// Standard
@@ -21,5 +23,21 @@ export default [
 			resolve()
 		]
 	},
+
+	// Minified
+	{
+		input: 'src/panic.js',
+		external: ['three'],
+		output: {
+			file: 'build/panic.min.js',
+			name: 'PANIC',
+			globals: { three: 'THREE' },
+			format: 'umd'
+		},
+		plugins: [
+			resolve(),
+			terser()
+		]
+	}
 
 ]
