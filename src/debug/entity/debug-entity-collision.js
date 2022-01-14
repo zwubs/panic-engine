@@ -4,9 +4,11 @@
  */
 
 import { Scene } from '../../core/rendering/scene.js'
+import { Camera } from '../../core/rendering/camera.js'
+
 import { Cube } from '../../core/cube.js';
 
-import { Box3, Box3Helper, Mesh, Object3D, Vector3, MeshBasicMaterial, SphereGeometry, LineSegments, LineBasicMaterial, BufferGeometry, BufferAttribute } from 'three';
+import { Box3, Box3Helper, Mesh, Object3D, Vector3, LineSegments, LineBasicMaterial, BufferGeometry, BufferAttribute, CircleGeometry EdgesGeometry } from 'three';
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 
@@ -54,16 +56,12 @@ export class DebugEntityCollision {
 
 		this.object.add( this.meshes.box );
 
-		//	Bounding Sphere
+		//	Bounding Sphere - still not sold on this implmentation yet
 		if( this.collider.boundingSphere ) {
 
-			let boundingSphere = this.collider.boundingSphere
-			let material = new MeshBasicMaterial( { opacity: 0.1, transparent: true,});
-			var geometry = new SphereGeometry(this.collider.boundingSphere.radius, 16, 16);
-			this.meshes.sphere = new Mesh(geometry, material);
-
-			this.meshes.sphere.position.copy( this.collider.boundingSphere.center )
-
+			const geometry = new CircleGeometry( this.collider.boundingSphere.radius, 64 );
+			const edges = new EdgesGeometry( geometry );
+			this.meshes.sphere = new LineSegments( edges, new LineBasicMaterial( { color: 0xffffff } ) );
 			this.object.add( this.meshes.sphere );
 
 		}
@@ -77,6 +75,7 @@ export class DebugEntityCollision {
 	update() {
 
 		this.meshes.sphere.position.copy( this.collider.boundingSphere.center );
+		this.meshes.sphere.quaternion.copy( Camera.quaternion );
 
 	}
 
