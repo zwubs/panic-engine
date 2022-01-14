@@ -80,6 +80,8 @@ class EntityTemplate {
 
 	spawnEntity() {
 
+		if( !this.actions.eventManager.active ) this.actions.eventManager.active = true;
+
 		return new Entity( this );
 
 	}

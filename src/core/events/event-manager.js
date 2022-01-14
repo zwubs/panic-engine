@@ -19,6 +19,8 @@ export class EventManager {
 
 	constructor( element, binding ) {
 
+		this.active = true;
+
 		this.events = {};
 
 		// Storage events waiting for the next game update/tick
@@ -124,8 +126,6 @@ export class EventManager {
 
 	unregisterEventAlias( alias ) {
 
-		console.log( alias, this.events )
-
 		if( !( alias in this.events ) ) {
 
 			Console.warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
@@ -212,8 +212,13 @@ export class EventManager {
 
 		}
 
-		if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
-		else this.queue[ eventID ] = { loop: loop, data: data };
+		if( this.active ) {
+
+			if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+
+			else this.queue[ eventID ] = { loop: loop, data: data };
+
+		}
 
 	}
 
@@ -303,11 +308,15 @@ export class EventManager {
 	 */
 	update() {
 
-		for ( const [key, value] of Object.entries( this.queue ) ) {
+		if( this.active ) {
 
-			this.events[ key ].emit( value.data );
+			for ( const [key, value] of Object.entries( this.queue ) ) {
 
-			if( value.loop == false ) { delete this.queue[ key ]; }
+				this.events[ key ].emit( value.data );
+
+				if( value.loop == false ) { delete this.queue[ key ]; }
+
+			}
 
 		}
 

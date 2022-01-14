@@ -1,4 +1,4 @@
-/**
+ /**
  *	@author zwubs
  *  // TODO: Add warnings for all functions
  */
@@ -15,6 +15,8 @@ export class Actions {
 
 		this.eventManager = new EventManager();
 
+		this.eventManager.active = false;
+
 	}
 
 	registerAction( actionID ) {
@@ -25,7 +27,7 @@ export class Actions {
 
 	addInputBinding( actionID, binding ) {
 
-		if( binding.split("_")[0] == "KEY" ) {
+		if( binding.startsWith("KEY") ) {
 
 			Keyboard.eventManager.on( binding, () => { this.eventManager.emit( actionID ) } );
 
