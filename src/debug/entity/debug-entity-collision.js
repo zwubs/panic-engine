@@ -8,7 +8,7 @@ import { Camera } from '../../core/rendering/camera.js'
 
 import { Cube } from '../../core/cube.js';
 
-import { Box3, Box3Helper, Mesh, Object3D, Vector3, LineSegments, LineBasicMaterial, BufferGeometry, BufferAttribute, CircleGeometry EdgesGeometry } from 'three';
+import { Box3, Box3Helper, Mesh, Object3D, Vector3, LineSegments, LineBasicMaterial, BufferGeometry, BufferAttribute, CircleGeometry, EdgesGeometry } from 'three';
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 
