@@ -72,7 +72,7 @@ export let TilesetParser = new function() {
 	 */
 	this.isGroup = function( group ) {
 
-		let acceptables = [ "default", "clone", "transform", "north", "south", "east", "west", "up", "down" ];
+		let acceptables = [ "all", "default", "clone", "transform", "north", "south", "east", "west", "up", "down" ];
 		let tiles = Object.entries( group );
 
 		for( let [name, tile] of tiles ) {
@@ -96,10 +96,12 @@ export let TilesetParser = new function() {
 		let directions = [ "north", "south", "east", "west", "up", "down" ]
 
 		if( group.clone ) tileGroup.clone( tileset.groups[ group.clone ] );
-		else if( group.default ) tileGroup.setAll( group.default.x, group.default.y, group.default.w, group.default.h );
+		else if( group.all ) tileGroup.setAll( group.all.x, group.all.y, group.all.w, group.all.h );
 
 		for( let dir of directions ) {
 			if( group[ dir ] ) {
+
+				if( group.default ) tileGroup[ dir ].set( group.default.x, group.default.y, group.default.w, group.default.h )
 
 				let tile = group[ dir ];
 
