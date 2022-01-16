@@ -33,7 +33,7 @@ export let EntityModelParser = new function() {
 				let position = new Vector3(0,0,0);
 				let rotation = new Euler(0,0,0);
 
-				if( cube.size ) scale.set( cube.size[0], cube.size[1], cube.size[2] ).divideScalar( 16 ).clampScalar( 0.0001, Math.min() );
+				if( cube.size ) scale.set( cube.size[0], cube.size[1], cube.size[2] ).divideScalar( 16 ).clampScalar( 0.00000001, Math.min() );
 
 				if( cube.offset ) position.set( cube.offset[0], cube.offset[1], cube.offset[2] ).divideScalar( 16 );
 
