@@ -7,7 +7,7 @@ import { Scene } from '../core/rendering/scene.js';
 import { Updater } from '../core/updater.js';
 import { Tools } from '../tools/tools.js';
 
-import { Collider } from '../collision/collider.js';
+import { EntityCollider } from '../collision/entity/collider.js';
 
 import { Vector3, Skeleton, Mesh, MeshDepthMaterial, RGBADepthPacking } from 'three';
 
@@ -30,7 +30,7 @@ class Entity {
 		this.scale = new Vector3( 1, 1, 1 );
 
 		// Entity collision
-		this.collider = new Collider( this );
+		this.collider = new EntityCollider( this );
 		this.collider.fromTemplate( this.template.collider );
 
 		// Entity event actions

@@ -2,9 +2,9 @@
  *  @author zwubs
  */
 
-export { Collider } from './collider.js';
+export { EntityCollider } from './entity/collider.js';
 
-export { ColliderTemplate } from './collider-template.js';
+export { EntityColliderTemplate } from './/entity/collider-template.js';
 
 export { BoundingBox } from './bounding-box.js';
 

@@ -2,9 +2,9 @@
  *	@author zwubs
  */
 
-import { Collider } from './collider.js';
+import { EntityCollider } from './collider.js';
 
-export class ColliderTemplate {
+export class EntityColliderTemplate {
 
 	constructor() {
 
@@ -20,7 +20,7 @@ export class ColliderTemplate {
 
 	generateCollider() {
 
-		return new Collider.fromTemplate( this );
+		return new EntityCollider.fromTemplate( this );
 
 	}
 

@@ -2,7 +2,7 @@
  *	@author zwubs
  */
 
-import { ColliderTemplate } from '../collision/collider-template.js'
+import { EntityColliderTemplate } from '../collision/entity/collider-template.js'
 
 import { Box3, Vector3 } from 'three'
 
@@ -10,7 +10,7 @@ export let CollisionParser = new function() {
 
 	this.parse = function( json ) {
 
-		let collider = new ColliderTemplate();
+		let collider = new EntityColliderTemplate();
 
 		let size = new Vector3( 1, 1, 1 );
 		let position = new Vector3( 0, 0, 0 );

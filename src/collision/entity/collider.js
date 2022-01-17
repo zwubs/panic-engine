@@ -2,18 +2,18 @@
  *	@author zwubs
  */
 
-import { BoundingSphere } from './bounding-sphere.js'
+import { BoundingSphere } from '../bounding-sphere.js'
 
-import { BoundingBox } from './bounding-box.js'
+import { BoundingBox } from '../bounding-box.js'
 
-export class Collider {
+export class EntityCollider {
 
 	constructor( entity ) {
 
 		this.entity = entity;
 
 		this.boundingSphere = new BoundingSphere( entity.position, 0.2 );
-		this.boundingBox = null;
+		this.boundingBox = new BoundingBox();
 		this.boxes = [];
 
 		this.debugger = null;
@@ -22,7 +22,7 @@ export class Collider {
 
 	/**
 	 *	@description Create a new collider
-	 *	@param {ColliderTemplate} template
+	 *	@param {EntityColliderTemplate} template
 	 */
 	fromTemplate( template ) {
 
