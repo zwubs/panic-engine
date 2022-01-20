@@ -4,6 +4,9 @@ return function() {
 	this.position.y += this.store.velocity[1];
 	this.position.z += this.store.velocity[2];
 
+	// this.store.velocity[0] = this.store.velocity[0] - 0.01;
+	// this.store.velocity[2] = this.store.velocity[2] - 0.01;
+
 	this.store.velocity[0] /= 1.1;
 	this.store.velocity[2] /= 1.1;
 
