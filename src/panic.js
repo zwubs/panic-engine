@@ -18,6 +18,7 @@ export { Cube } from './core/cube.js';
 export { Texture } from './core/texture.js';
 export { Controls as OrbitControls } from './core/input/orbit-controls.js';
 export { Element } from './core/dom/element.js';
+export { Maths } from './core/maths.js';
 
 	/**
 	 * 	@filespace {CORE/TILESET}
