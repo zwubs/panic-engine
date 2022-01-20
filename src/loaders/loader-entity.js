@@ -9,7 +9,7 @@ import * as Parsers from '../parsers/parsers.js';
 import { Actions } from '../core/input/actions.js';
 
 import { EntityTemplate } from '../entities/entity-template.js';
-import { EntityRegistry } from '../entities/entity-registry.js';
+import { EntityTemplateRegistry } from '../entities/entity-template-registry.js';
 
 export let EntityLoader = new function() {
 

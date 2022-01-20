@@ -48,7 +48,7 @@ export { Maths } from './core/maths.js';
  */
 export { Entity } from './entities/entity.js';
 export { EntityTemplate } from './entities/entity-template.js';
-export { EntityRegistry } from './entities/entity-registry.js';
+export { EntityTemplateRegistry } from './entities/entity-template-registry.js';
 
 
 /**

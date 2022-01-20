@@ -5,7 +5,7 @@
 
 import * as Debug from '../debug/debug-console.js';
 
-class EntityRegistry {
+class EntityTemplateRegistry {
 
 	constructor() {
 
@@ -55,5 +55,5 @@ class EntityRegistry {
 
 };
 
-let instance = new EntityRegistry();
-export { instance as EntityRegistry };
+let instance = new EntityTemplateRegistry();
+export { instance as EntityTemplateRegistry };
