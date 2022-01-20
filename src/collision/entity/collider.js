@@ -3,8 +3,9 @@
  */
 
 import { BoundingSphere } from '../bounding-sphere.js'
+import { OBB } from '../obb.js'
 
-import { BoundingBox } from '../bounding-box.js'
+import { Box3 } from 'three'
 
 export class EntityCollider {
 
@@ -12,11 +13,13 @@ export class EntityCollider {
 
 		this.entity = entity;
 
-		this.boundingSphere = new BoundingSphere( entity.position, 0.2 );
-		this.boundingBox = new BoundingBox();
-		this.boxes = [];
+		this.boundingSphere = new BoundingSphere( this );
+		this.boundingBox = new OBB( this );
+		this.collision = [];
 
 		this.debugger = null;
+
+		this.update();
 
 	}
 
@@ -26,25 +29,48 @@ export class EntityCollider {
 	 */
 	fromTemplate( template ) {
 
-		this.boxes = template.boxes;
+		this.collision = template.collision;
+		for( let box of this.collision ) { box.collider = this; }
+
+		this.boundingBox = template.boundingBox;
+		this.boundingBox.collider = this;
+
+		this.boundingSphere = template.boundingSphere;
+		this.boundingSphere.collider = this;
 
 	}
 
 	isColliding( collider ) {
 
-		return this.boundingSphere.intersectsSphere( collider.boundingSphere );
+		if( this.boundingSphere.intersectsSphere( collider.boundingSphere ) ) {
+
+			return this.boundingBox.intersectsOBB( collider.boundingBox );
+
+		}
+
+		return false;
 
 	}
 
 	addBox( box ) {
 
-		this.boxes.push( box );
+		this.collision.push( box );
 
 	}
 
+	/**
+	 *	@note update() updates collision info, updateWorldMatrix() just updates from the parent position.
+	 */
 	update() {
 
-		this.boundingSphere.setCenter( this.entity.position );
+		// Update small collision (OBBs)
+		for( let obb of this.collision ) { obb.updateWorldMatrix() }
+
+		// Update BoundingBox (OBB)
+		this.boundingBox.update();
+
+		// Upodate BoundingSphere
+		this.boundingSphere.updateWorldMatrix();
 
 	}
 

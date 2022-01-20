@@ -40,12 +40,15 @@
 
 			PANIC.Debug.Access.enable();
 
+			AngelFish = null;
+			Fish = null;
+
 			try {
 
-				// Replace this file name with your own!
 				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
 
 					Fish = PANIC.EntityRegistry.spawnEntity( template.id );
+					Fish.position.set( 0.5, 0, 0 );
 
 					// PANIC.Debug.Entity( Fish ).collision = true;
 
@@ -55,7 +58,7 @@
 
 					AngelFish = PANIC.EntityRegistry.spawnEntity( template.id );
 
-					// PANIC.Debug.Entity( Player ).collision = true;
+					// PANIC.Debug.Entity( AngelFish ).collision = true;
 
 				});
 
@@ -68,11 +71,16 @@
 
 				PANIC.Debug.Compass.toggle();
 
+				PANIC.Debug.Text.toggle();
+
 				let Loop = function( time=0 ) {
 
 					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
 					PANIC.Updater.update();
+
+					if( AngelFish ) AngelFish.checkCollision();
+					if( Fish ) Fish.checkCollision();
 
 					requestAnimationFrame( Loop );
 

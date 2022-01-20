@@ -39,7 +39,7 @@
 
 	}
 
-	const instance$e = new Scene();
+	const instance$f = new Scene();
 
 	/**
 	 *	@author zwubs
@@ -59,7 +59,7 @@
 
 	}
 
-	const instance$d = new Camera();
+	const instance$e = new Camera();
 
 	/**
 	 *	@author zwubs
@@ -373,7 +373,7 @@
 
 	}
 
-	const instance$c = new Updater();
+	const instance$d = new Updater();
 
 	/**
 	 *  @class
@@ -462,6 +462,8 @@
 
 		constructor( element, binding ) {
 
+			this.active = true;
+
 			this.events = {};
 
 			// Storage events waiting for the next game update/tick
@@ -473,7 +475,7 @@
 			this.element = element ? element : Element;
 			this.binding = binding ? binding : window;
 
-			instance$c.add( this );
+			instance$d.add( this );
 
 		}
 
@@ -567,8 +569,6 @@
 
 		unregisterEventAlias( alias ) {
 
-			console.log( alias, this.events );
-
 			if( !( alias in this.events ) ) {
 
 				warn(`EventManager.unregisterEventAlias(): '${alias}' is already registered`);
@@ -655,8 +655,13 @@
 
 			}
 
-			if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
-			else this.queue[ eventID ] = { loop: loop, data: data };
+			if( this.active ) {
+
+				if( this.events[ eventID ] instanceof EventAlias ) { this.queue[ this.events[ eventID ].event.id ] = { loop: loop, data: data }; }
+
+				else this.queue[ eventID ] = { loop: loop, data: data };
+
+			}
 
 		}
 
@@ -746,11 +751,15 @@
 		 */
 		update() {
 
-			for ( const [key, value] of Object.entries( this.queue ) ) {
+			if( this.active ) {
 
-				this.events[ key ].emit( value.data );
+				for ( const [key, value] of Object.entries( this.queue ) ) {
 
-				if( value.loop == false ) { delete this.queue[ key ]; }
+					this.events[ key ].emit( value.data );
+
+					if( value.loop == false ) { delete this.queue[ key ]; }
+
+				}
 
 			}
 
@@ -789,8 +798,8 @@
 
 		onResize( e ) {
 
-			instance$d.aspect = Element.clientWidth / Element.clientHeight;
-			instance$d.updateProjectionMatrix();
+			instance$e.aspect = Element.clientWidth / Element.clientHeight;
+			instance$e.updateProjectionMatrix();
 
 			this.setPixelRatio( window.devicePixelRatio );
 			this.setSize( Element.clientWidth, Element.clientHeight );
@@ -801,7 +810,7 @@
 
 	}
 
-	const instance$b = new Renderer();
+	const instance$c = new Renderer();
 
 	/**
 	 *  @author zwubs
@@ -895,6 +904,21 @@
 			// Mark attribute for an update
 			this.attributes.position.needsUpdate = true;
 
+		}
+
+		static identity() {
+
+			const indices = new Uint16Array( [ 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7 ] );
+			const positions = new Float32Array( [ 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5 ] );
+
+			const geometry = new three.BufferGeometry();
+			geometry.setIndex( new three.BufferAttribute( indices, 1 ) );
+			geometry.setAttribute( 'position', new three.BufferAttribute( positions, 3 ) );
+
+			geometry.computeBoundingSphere();
+
+			return geometry;
+			
 		}
 	}
 
@@ -2160,7 +2184,7 @@
 	 *	@todo Replace using custom input system
 	 */
 
-	let Controls = new OrbitControls( instance$d, Canvas );
+	let Controls = new OrbitControls( instance$e, Canvas );
 
 	Controls.traget = new three.Vector3( 0, 0, 0);
 	Controls.update();
@@ -2636,7 +2660,7 @@
 
 	}
 
-	const instance$a = new Keyboard();
+	const instance$b = new Keyboard();
 
 	const MouseButtonCodes = {
 		L: 0,
@@ -2949,7 +2973,7 @@
 
 	}
 
-	const instance$9 = new Mouse();
+	const instance$a = new Mouse();
 
 	/**
 	 *  @reference https://github.com/vaalentin/keycodes
@@ -3075,7 +3099,7 @@
 
 	}
 
-	const instance$8 = new Gamepad();
+	const instance$9 = new Gamepad();
 
 	/**
 	 *	@author zwubs
@@ -3083,9 +3107,9 @@
 
 	var input = /*#__PURE__*/Object.freeze({
 		__proto__: null,
-		Keyboard: instance$a,
-		Mouse: instance$9,
-		Gamepad: instance$8
+		Keyboard: instance$b,
+		Mouse: instance$a,
+		Gamepad: instance$9
 	});
 
 	/**
@@ -3130,7 +3154,707 @@
 		}
 
 	}
-	let instance$7 = new Tools();
+	let instance$8 = new Tools();
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class BoundingSphere {
+
+		/**
+		 *	@param {Vector3} center
+		 *	@param {Number} radius
+		 */
+		constructor( collider, center = new three.Vector3( 0, 0, 0 ), radius = 0) {
+
+			this.collider = collider;
+
+			this.position = center;
+			this.center = center;
+			this.radius = radius;
+
+			this.matrix = new three.Matrix4(); // local position
+			this.matrixWorld = new three.Matrix4(); // world position
+
+		}
+
+		/**
+		 *	@param {BoundingSphere} sphere
+		 */
+		intersectsSphere( sphere ) {
+
+			let radiusSum = this.radius + sphere.radius;
+
+			return sphere.position.distanceToSquared( this.position ) <= ( radiusSum * radiusSum );
+
+		}
+
+		update() {
+
+			this.matrix.setPosition( this.center );
+
+		}
+
+		updateWorldMatrix() {
+
+			if( this.collider ) {
+				this.matrixWorld.multiplyMatrices( this.collider.entity.matrix, this.matrix );
+				this.position = this.center.clone().applyMatrix4( this.collider.entity.matrix );
+			}
+			else this.matrixWorld.copy( this.matrix );
+
+		}
+
+	}
+
+	// module scope helper variables
+
+	const a = {
+		c: null, // center
+		u: [ new three.Vector3(), new three.Vector3(), new three.Vector3() ], // basis vectors
+		e: [] // half width
+	};
+
+	const b = {
+		c: null, // center
+		u: [ new three.Vector3(), new three.Vector3(), new three.Vector3() ], // basis vectors
+		e: [] // half width
+	};
+
+	const R = [[], [], []];
+	const AbsR = [[], [], []];
+	const t = [];
+
+	let c = 0;
+	let d = 0;
+	let min = Infinity;
+	let epsilon = 1e-3;
+
+	const xAxis = new three.Vector3();
+	const yAxis = new three.Vector3();
+	const zAxis = new three.Vector3();
+	const v1 = new three.Vector3();
+	const size = new three.Vector3();
+	const direction = new three.Vector3();
+	const closestPoint = new three.Vector3();
+	const rotationMatrix = new three.Matrix3();
+	const aabb = new three.Box3();
+	const matrix = new three.Matrix4();
+	const inverse = new three.Matrix4();
+	const localRay = new three.Ray();
+
+	// OBB
+
+	class OBB {
+
+		constructor( center = new three.Vector3(), halfSize = new three.Vector3(), rotation = new three.Matrix3() ) {
+
+			this.center = center;
+			this.halfSize = halfSize;
+			this.rotation = rotation;
+
+		}
+
+		set( center, halfSize, rotation ) {
+
+			this.center = center;
+			this.halfSize = halfSize;
+			this.rotation = rotation;
+
+			return this;
+
+		}
+
+		copy( obb ) {
+
+			this.center.copy( obb.center );
+			this.halfSize.copy( obb.halfSize );
+			this.rotation.copy( obb.rotation );
+
+			return this;
+
+		}
+
+		clone() {
+
+			return new this.constructor().copy( this );
+
+		}
+
+		getSize( result ) {
+
+			return result.copy( this.halfSize ).multiplyScalar( 2 );
+
+		}
+
+		/**
+		* Reference: Closest Point on OBB to Point in Real-Time Collision Detection
+		* by Christer Ericson (chapter 5.1.4)
+		*/
+		clampPoint( point, result ) {
+
+			const halfSize = this.halfSize;
+
+			v1.subVectors( point, this.center );
+			this.rotation.extractBasis( xAxis, yAxis, zAxis );
+
+			// start at the center position of the OBB
+
+			result.copy( this.center );
+
+			// project the target onto the OBB axes and walk towards that point
+
+			const x = three.MathUtils.clamp( v1.dot( xAxis ), - halfSize.x, halfSize.x );
+			result.add( xAxis.multiplyScalar( x ) );
+
+			const y = three.MathUtils.clamp( v1.dot( yAxis ), - halfSize.y, halfSize.y );
+			result.add( yAxis.multiplyScalar( y ) );
+
+			const z = three.MathUtils.clamp( v1.dot( zAxis ), - halfSize.z, halfSize.z );
+			result.add( zAxis.multiplyScalar( z ) );
+
+			return result;
+
+		}
+
+		containsPoint( point ) {
+
+			v1.subVectors( point, this.center );
+			this.rotation.extractBasis( xAxis, yAxis, zAxis );
+
+			// project v1 onto each axis and check if these points lie inside the OBB
+
+			return Math.abs( v1.dot( xAxis ) ) <= this.halfSize.x &&
+					Math.abs( v1.dot( yAxis ) ) <= this.halfSize.y &&
+					Math.abs( v1.dot( zAxis ) ) <= this.halfSize.z;
+
+		}
+
+		intersectsBox3( box3 ) {
+
+			return this.intersectsOBB( obb.fromBox3( box3 ) );
+
+		}
+
+		intersectsSphere( sphere ) {
+
+			// find the point on the OBB closest to the sphere center
+
+			this.clampPoint( sphere.center, closestPoint );
+
+			// if that point is inside the sphere, the OBB and sphere intersect
+
+			return closestPoint.distanceToSquared( sphere.center ) <= ( sphere.radius * sphere.radius );
+
+		}
+
+		/**
+		* Reference: OBB-OBB Intersection in Real-Time Collision Detection
+		* by Christer Ericson (chapter 4.4.1)
+		*
+		*/
+		intersectsOBB( obb ) {
+
+			// prepare data structures (the code uses the same nomenclature like the reference)
+			min = Infinity;
+			direction.set( 0, 0, 0 );
+
+			a.c = this.center;
+			a.e[ 0 ] = this.halfSize.x;
+			a.e[ 1 ] = this.halfSize.y;
+			a.e[ 2 ] = this.halfSize.z;
+			this.rotation.extractBasis( a.u[ 0 ], a.u[ 1 ], a.u[ 2 ] );
+
+			b.c = obb.center;
+			b.e[ 0 ] = obb.halfSize.x;
+			b.e[ 1 ] = obb.halfSize.y;
+			b.e[ 2 ] = obb.halfSize.z;
+			obb.rotation.extractBasis( b.u[ 0 ], b.u[ 1 ], b.u[ 2 ] );
+
+			// compute rotation matrix expressing b in a's coordinate frame
+
+			for ( let i = 0; i < 3; i ++ ) {
+
+				for ( let j = 0; j < 3; j ++ ) {
+
+					R[ i ][ j ] = a.u[ i ].dot( b.u[ j ] );
+
+					AbsR[ i ][ j ] = Math.abs( R[ i ][ j ] ) + epsilon;
+
+				}
+
+			}
+
+			// compute translation vector
+
+			v1.subVectors( b.c, a.c );
+
+			// bring translation into a's coordinate frame
+
+			t[ 0 ] = v1.dot( a.u[ 0 ] );
+			t[ 1 ] = v1.dot( a.u[ 1 ] );
+			t[ 2 ] = v1.dot( a.u[ 2 ] );
+
+			let ra, rb;
+
+			// test axes L = A0, L = A1, L = A2
+
+			for ( let i = 0; i < 3; i ++ ) {
+
+				ra = a.e[ i ];
+				rb = b.e[ 0 ] * AbsR[ i ][ 0 ] + b.e[ 1 ] * AbsR[ i ][ 1 ] + b.e[ 2 ] * AbsR[ i ][ 2 ];
+				if ( Math.abs( t[ i ] ) > ra + rb ) return false;
+
+				c = t[ i ];
+				d = Math.abs( c ) - ( ra + rb );
+				if( Math.abs( d ) < Math.abs( min ) ) {
+					min = d;
+					if( Math.sign( c ) != 0 ) { min *= Math.sign( c ); }
+					direction.copy( a.u[ i ] );
+				}
+
+			}
+
+			// test axes L = B0, L = B1, L = B2
+
+			for ( let i = 0; i < 3; i ++ ) {
+
+				ra = a.e[ 0 ] * AbsR[ 0 ][ i ] + a.e[ 1 ] * AbsR[ 1 ][ i ] + a.e[ 2 ] * AbsR[ 2 ][ i ];
+				rb = b.e[ i ];
+				if ( Math.abs( t[ 0 ] * R[ 0 ][ i ] + t[ 1 ] * R[ 1 ][ i ] + t[ 2 ] * R[ 2 ][ i ] ) > ra + rb ) return false;
+
+				c = t[ 0 ] * R[ 0 ][ i ] + t[ 1 ] * R[ 1 ][ i ] + t[ 2 ] * R[ 2 ][ i ];
+				d = Math.abs( c ) - ( ra + rb );
+				if( Math.abs( d ) < Math.abs( min ) ) {
+					min = d;
+					if( Math.sign( c ) != 0 ) { min *= Math.sign( c ); }
+					direction.copy( b.u[ i ] );
+				}
+
+			}
+
+			// test axis L = A0 x B0
+
+			ra = a.e[ 1 ] * AbsR[ 2 ][ 0 ] + a.e[ 2 ] * AbsR[ 1 ][ 0 ];
+			rb = b.e[ 1 ] * AbsR[ 0 ][ 2 ] + b.e[ 2 ] * AbsR[ 0 ][ 1 ];
+			if ( Math.abs( t[ 2 ] * R[ 1 ][ 0 ] - t[ 1 ] * R[ 2 ][ 0 ] ) > ra + rb ) return false;
+
+			// test axis L = A0 x B1
+
+			ra = a.e[ 1 ] * AbsR[ 2 ][ 1 ] + a.e[ 2 ] * AbsR[ 1 ][ 1 ];
+			rb = b.e[ 0 ] * AbsR[ 0 ][ 2 ] + b.e[ 2 ] * AbsR[ 0 ][ 0 ];
+			if ( Math.abs( t[ 2 ] * R[ 1 ][ 1 ] - t[ 1 ] * R[ 2 ][ 1 ] ) > ra + rb ) return false;
+
+			// test axis L = A0 x B2
+
+			ra = a.e[ 1 ] * AbsR[ 2 ][ 2 ] + a.e[ 2 ] * AbsR[ 1 ][ 2 ];
+			rb = b.e[ 0 ] * AbsR[ 0 ][ 1 ] + b.e[ 1 ] * AbsR[ 0 ][ 0 ];
+			if ( Math.abs( t[ 2 ] * R[ 1 ][ 2 ] - t[ 1 ] * R[ 2 ][ 2 ] ) > ra + rb ) return false;
+
+			// test axis L = A1 x B0
+
+			ra = a.e[ 0 ] * AbsR[ 2 ][ 0 ] + a.e[ 2 ] * AbsR[ 0 ][ 0 ];
+			rb = b.e[ 1 ] * AbsR[ 1 ][ 2 ] + b.e[ 2 ] * AbsR[ 1 ][ 1 ];
+			if ( Math.abs( t[ 0 ] * R[ 2 ][ 0 ] - t[ 2 ] * R[ 0 ][ 0 ] ) > ra + rb ) return false;
+
+			// test axis L = A1 x B1
+
+			ra = a.e[ 0 ] * AbsR[ 2 ][ 1 ] + a.e[ 2 ] * AbsR[ 0 ][ 1 ];
+			rb = b.e[ 0 ] * AbsR[ 1 ][ 2 ] + b.e[ 2 ] * AbsR[ 1 ][ 0 ];
+			if ( Math.abs( t[ 0 ] * R[ 2 ][ 1 ] - t[ 2 ] * R[ 0 ][ 1 ] ) > ra + rb ) return false;
+
+			// test axis L = A1 x B2
+
+			ra = a.e[ 0 ] * AbsR[ 2 ][ 2 ] + a.e[ 2 ] * AbsR[ 0 ][ 2 ];
+			rb = b.e[ 0 ] * AbsR[ 1 ][ 1 ] + b.e[ 1 ] * AbsR[ 1 ][ 0 ];
+			if ( Math.abs( t[ 0 ] * R[ 2 ][ 2 ] - t[ 2 ] * R[ 0 ][ 2 ] ) > ra + rb ) return false;
+
+			// test axis L = A2 x B0
+
+			ra = a.e[ 0 ] * AbsR[ 1 ][ 0 ] + a.e[ 1 ] * AbsR[ 0 ][ 0 ];
+			rb = b.e[ 1 ] * AbsR[ 2 ][ 2 ] + b.e[ 2 ] * AbsR[ 2 ][ 1 ];
+			if ( Math.abs( t[ 1 ] * R[ 0 ][ 0 ] - t[ 0 ] * R[ 1 ][ 0 ] ) > ra + rb ) return false;
+
+			// test axis L = A2 x B1
+
+			ra = a.e[ 0 ] * AbsR[ 1 ][ 1 ] + a.e[ 1 ] * AbsR[ 0 ][ 1 ];
+			rb = b.e[ 0 ] * AbsR[ 2 ][ 2 ] + b.e[ 2 ] * AbsR[ 2 ][ 0 ];
+			if ( Math.abs( t[ 1 ] * R[ 0 ][ 1 ] - t[ 0 ] * R[ 1 ][ 1 ] ) > ra + rb ) return false;
+
+			// test axis L = A2 x B2
+
+			ra = a.e[ 0 ] * AbsR[ 1 ][ 2 ] + a.e[ 1 ] * AbsR[ 0 ][ 2 ];
+			rb = b.e[ 0 ] * AbsR[ 2 ][ 1 ] + b.e[ 1 ] * AbsR[ 2 ][ 0 ];
+			if ( Math.abs( t[ 1 ] * R[ 0 ][ 2 ] - t[ 0 ] * R[ 1 ][ 2 ] ) > ra + rb ) return false;
+
+			// since no separating axis is found, the OBBs must be intersecting
+			return [ direction, min ];
+
+		}
+
+		/**
+		* Reference: Testing Box Against Plane in Real-Time Collision Detection
+		* by Christer Ericson (chapter 5.2.3)
+		*/
+		intersectsPlane( plane ) {
+
+			this.rotation.extractBasis( xAxis, yAxis, zAxis );
+
+			// compute the projection interval radius of this OBB onto L(t) = this->center + t * p.normal;
+
+			const r = this.halfSize.x * Math.abs( plane.normal.dot( xAxis ) ) +
+					this.halfSize.y * Math.abs( plane.normal.dot( yAxis ) ) +
+					this.halfSize.z * Math.abs( plane.normal.dot( zAxis ) );
+
+			// compute distance of the OBB's center from the plane
+
+			const d = plane.normal.dot( this.center ) - plane.constant;
+
+			// Intersection occurs when distance d falls within [-r,+r] interval
+
+			return Math.abs( d ) <= r;
+
+		}
+
+		/**
+		* Performs a ray/OBB intersection test and stores the intersection point
+		* to the given 3D vector. If no intersection is detected, *null* is returned.
+		*/
+		intersectRay( ray, result ) {
+
+			// the idea is to perform the intersection test in the local space
+			// of the OBB.
+
+			this.getSize( size );
+			aabb.setFromCenterAndSize( v1.set( 0, 0, 0 ), size );
+
+			// create a 4x4 transformation matrix
+
+			matrix.setFromMatrix3( this.rotation );
+			matrix.setPosition( this.center );
+
+			// transform ray to the local space of the OBB
+
+			inverse.copy( matrix ).invert();
+			localRay.copy( ray ).applyMatrix4( inverse );
+
+			// perform ray <-> AABB intersection test
+
+			if ( localRay.intersectBox( aabb, result ) ) {
+
+				// transform the intersection point back to world space
+
+				return result.applyMatrix4( matrix );
+
+			} else {
+
+				return null;
+
+			}
+
+		}
+
+		/**
+		* Performs a ray/OBB intersection test. Returns either true or false if
+		* there is a intersection or not.
+		*/
+		intersectsRay( ray ) {
+
+			return this.intersectRay( ray, v1 ) !== null;
+
+		}
+
+		fromBox3( box3 ) {
+
+			box3.getCenter( this.center );
+
+			box3.getSize( this.halfSize ).multiplyScalar( 0.5 );
+
+			this.rotation.identity();
+
+			return this;
+
+		}
+
+		equals( obb ) {
+
+			return obb.center.equals( this.center ) &&
+				obb.halfSize.equals( this.halfSize ) &&
+				obb.rotation.equals( this.rotation );
+
+		}
+
+		applyMatrix4( matrix ) {
+
+			const e = matrix.elements;
+
+			let sx = v1.set( e[ 0 ], e[ 1 ], e[ 2 ] ).length();
+			const sy = v1.set( e[ 4 ], e[ 5 ], e[ 6 ] ).length();
+			const sz = v1.set( e[ 8 ], e[ 9 ], e[ 10 ] ).length();
+
+			const det = matrix.determinant();
+			if ( det < 0 ) sx = - sx;
+
+			rotationMatrix.setFromMatrix4( matrix );
+
+			const invSX = 1 / sx;
+			const invSY = 1 / sy;
+			const invSZ = 1 / sz;
+
+			rotationMatrix.elements[ 0 ] *= invSX;
+			rotationMatrix.elements[ 1 ] *= invSX;
+			rotationMatrix.elements[ 2 ] *= invSX;
+
+			rotationMatrix.elements[ 3 ] *= invSY;
+			rotationMatrix.elements[ 4 ] *= invSY;
+			rotationMatrix.elements[ 5 ] *= invSY;
+
+			rotationMatrix.elements[ 6 ] *= invSZ;
+			rotationMatrix.elements[ 7 ] *= invSZ;
+			rotationMatrix.elements[ 8 ] *= invSZ;
+
+			this.rotation.multiply( rotationMatrix );
+
+			this.halfSize.x *= sx;
+			this.halfSize.y *= sy;
+			this.halfSize.z *= sz;
+
+			v1.setFromMatrixPosition( matrix );
+			this.center.add( v1 );
+
+			return this;
+
+		}
+
+	}
+
+	const obb = new OBB();
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class OrientedBoundingBox {
+
+		/**
+		 *	@param {Collider} collider
+		 */
+		constructor( collider ) {
+
+			this.collider = collider;
+
+			this.epsilon = 1e-3;
+
+			// User friendly inputs
+			this.position = new three.Vector3();
+			this.rotation = new three.Euler();
+			this.scale = new three.Vector3();
+
+			this.obb = new OBB();
+
+			// SAT friendly inputs
+			this.center = new three.Vector3();
+			this.basis = new three.Matrix4();
+			this.halfWidth = new three.Vector3();
+
+			// For children calculations
+			this.quaternion = new three.Quaternion();
+			this.matrix = new three.Matrix4(); // local position
+			this.matrixWorld = new three.Matrix4(); // world position
+
+		}
+
+		getBoundingBox() { return new three.Box3().setFromCenterAndSize( this.position, this.scale ).applyMatrix4( new three.Matrix4().makeRotationFromEuler( this.rotation ) ); }
+
+		fromBoundingBox( box3 ) {
+
+			box3.getCenter( this.position );
+			box3.getSize( this.scale );
+
+			this.update();
+
+		}
+
+		/**
+		 *
+		 */
+		set( position, rotation, scale ) {
+
+			if( position ) this.position = position;
+			if( scale ) this.scale = scale;
+			if( rotation instanceof three.Vector3 ) this.rotation.setFromVector3( rotation );
+			else if( rotation instanceof three.Euler ) this.rotation.copy( rotation );
+
+		}
+
+		update() {
+
+			// Update matrix
+			this.quaternion.setFromEuler( this.rotation, false );
+
+			this.matrix.compose( this.position, this.quaternion, this.scale );
+
+			this.updateWorldMatrix();
+
+			// Update SAT variables
+			this.center.setFromMatrixPosition( this.matrixWorld );
+
+			if( this.collider ) this.basis.makeRotationFromEuler( this.collider.entity.rotation );
+
+			this.halfWidth.copy( this.scale ).multiplyScalar( 0.5 );
+
+			this.obb.set( this.center, this.halfWidth, this.basis );
+
+		}
+
+		updateWorldMatrix() {
+
+			if( this.collider ) this.matrixWorld.multiplyMatrices( this.collider.entity.matrix, this.matrix );
+			else this.matrixWorld.copy( this.matrix );
+
+		}
+
+		intersectsOBB( obb ) {
+
+			return this.obb.intersectsOBB( obb.obb );
+
+		}
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class EntityCollider {
+
+		constructor( entity ) {
+
+			this.entity = entity;
+
+			this.boundingSphere = new BoundingSphere( this );
+			this.boundingBox = new OrientedBoundingBox( this );
+			this.collision = [];
+
+			this.debugger = null;
+
+			this.update();
+
+		}
+
+		/**
+		 *	@description Create a new collider
+		 *	@param {EntityColliderTemplate} template
+		 */
+		fromTemplate( template ) {
+
+			this.collision = template.collision;
+			for( let box of this.collision ) { box.collider = this; }
+
+			this.boundingBox = template.boundingBox;
+			this.boundingBox.collider = this;
+
+			this.boundingSphere = template.boundingSphere;
+			this.boundingSphere.collider = this;
+
+		}
+
+		isColliding( collider ) {
+
+			if( this.boundingSphere.intersectsSphere( collider.boundingSphere ) ) {
+
+				return this.boundingBox.intersectsOBB( collider.boundingBox );
+
+			}
+
+			return false;
+
+		}
+
+		addBox( box ) {
+
+			this.collision.push( box );
+
+		}
+
+		/**
+		 *	@note update() updates collision info, updateWorldMatrix() just updates from the parent position.
+		 */
+		update() {
+
+			// Update small collision (OBBs)
+			for( let obb of this.collision ) { obb.updateWorldMatrix(); }
+
+			// Update BoundingBox (OBB)
+			this.boundingBox.update();
+
+			// Upodate BoundingSphere
+			this.boundingSphere.updateWorldMatrix();
+
+		}
+
+	}
+
+	/**
+	 *
+	 */
+
+	let DebugElement = document.createElement("div");
+
+	DebugElement.style = `
+	position: absolute;
+	top: 0;
+	color: #FFF;
+`;
+
+	DebugElement.id = "PANIC-Debug";
+
+	Element.appendChild( DebugElement );
+
+	/**
+	 *	@author zwubss
+	 */
+
+	class Text {
+
+		constructor() {
+
+			this.id = "PANIC-Debug-Text";
+
+			this.element = document.createElement("div");
+			this.element.id = this.id;
+
+			this.active = false;
+
+			/**
+			 *	0 = Cardinal & Ordinal Directions
+			 *	1 = Cartesian Directions
+			 *	2 = Cartesian Coordinates
+			 */
+			this.state = 0;
+
+		}
+
+		toggle( override=null ) {
+
+			if( typeof override == "boolean" ) { this.active = !override; }
+			else { this.active = !this.active; }
+
+			if( this.active ) { DebugElement.appendChild( this.element ); }
+			else { DebugElement.removeChild( this.element ); }
+
+		}
+
+		set( text ) {
+
+			this.element.innerHTML = `${ text }`;
+
+		}
+
+	}
+
+	let instance$7 = new Text();
 
 	/**
 	 *	@typedef {Object} PANIC.Entity
@@ -3142,27 +3866,25 @@
 		constructor( template ) {
 
 			// Unique Entity Identifier
-			this.uuid = instance$7.generateUUID();
+			this.uuid = instance$8.generateUUID();
 
 			// Assign template for future access
 			this.template = template;
 
 			// Transformation Variables
 			this.position = new three.Vector3( 0, 0, 0 );
-			this.rotation = new three.Vector3( 0, 0, 0 );
+			this.rotation = new three.Euler( 0, 0, 0 );
 			this.scale = new three.Vector3( 1, 1, 1 );
 
-			this.actions = template.actions;
-			this.actions.eventManager.binding = this;
-			this.actions.eventManager.emit( "INIT" );
-
-			this.store = {};
+			this.quaternion = new three.Quaternion();
+			this.matrix = new three.Matrix4();
 
 			// Skeleton
 			this.skeleton = new three.Skeleton();
 
 			// Mesh definition
 			this.mesh = new three.Mesh( this.template.geometry, this.template.material );
+			this.mesh.matrixAutoUpdate = false;
 
 			this.mesh.castShadow = true;
 			this.mesh.receiveShadow = true;
@@ -3178,19 +3900,73 @@
 			// Bind skeleton to mesh
 			// this.mesh.bind( this.skeleton );
 
-			instance$e.add( this.mesh );
+			instance$f.add( this.mesh );
 
-			instance$c.add( this );
+			// Entity collision
+			this.collider = new EntityCollider( this );
+			this.collider.fromTemplate( this.template.collider );
+
+			// Entity event actions
+			this.actions = this.template.actions;
+			this.actions.eventManager.binding = this;
+			if( this.actions.eventManager.hasEvent("INIT") ) this.actions.eventManager.emit( "INIT" );
+
+			// Storage for entity actions
+			this.store = {};
+
+			// Debug variables
+			this.debug = null;
+
+			instance$d.add( this );
 
 		}
 
 		update() {
 
-			this.actions.eventManager.emit( "UPDATE" );
+			if( this.actions.eventManager.hasEvent("UPDATE") ) this.actions.eventManager.emit( "UPDATE" );
 
-			this.mesh.position.copy( this.position );
-			this.mesh.rotation.setFromVector3( this.rotation );
-			this.mesh.scale.copy( this.scale );
+			if( this.debug ) this.debug.update();
+
+			this.quaternion.setFromEuler( this.rotation, false );
+			this.matrix.compose( this.position, this.quaternion, this.scale );
+
+			this.collider.update();
+
+			this.mesh.matrix.copy( this.matrix );
+
+		}
+
+		checkCollision() {
+			new three.Vector3();
+			new three.Vector3();
+
+			for( const [id,entity] of Object.entries( PANIC.EntityRegistry.entities ) ) {
+
+				if( this.uuid != id && this.actions.eventManager.hasEvent("COLLIDE") ) {
+
+					let collision = this.collider.isColliding( entity.collider );
+
+					if( collision ) {
+
+						// distance = ( this.collider.boundingSphere.radius + entity.collider.boundingSphere.radius ) - this.collider.boundingSphere.position.distanceTo( entity.collider.boundingSphere.position ) + 0.001
+
+						// direction.subVectors( this.collider.boundingSphere.position, entity.collider.boundingSphere.position ).normalize();
+
+						// if( direction.equals ( zero ) ) direction = new Vector3( 1, 0, 0 );
+						// console.log( collision[0], collision[1] )
+						this.position.add( collision[0].multiplyScalar( collision[ 1 ] ).multiplyScalar( 0.5 ) );
+						entity.position.add( collision[0].multiplyScalar( collision[ 1 ] ).multiplyScalar( -0.5 ) );
+
+						// Text.set(`${collision[0].toArray()}_______${collision[1]}`);
+
+						this.actions.eventManager.emit("COLLIDE");
+						entity.actions.eventManager.emit("COLLIDE");
+
+					}
+
+				}
+
+			}
 
 		}
 
@@ -3378,6 +4154,8 @@
 			this.bones = [];
 			this.geometry = null;
 
+			this.collider = null;
+
 			this.actions = null;
 
 			this.shader = Entity;
@@ -3432,6 +4210,8 @@
 		}
 
 		spawnEntity() {
+
+			if( !this.actions.eventManager.active ) this.actions.eventManager.active = true;
 
 			return new Entity$1( this );
 
@@ -3494,6 +4274,80 @@
 
 	}
 	let instance$6 = new EntityRegistry();
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class EntityColliderTemplate {
+
+		constructor() {
+
+			this.boundingSphere = new BoundingSphere();
+			this.boundingBox = new OrientedBoundingBox();
+			this.collision = [];
+
+		}
+
+		addBox( box ) {
+
+			this.collision.push( box );
+
+		}
+
+		generate() {
+
+			// Bounding Box
+			let min = new three.Vector3( +Infinity, +Infinity, +Infinity );
+			let max = new three.Vector3( -Infinity, -Infinity, -Infinity );
+
+			let vec = new three.Vector3();
+
+			for( let box of this.collision ) {
+
+				let positions = new Float32Array( [ 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5 ] );
+				let verticies = new three.BufferAttribute( positions, 3 );
+				verticies.applyMatrix4( box.matrix );
+
+				for( let i = 0; i < 8; i++ ) {
+
+					vec.fromBufferAttribute( verticies, i );
+
+					min.min( vec );
+					max.max( vec );
+
+				}
+
+			}
+
+			this.boundingBox.position.addVectors( min, max ).multiplyScalar( 0.5 );
+			this.boundingBox.scale.subVectors( max, min );
+			this.boundingBox.update();
+
+			// Bounding Sphere
+			this.boundingSphere.center.copy( this.boundingBox.position );
+			this.boundingSphere.radius = this.boundingSphere.center.distanceTo( min ) > this.boundingSphere.center.distanceTo( max ) ? this.boundingSphere.center.distanceTo( min ) : this.boundingSphere.center.distanceTo( max );
+			this.boundingSphere.update();
+		}
+
+		generateCollider( entity ) {
+
+			return new EntityCollider.fromTemplate( this, entity );
+
+		}
+
+	}
+
+	/**
+	 *  @author zwubs
+	 */
+
+	var collision = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		EntityCollider: EntityCollider,
+		EntityColliderTemplate: EntityColliderTemplate,
+		BoundingSphere: BoundingSphere
+	});
 
 	/**
 	 *	@namespace PANIC.Shaders.DebugAxes
@@ -3783,7 +4637,7 @@
 		 */
 		this.isGroup = function( group ) {
 
-			let acceptables = [ "default", "clone", "transform", "north", "south", "east", "west", "up", "down" ];
+			let acceptables = [ "all", "default", "clone", "transform", "north", "south", "east", "west", "up", "down" ];
 			let tiles = Object.entries( group );
 
 			for( let [name, tile] of tiles ) {
@@ -3807,10 +4661,12 @@
 			let directions = [ "north", "south", "east", "west", "up", "down" ];
 
 			if( group.clone ) tileGroup.clone( tileset.groups[ group.clone ] );
-			else if( group.default ) tileGroup.setAll( group.default.x, group.default.y, group.default.w, group.default.h );
+			else if( group.all ) tileGroup.setAll( group.all.x, group.all.y, group.all.w, group.all.h );
 
 			for( let dir of directions ) {
 				if( group[ dir ] ) {
+
+					if( group.default ) tileGroup[ dir ].set( group.default.x, group.default.y, group.default.w, group.default.h );
 
 					let tile = group[ dir ];
 
@@ -3872,13 +4728,17 @@
 
 			for( var f = 0; f < 6; f++ ) {
 
-				let uv = tileGroup[ faces[ f ] ].UV( texture );
+				if( tileGroup[ faces[ f ] ] ) {
 
-				box.attributes.uv.array.set( [ uv[ 0 ], uv[ 1 ] ], f * 8 + 0 );
-				box.attributes.uv.array.set( [ uv[ 2 ], uv[ 3 ] ], f * 8 + 2 );
-				box.attributes.uv.array.set( [ uv[ 4 ], uv[ 5 ] ], f * 8 + 4 );
-				box.attributes.uv.array.set( [ uv[ 6 ], uv[ 7 ] ], f * 8 + 6 );
+					let uv = tileGroup[ faces[ f ] ].UV( texture );
 
+					box.attributes.uv.array.set( [ uv[ 0 ], uv[ 1 ] ], f * 8 + 0 );
+					box.attributes.uv.array.set( [ uv[ 2 ], uv[ 3 ] ], f * 8 + 2 );
+					box.attributes.uv.array.set( [ uv[ 4 ], uv[ 5 ] ], f * 8 + 4 );
+					box.attributes.uv.array.set( [ uv[ 6 ], uv[ 7 ] ], f * 8 + 6 );
+
+				}
+				
 			}
 
 		};
@@ -4178,7 +5038,7 @@
 					let position = new three.Vector3(0,0,0);
 					let rotation = new three.Euler(0,0,0);
 
-					if( cube.size ) scale.set( cube.size[0], cube.size[1], cube.size[2] ).divideScalar( 16 ).clampScalar( 0.0001, Math.min() );
+					if( cube.size ) scale.set( cube.size[0], cube.size[1], cube.size[2] ).divideScalar( 16 ).clampScalar( 0.00000001, Math.min() );
 
 					if( cube.offset ) position.set( cube.offset[0], cube.offset[1], cube.offset[2] ).divideScalar( 16 );
 
@@ -4227,6 +5087,48 @@
 
 	/**
 	 *	@author zwubs
+	 */
+
+	let CollisionParser = new function() {
+
+		this.parse = function( json ) {
+
+			let collider = new EntityColliderTemplate();
+
+			// Load Collision Boxes
+			for( const [ id, box ] of Object.entries( json.boxes ) ) {
+
+				let obb = new OrientedBoundingBox();
+
+				if( box.size ) { obb.scale.set( box.size[0] / 16, box.size[1] / 16, box.size[2] / 16 ); }
+
+				if( box.offset ) { obb.position.set( box.offset[0] / 16, box.offset[1] / 16, box.offset[2] / 16 ); }
+
+				if( box.rotation ) { obb.rotation.setFromVector3( new three.Vector3( box.rotation[0], box.rotation[1], box.rotation[2] ).multiplyScalar( Math.PI/180 ) ); }
+
+				obb.update();
+
+				collider.addBox( obb );
+
+			}
+
+			collider.generate();
+
+			// Create Bounding Box
+			// collider.calculateBoundingBox();
+
+			// Create Bounding Sphere
+			// collider.calculateBoundingSphere();
+
+			// Return to EntityTemplate
+			return collider;
+
+		};
+
+	};
+
+	/**
+	 *	@author zwubs
 	 *  // TODO: Add warnings for all functions
 	 */
 
@@ -4235,6 +5137,8 @@
 		constructor() {
 
 			this.eventManager = new EventManager();
+
+			this.eventManager.active = false;
 
 		}
 
@@ -4246,19 +5150,19 @@
 
 		addInputBinding( actionID, binding ) {
 
-			if( binding.split("_")[0] == "KEY" ) {
+			if( binding.startsWith("KEY") ) {
 
-				instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$b.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 			else if( binding.startsWith("MOUSE") ) {
 
-				instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 			else if( binding.startsWith("GAMEPAD") ) {
 
-				instance$8.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 
@@ -4279,8 +5183,6 @@
 	let ActionScriptLoader = new function() {
 
 		this.load = async function( url ) {
-
-			url.substring(0, url.lastIndexOf("/") + 1 );
 
 			let file = await FileLoader.load( url );
 
@@ -4349,6 +5251,7 @@
 		CubeUV: CubeUVParser,
 		EntityModel: EntityModelParser,
 		EntityArmature: EntityArmatureParser,
+		Collision: CollisionParser,
 		Actions: instance$5
 	});
 
@@ -4373,6 +5276,9 @@
 			template.name = json.name;
 
 			if( json.actions ) template.actions = await instance$5.parse( json.actions, json.bindings, baseURL );
+			else template.actions = new Actions();
+
+			if( json.collision ) template.collider = await CollisionParser.parse( json.collision );
 
 			// Load Image & Create Texture
 			template.texture = await TextureLoader.load( baseURL + json.texture );
@@ -4408,16 +5314,6 @@
 		Entity: EntityLoader,
 		ActionScript: ActionScriptLoader
 	});
-
-	/**
-	 *
-	 */
-
-	let DebugElement = document.createElement("div");
-
-	DebugElement.id = "PANIC-Debug";
-
-	Element.appendChild( DebugElement );
 
 	/**
 	 *	@author zwubs
@@ -4601,9 +5497,9 @@
 
 			if( !this.active ) {
 
-				if( instance$e.getObjectByName( this.id ) == null ) {
+				if( instance$f.getObjectByName( this.id ) == null ) {
 
-					instance$e.add( this.mesh );
+					instance$f.add( this.mesh );
 
 				}
 
@@ -4611,9 +5507,9 @@
 
 			else {
 
-				if( instance$e.getObjectByName( this.id ) ) {
+				if( instance$f.getObjectByName( this.id ) ) {
 
-					instance$e.remove( this.mesh );
+					instance$f.remove( this.mesh );
 
 				}
 
@@ -4722,9 +5618,9 @@
 
 			if( !this.active ) {
 
-				if( instance$e.getObjectByName( this.id ) == null ) {
+				if( instance$f.getObjectByName( this.id ) == null ) {
 
-					instance$e.add( this.mesh );
+					instance$f.add( this.mesh );
 
 				}
 
@@ -4732,9 +5628,9 @@
 
 			else {
 
-				if( instance$e.getObjectByName( this.id ) ) {
+				if( instance$f.getObjectByName( this.id ) ) {
 
-					instance$e.remove( this.mesh );
+					instance$f.remove( this.mesh );
 
 				}
 
@@ -4837,7 +5733,7 @@
 
 				DebugElement.appendChild( this.element );
 
-				instance$c.add( this, 15 );
+				instance$d.add( this, 15 );
 
 			}
 
@@ -4845,7 +5741,7 @@
 
 				DebugElement.removeChild( this.element );
 
-				instance$c.remove( this );
+				instance$d.remove( this );
 
 			}
 
@@ -4855,7 +5751,7 @@
 
 			var string = "";
 			var direction = new three.Vector3( 0, 0, 0 );
-			instance$d.getWorldDirection( direction );
+			instance$e.getWorldDirection( direction );
 
 			if( this.state == 0 ) {
 
@@ -4912,15 +5808,142 @@
 	let instance = new Compass();
 
 	/**
+	 *	@author zwubs
+	 *	@todo Cleanup this file
+	 */
+
+	class DebugEntityCollision {
+
+		constructor( entity ) {
+
+			this.entity = entity;
+			this.collider = entity.collider;
+
+			// TODO: Implement Functionality
+			this.status = false;
+
+			this.object = new three.Object3D();
+			instance$f.add( this.object );
+
+			this.meshes = {
+				collision: new three.Object3D(), // Collection of OBBs
+				box: null, // OBB that encapsulates ^
+				sphere: null // Bounding Sphere that encapsulates ^
+			};
+
+			let collisionGeometry = [];
+
+			for( let i = 0; i < this.collider.collision.length; i++ ) {
+
+				this.collider.collision[ i ];
+
+				collisionGeometry.push( Cube.identity() );
+
+				let mesh = new three.LineSegments( collisionGeometry[i], new three.LineBasicMaterial( { color: 0x00FF00 } ) );
+				mesh.matrixAutoUpdate = false;
+				this.meshes.collision.add( mesh );
+
+			}
+
+			// Collision boxes
+			this.object.add( this.meshes.collision );
+
+			// OBB
+			this.meshes.box = new three.LineSegments( Cube.identity(), new three.LineBasicMaterial( { color: 0xFFFF00 } ) );
+			this.meshes.box.matrixAutoUpdate = false;
+			this.object.add( this.meshes.box );
+
+			//	Bounding Sphere - still not sold on this implmentation yet
+			const geometry = new three.CircleGeometry( this.collider.boundingSphere.radius, 64 );
+			const edges = new three.EdgesGeometry( geometry );
+			this.meshes.sphere = new three.LineSegments( edges, new three.LineBasicMaterial( { color: 0xffffff } ) );
+			this.meshes.sphere.matrixAutoUpdate = false;
+			this.object.add( this.meshes.sphere );
+
+		}
+
+		enable() {}
+		disable() {}
+		toggle() {}
+
+		update() {
+
+			// Collision Boxes
+			for( let i = 0; i < this.collider.collision.length; i++ ) {
+
+				this.meshes.collision.children[i].matrix.copy( this.collider.collision[i].matrixWorld );
+
+			}
+
+			// Bounding Box
+			this.meshes.box.matrix.copy( this.collider.boundingBox.matrixWorld );
+
+			// Bounding Sphere
+			let position = new three.Vector3();
+			let scale = new three.Vector3();
+			this.collider.boundingSphere.matrixWorld.decompose( position, new three.Quaternion(), scale );
+			this.meshes.sphere.lookAt( instance$e.getWorldPosition( new three.Vector3 ) );
+			this.meshes.sphere.matrix.compose( position, this.meshes.sphere.quaternion, scale );
+
+		}
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class EntityDebug {
+
+		constructor( entity ) {
+
+			entity.debug = this;
+
+			this.entity = entity;
+
+			this._collision = null;
+
+			instance$d.add( this );
+
+		}
+
+		set collision( bool ) {
+
+			if( bool == true && this._collision == null ) {
+				this._collision = new DebugEntityCollision( this.entity );
+			}
+			else if( bool == false && this._collision != null ) ;
+			else ;
+
+		}
+
+		update() {
+
+			if( this._collision != null ) { this._collision.update(); }
+
+		}
+
+	}
+
+	let EntityDebugFunction = function( entity ) {
+
+		return entity.debug = new EntityDebug( entity );
+
+	};
+
+	/**
 	 *  @author zwubs
 	 */
 
 	var debug = /*#__PURE__*/Object.freeze({
 		__proto__: null,
+		Element: DebugElement,
+		Text: instance$7,
 		Access: instance$3,
 		Grid: instance$2,
 		Axes: instance$1,
 		Compass: instance,
+		Entity: EntityDebugFunction,
 		get enabled () { return enabled; },
 		enable: enable,
 		disable: disable,
@@ -4929,8 +5952,7 @@
 		warn: warn,
 		error: error,
 		clear: clear,
-		style: style,
-		DebugElement: DebugElement
+		style: style
 	});
 
 	/**
@@ -4944,11 +5966,11 @@
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		Version: Version,
-		Scene: instance$e,
-		Camera: instance$d,
-		Renderer: instance$b,
+		Scene: instance$f,
+		Camera: instance$e,
+		Renderer: instance$c,
 		Clock: Clock,
-		Updater: instance$c,
+		Updater: instance$d,
 		Cube: Cube,
 		Texture: Texture,
 		OrbitControls: Controls,
@@ -4961,15 +5983,17 @@
 		Entity: Entity$1,
 		EntityTemplate: EntityTemplate,
 		EntityRegistry: instance$6,
+		Collision: collision,
 		Shaders: shaders,
 		Loaders: loaders,
 		Parsers: parsers,
-		Tools: instance$7,
+		Tools: instance$8,
 		Debug: debug
 	});
 
-	exports.Camera = instance$d;
+	exports.Camera = instance$e;
 	exports.Clock = Clock;
+	exports.Collision = collision;
 	exports.Cube = Cube;
 	exports.Debug = debug;
 	exports.Element = Element;
@@ -4981,15 +6005,15 @@
 	exports.Loaders = loaders;
 	exports.OrbitControls = Controls;
 	exports.Parsers = parsers;
-	exports.Renderer = instance$b;
-	exports.Scene = instance$e;
+	exports.Renderer = instance$c;
+	exports.Scene = instance$f;
 	exports.Shaders = shaders;
 	exports.Texture = Texture;
 	exports.Tile = Tile;
 	exports.TileGroup = TileGroup;
 	exports.Tileset = Tileset;
-	exports.Tools = instance$7;
-	exports.Updater = instance$c;
+	exports.Tools = instance$8;
+	exports.Updater = instance$d;
 	exports.Version = Version;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
