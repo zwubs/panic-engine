@@ -6,7 +6,9 @@ export * from './debug-status.js';
 
 export * from './debug-console.js';
 
-export * from './debug-element.js';
+export { DebugElement as Element } from './debug-element.js';
+
+export { Text } from './debug-text.js';
 
 export { Access } from './debug-access.js';
 
