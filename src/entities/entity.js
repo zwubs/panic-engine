@@ -83,6 +83,7 @@ class Entity {
 		this.matrix.compose( this.position, this.quaternion, this.scale );
 
 		this.collider.update();
+		this.checkCollision();
 
 		this.mesh.matrix.copy( this.matrix );
 

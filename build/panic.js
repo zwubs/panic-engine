@@ -3717,7 +3717,10 @@
 
 		intersectsOBB( obb ) {
 
-			return this.obb.intersectsOBB( obb.obb );
+			let vars = this.obb.intersectsOBB( obb.obb );
+
+			if( vars ) return vars[0].multiplyScalar( vars[ 1 ] );
+			else return false
 
 		}
 
@@ -3931,6 +3934,7 @@
 			this.matrix.compose( this.position, this.quaternion, this.scale );
 
 			this.collider.update();
+			this.checkCollision();
 
 			this.mesh.matrix.copy( this.matrix );
 
@@ -3949,15 +3953,11 @@
 					if( collision ) {
 
 						// distance = ( this.collider.boundingSphere.radius + entity.collider.boundingSphere.radius ) - this.collider.boundingSphere.position.distanceTo( entity.collider.boundingSphere.position ) + 0.001
-
 						// direction.subVectors( this.collider.boundingSphere.position, entity.collider.boundingSphere.position ).normalize();
-
 						// if( direction.equals ( zero ) ) direction = new Vector3( 1, 0, 0 );
-						// console.log( collision[0], collision[1] )
-						this.position.add( collision[0].multiplyScalar( collision[ 1 ] ).multiplyScalar( 0.5 ) );
-						entity.position.add( collision[0].multiplyScalar( collision[ 1 ] ).multiplyScalar( -0.5 ) );
 
-						// Text.set(`${collision[0].toArray()}_______${collision[1]}`);
+						this.position.add( collision.multiplyScalar( 0.5 ) );
+						entity.position.add( collision.multiplyScalar( -0.5 ) );
 
 						this.actions.eventManager.emit("COLLIDE");
 						entity.actions.eventManager.emit("COLLIDE");
