@@ -39,7 +39,7 @@
 
 	}
 
-	const instance$f = new Scene();
+	const instance$g = new Scene();
 
 	/**
 	 *	@author zwubs
@@ -59,7 +59,7 @@
 
 	}
 
-	const instance$e = new Camera();
+	const instance$f = new Camera();
 
 	/**
 	 *	@author zwubs
@@ -373,7 +373,7 @@
 
 	}
 
-	const instance$d = new Updater();
+	const instance$e = new Updater();
 
 	/**
 	 *  @class
@@ -475,7 +475,7 @@
 			this.element = element ? element : Element;
 			this.binding = binding ? binding : window;
 
-			instance$d.add( this );
+			instance$e.add( this );
 
 		}
 
@@ -798,8 +798,8 @@
 
 		onResize( e ) {
 
-			instance$e.aspect = Element.clientWidth / Element.clientHeight;
-			instance$e.updateProjectionMatrix();
+			instance$f.aspect = Element.clientWidth / Element.clientHeight;
+			instance$f.updateProjectionMatrix();
 
 			this.setPixelRatio( window.devicePixelRatio );
 			this.setSize( Element.clientWidth, Element.clientHeight );
@@ -810,7 +810,7 @@
 
 	}
 
-	const instance$c = new Renderer();
+	const instance$d = new Renderer();
 
 	/**
 	 *  @author zwubs
@@ -2184,10 +2184,45 @@
 	 *	@todo Replace using custom input system
 	 */
 
-	let Controls = new OrbitControls( instance$e, Canvas );
+	let Controls = new OrbitControls( instance$f, Canvas );
 
 	Controls.traget = new three.Vector3( 0, 0, 0);
 	Controls.update();
+
+	/**
+	 *	@author zwubs
+	 *	@description functions that are used throughout the PANIC Engine
+	 */
+
+	class Maths {
+
+		constructor() {}
+
+		/**
+		 *	@description
+		 *	@param { Number } x
+		 *	@param { Number } a
+		 *	@param { Number } b
+		 */
+		lerp( x, a, b ) { return x * ( b - a ) + a; }
+
+		/**
+		 *	@description
+		 *	@param { Number } x
+		 *	@param { Number } a
+		 *	@param { Number } b
+		 */
+		clamp( x, a, b ) { return Math.min( Math.max( x, a ), b ); }
+
+		/**
+		 *	@description
+		 *	@param { Number } x
+		 */
+		sat( x ) { return Math.min( Math.max( x, 0.0 ), 1.0 ); }
+
+	}
+
+	let instance$c = new Maths();
 
 	/**
 	 *	@typedef {Object} PANIC.Tileset.Tile
@@ -3113,6 +3148,251 @@
 	});
 
 	/**
+	 *	@author zwubs
+	 *	@reference simondevyoutube
+	 */
+
+	class Client {
+
+		constructor( position, dimensions ) {
+
+			this.position = position;
+			this.dimensions = dimensions;
+			this.cells = new Cell();
+			this.queryId = -1;
+
+		}
+
+	}
+
+	class Cell {
+
+		consturctor() {
+
+			this.min = null;
+			this.max = null;
+			this.nodes = null;
+
+		}
+
+	}
+
+	class SpatialHashGrid {
+
+		/**
+		 *	@description
+		 *	@param { Number[2][3] } bounds
+		 *	@param { Number[3] } dimensions
+		 */
+		constructor( bounds, dimensions ) {
+
+			const [ x, y, z ] = dimensions;
+
+			this.cells = [ ...Array( x ) ].map( _ => [ ...Array( y ) ].map( _ => [ ...Array( z ) ].map( _ => ( null ) ) ) );
+			this.dimensions = dimensions;
+			this.bounds = bounds;
+			this.queryIds = 0;
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { Array } position
+		 */
+		getCellIndex( position ) {
+
+			const x = MathFunctions.sat( ( position[0] - this.bounds[0][0] ) / ( this.bounds[1][0] - this.bounds[0][0] ) );
+			const y = MathFunctions.sat( ( position[1] - this.bounds[0][1] ) / ( this.bounds[1][1] - this.bounds[0][1] ) );
+			const z = MathFunctions.sat( ( position[2] - this.bounds[0][2] ) / ( this.bounds[1][2] - this.bounds[0][2] ) );
+
+			const xIndex = Math.floor( x * ( this.dimensions[ 0 ] - 1 ) );
+			const yIndex = Math.floor( y * ( this.dimensions[ 1 ] - 1 ) );
+			const zIndex = Math.floor( z * ( this.dimensions[ 2 ] - 1 ) );
+
+			return [ xIndex, yIndex, zIndex ];
+
+		}
+
+		/**
+		 *	@description
+		 *	@param {} position
+		 *	@param {} dimensions
+		 */
+		newClient( position, dimensions ) {
+
+			const client = new Client( position, dimensions );
+
+			this.insertClient( client );
+
+			return client;
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { Client } client
+		 */
+		updateClient( client ) {
+
+			const [ x, y, z ] = client.position;
+			const [ w, h, d ] = client.dimensions;
+
+			const i1 = this.getCellIndex( [ x - w / 2, y - h / 2 ] );
+			const i2 = this.getCellIndex( [ x + w / 2, y + h / 2 ] );
+
+			if( client.cells.min[0] == i1[0] &&
+				client.cells.min[1] == i1[1] &&
+				client.cells.max[0] == i2[0] &&
+				client.cells.max[1] == i2[1] ) { return; }
+
+			this.removeClient( client );
+			this.insertClient( client );
+
+		}
+
+		/**
+		 *	@description
+		 *	@param {} position
+		 *	@param {} bounds
+		 */
+		findNear( position, bounds ) {
+
+			const [ x, y, z ] = position;
+			const [ w, h, d ] = bounds;
+
+			const i1 = this.getCellIndex( [ x - w / 2, y - h / 2 ] );
+			const i2 = this.getCellIndex( [ x + w / 2, y + h / 2 ] );
+
+			const clients = [];
+			const queryId = this.queryIds++;
+
+			for( let x = i1[ 0 ], xn = i2[ 0 ]; x <= xn; ++x ) {
+				for( let y = i1[ 1 ], yn = i2[ 1 ]; y <= yn; ++y ) {
+					for( let z = i1[ 2 ], zn = i2[ 2 ]; z <= zn; ++z ) {
+
+						let head = this.cells[ x ][ y ][ z ];
+
+						while( head ) {
+
+							const v = head.client;
+							head = head.next;
+
+							if( v.queryId != queryId ) {
+
+								v.queryId = queryId;
+
+								clients.push( v );
+
+							}
+						}
+					}
+				}
+			}
+
+			return clients;
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { Client } client
+		 */
+		insertClient( client ) {
+
+			const [ x, y, z ] = client.position;
+			const [ w, h, d ] = client.dimensions;
+
+			const i1 = this.getCellIndex( [ x - w / 2, y - h / 2 ] );
+			const i2 = this.getCellIndex( [ x + w / 2, y + h / 2 ] );
+
+			const nodes = [];
+
+			for( let x = i1[ 0 ], xn = i2[ 0 ]; x <= xn; ++x ) {
+
+				nodes.push( [] );
+
+				for( let y = i1[ 1 ], yn = i2[ 1 ]; y <= yn; ++y ) {
+
+					const xi = x - i1[ 0 ];
+
+					nodes[ xi ].push( [] );
+
+					for( let z = i1[ 2 ], zn = i2[ 2 ]; z <= zn; ++z ) {
+
+						const yi = y - i1[ 1 ];
+
+						const head = {
+							next: null,
+							prev: null,
+							client: client
+						};
+
+						nodes[ xi ][ yi ].push( head );
+
+						head.next = this.cells[ x ][ y ];
+						if( this.cells[ x ][ y ][ z ] ) this.cells[ x ][ y ].prev = head;
+
+						this.cells[ x ][ y ][ z ] = head;
+
+					}
+				}
+			}
+
+			client.cells.min = i1;
+			client.cells.max = i2;
+			client.cells.ndoes = nodes;
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { Client } client
+		 */
+		removeClient( client ) {
+
+			const i1 = client.cells.min;
+			const i2 = client.cells.max;
+
+			for( let x = i1[ 0 ], xn = i2[ 0 ]; x <= xn; ++x ) {
+
+				const xi = x - i1[ 0 ];
+
+				for( let y = i1[ 1 ], yn = i2[ 1 ]; y <= yn; ++y ) {
+
+					const yi = y - i1[ 1 ];
+
+					for( let z = i1[ 2 ], zn = i2[ 2 ]; z <= zn; ++z ) {
+
+						const zi = z - i1[ 2 ];
+
+						const node = client.cells.nodes[ xi ][ yi ][ zi ];
+
+						if( node.next ) node.next.prev = node.prev;
+						if( node.prev ) node.prev.next = node.next;
+						if( !node.prev ) this.cells[ x ][ y ][ z ] = node.next;
+
+					}
+				}
+			}
+
+			client.cells.min = null;
+			client.cells.max = null;
+			client.cells.nodes = null;
+
+		}
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
+	var dataStructures = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		SpatialHashGrid: SpatialHashGrid
+	});
+
+	/**
 	 *   @namespace PANIC.Tools
 	 */
 
@@ -3903,7 +4183,7 @@
 			// Bind skeleton to mesh
 			// this.mesh.bind( this.skeleton );
 
-			instance$f.add( this.mesh );
+			instance$g.add( this.mesh );
 
 			// Entity collision
 			this.collider = new EntityCollider( this );
@@ -3920,7 +4200,7 @@
 			// Debug variables
 			this.debug = null;
 
-			instance$d.add( this );
+			instance$e.add( this );
 
 		}
 
@@ -5497,9 +5777,9 @@
 
 			if( !this.active ) {
 
-				if( instance$f.getObjectByName( this.id ) == null ) {
+				if( instance$g.getObjectByName( this.id ) == null ) {
 
-					instance$f.add( this.mesh );
+					instance$g.add( this.mesh );
 
 				}
 
@@ -5507,9 +5787,9 @@
 
 			else {
 
-				if( instance$f.getObjectByName( this.id ) ) {
+				if( instance$g.getObjectByName( this.id ) ) {
 
-					instance$f.remove( this.mesh );
+					instance$g.remove( this.mesh );
 
 				}
 
@@ -5618,9 +5898,9 @@
 
 			if( !this.active ) {
 
-				if( instance$f.getObjectByName( this.id ) == null ) {
+				if( instance$g.getObjectByName( this.id ) == null ) {
 
-					instance$f.add( this.mesh );
+					instance$g.add( this.mesh );
 
 				}
 
@@ -5628,9 +5908,9 @@
 
 			else {
 
-				if( instance$f.getObjectByName( this.id ) ) {
+				if( instance$g.getObjectByName( this.id ) ) {
 
-					instance$f.remove( this.mesh );
+					instance$g.remove( this.mesh );
 
 				}
 
@@ -5733,7 +6013,7 @@
 
 				DebugElement.appendChild( this.element );
 
-				instance$d.add( this, 15 );
+				instance$e.add( this, 15 );
 
 			}
 
@@ -5741,7 +6021,7 @@
 
 				DebugElement.removeChild( this.element );
 
-				instance$d.remove( this );
+				instance$e.remove( this );
 
 			}
 
@@ -5751,7 +6031,7 @@
 
 			var string = "";
 			var direction = new three.Vector3( 0, 0, 0 );
-			instance$e.getWorldDirection( direction );
+			instance$f.getWorldDirection( direction );
 
 			if( this.state == 0 ) {
 
@@ -5823,7 +6103,7 @@
 			this.status = false;
 
 			this.object = new three.Object3D();
-			instance$f.add( this.object );
+			instance$g.add( this.object );
 
 			this.meshes = {
 				collision: new three.Object3D(), // Collection of OBBs
@@ -5882,7 +6162,7 @@
 			let position = new three.Vector3();
 			let scale = new three.Vector3();
 			this.collider.boundingSphere.matrixWorld.decompose( position, new three.Quaternion(), scale );
-			this.meshes.sphere.lookAt( instance$e.getWorldPosition( new three.Vector3 ) );
+			this.meshes.sphere.lookAt( instance$f.getWorldPosition( new three.Vector3 ) );
 			this.meshes.sphere.matrix.compose( position, this.meshes.sphere.quaternion, scale );
 
 		}
@@ -5903,7 +6183,7 @@
 
 			this._collision = null;
 
-			instance$d.add( this );
+			instance$e.add( this );
 
 		}
 
@@ -5966,20 +6246,22 @@
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		Version: Version,
-		Scene: instance$f,
-		Camera: instance$e,
-		Renderer: instance$c,
+		Scene: instance$g,
+		Camera: instance$f,
+		Renderer: instance$d,
 		Clock: Clock,
-		Updater: instance$d,
+		Updater: instance$e,
 		Cube: Cube,
 		Texture: Texture,
 		OrbitControls: Controls,
 		Element: Element,
+		Maths: instance$c,
 		Tile: Tile,
 		TileGroup: TileGroup,
 		Tileset: Tileset,
 		EventManager: EventManager,
 		Input: input,
+		DataStructures: dataStructures,
 		Entity: Entity$1,
 		EntityTemplate: EntityTemplate,
 		EntityRegistry: instance$6,
@@ -5991,10 +6273,11 @@
 		Debug: debug
 	});
 
-	exports.Camera = instance$e;
+	exports.Camera = instance$f;
 	exports.Clock = Clock;
 	exports.Collision = collision;
 	exports.Cube = Cube;
+	exports.DataStructures = dataStructures;
 	exports.Debug = debug;
 	exports.Element = Element;
 	exports.Entity = Entity$1;
@@ -6003,17 +6286,18 @@
 	exports.EventManager = EventManager;
 	exports.Input = input;
 	exports.Loaders = loaders;
+	exports.Maths = instance$c;
 	exports.OrbitControls = Controls;
 	exports.Parsers = parsers;
-	exports.Renderer = instance$c;
-	exports.Scene = instance$f;
+	exports.Renderer = instance$d;
+	exports.Scene = instance$g;
 	exports.Shaders = shaders;
 	exports.Texture = Texture;
 	exports.Tile = Tile;
 	exports.TileGroup = TileGroup;
 	exports.Tileset = Tileset;
 	exports.Tools = instance$8;
-	exports.Updater = instance$d;
+	exports.Updater = instance$e;
 	exports.Version = Version;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
