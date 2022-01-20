@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+	<head>
+
+		<meta charset="utf-8">
+
+		<title>Spatial Hash Grid Test</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="icon" type="image/png" href="../logo.png"/>
+
+		<style media="screen">
+
+			body {
+
+				width: 100vw;
+				height: 100vh;
+
+				margin: 0;
+
+				overflow: hidden;
+
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<script src="../../lib/three.js"></script>
+
+		<script src="../../build/panic.js"></script>
+
+		<script>
+
+		let math = {
+
+			rand_range: function(a, b) {
+				return Math.random() * (b - a) + a;
+			},
+
+			rand_normalish: function() {
+				const r = Math.random() + Math.random() + Math.random() + Math.random();
+				return (r / 4.0) * 2.0 - 1;
+			},
+
+			rand_int: function(a, b) {
+				return Math.round(Math.random() * (b - a) + a);
+			},
+
+			lerp: function(x, a, b) {
+				return x * (b - a) + a;
+			},
+
+			smoothstep: function(x, a, b) {
+				x = x * x * (3.0 - 2.0 * x);
+				return x * (b - a) + a;
+			},
+
+			smootherstep: function(x, a, b) {
+				x = x * x * x * (x * (x * 6 - 15) + 10);
+				return x * (b - a) + a;
+			},
+
+			clamp: function(x, a, b) {
+				return Math.min(Math.max(x, a), b);
+			},
+
+			sat: function(x) {
+				return Math.min(Math.max(x, 0.0), 1.0);
+			}
+
+		};
+
+		</script>
+
+		<script>
+
+			const _NUM_CLIENTS = 100000;
+			const _ITERATIONS = 10000;
+
+			const _CLIENT_BOUNDS = [[-1000.0, -1000.0, -1000.0], [1000.0, 1000.0, 1000.0]];
+			const _CLIENT_DIMENSIONS = [100, 100, 100];
+
+			const _CLIENT_POSITIONS = [];
+			for (let i = 0; i < _NUM_CLIENTS; ++i) {
+			  _CLIENT_POSITIONS.push(
+				  [
+					  math.rand_range(_CLIENT_BOUNDS[0][0], _CLIENT_BOUNDS[1][0]),
+					  math.rand_range(_CLIENT_BOUNDS[0][1], _CLIENT_BOUNDS[1][1]),
+					  math.rand_range(_CLIENT_BOUNDS[0][1], _CLIENT_BOUNDS[1][1])
+				  ]);
+			}
+
+			const _CLIENT_QUERIES = [];
+			for (let i = 0; i < _ITERATIONS; ++i) {
+			  const p = [
+				  math.rand_range(_CLIENT_BOUNDS[0][0], _CLIENT_BOUNDS[1][0]),
+				  math.rand_range(_CLIENT_BOUNDS[0][1], _CLIENT_BOUNDS[1][1]),
+				  math.rand_range(_CLIENT_BOUNDS[0][1], _CLIENT_BOUNDS[1][2])
+			  ];
+
+			  _CLIENT_QUERIES.push(p);
+			}
+
+			const _CLIENT_MOVES = [];
+			for (let i = 0; i < _NUM_CLIENTS; ++i) {
+			  const p = [
+				  Math.random(),
+				  Math.random(),
+				  Math.random()];
+
+			  _CLIENT_MOVES.push(p);
+			}
+
+			class GridTester {
+			  constructor(gridClass) {
+				this._grid = new gridClass(_CLIENT_BOUNDS, _CLIENT_DIMENSIONS);
+
+				this._clients = [];
+				for (let i = 0; i < _NUM_CLIENTS; ++i) {
+				  const client = this._grid.newClient(
+					  _CLIENT_POSITIONS[i], [15, 15, 15]
+				  );
+				  this._clients.push(client);
+				}
+			  }
+
+			  Test_FindNearby() {
+				const queryBounds = [15, 15, 15];
+
+				let startTime = performance.now();
+				for (let i = 0; i < _ITERATIONS; ++i) {
+				  this._grid.findNear(_CLIENT_QUERIES[i], queryBounds);
+				}
+				let totalTime = performance.now() - startTime;
+				return totalTime;
+			  }
+
+			  Test_Update() {
+				for (let i = 0; i < this._clients.length; ++i) {
+				  const c = this._clients[i];
+				  c.position[0] = _CLIENT_POSITIONS[i][0];
+				  c.position[1] = _CLIENT_POSITIONS[i][1];
+				  c.position[2] = _CLIENT_POSITIONS[i][2];
+				  this._grid.updateClient(this._clients[i]);
+				}
+
+				let startTime = performance.now();
+				for (let i = 0; i < this._clients.length; ++i) {
+				  const c = this._clients[i];
+				  c.position[0] += _CLIENT_MOVES[i][0];
+				  c.position[1] += _CLIENT_MOVES[i][1];
+				  c.position[2] += _CLIENT_MOVES[i][2];
+				  this._grid.updateClient(this._clients[i]);
+				}
+				let totalTime = performance.now() - startTime;
+
+				return totalTime;
+			  }
+			}
+
+
+			const grid = new GridTester( PANIC.DataStructures.SpatialHashGrid );
+
+			console.log('Spatial Grid - FindNearby: ' + grid.Test_FindNearby() + 'ms');
+			console.log('----------------------------------');
+			console.log('Spatial Grid - FindNearby: ' + grid.Test_FindNearby() + 'ms');
+
+			console.log('----------------------------------');
+			console.log('----------------------------------');
+
+			console.log('Spatial Grid - Update: ' + grid.Test_Update() + 'ms');
+			console.log('----------------------------------');
+			console.log('Spatial Grid - Update: ' + grid.Test_Update() + 'ms');
+
+		</script>
+
+	</body>
+
+</html>
