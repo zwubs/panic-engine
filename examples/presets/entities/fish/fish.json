@@ -19,15 +19,16 @@
 		},
 
 		"fin": {
-			"default": { "x": 1, "y": 0, "w": 2, "h": 1 }
+			"all": { "x": 1, "y": 0, "w": 2, "h": 1 },
+			"west": { "t": { "flipX": true } }
 		},
 
 		"pelvic-fin": {
-			"default": { "x": 0, "y": 0, "w": 1, "h": 1 }
+			"all": { "x": 0, "y": 0, "w": 1, "h": 1 }
 		},
 
 		"tail": {
-			"default": { "x": 0, "y": 0, "w": 3, "h": 2 },
+			"all": { "x": 0, "y": 0, "w": 3, "h": 2 },
 			"west": { "t": { "flipX": true } }
 		}
 
