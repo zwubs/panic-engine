@@ -11,6 +11,13 @@ npm start
 ```
 
 ## Version 0.0.3
+**The Collision Update**
+- Add BoundingSphere to entities.
+- Add OrientedBoundingBox to entities.
+- Add collision json format to entity files.
+- Add very basic physics.
+
+## Version 0.0.3
 **The Input Update**
 - Add keyboard, mouse, and gamepad input.
 - Add scripting to entities.

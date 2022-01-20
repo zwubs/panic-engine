@@ -5961,7 +5961,7 @@
 	 *	@todo Decide what actually needs to be visible to the user.
 	 */
 
-	let Version = "0.0.3";
+	let Version = "0.0.4";
 
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,

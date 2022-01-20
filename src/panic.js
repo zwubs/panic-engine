@@ -4,7 +4,7 @@
  *	@todo Decide what actually needs to be visible to the user.
  */
 
-export let Version = "0.0.3";
+export let Version = "0.0.4";
 
 /**
  *	@filespace {CORE}
