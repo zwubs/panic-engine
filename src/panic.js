@@ -37,6 +37,11 @@ export { Maths } from './core/maths.js';
 	 */
 	export * as Input from './core/input/input.js';
 
+	/**
+	 *	@filespace {CORE/DATA STRUCTURES}
+	 */
+	 export * as DataStructures from './core/data-structures/data-structures.js'
+
 
 /**
  *	@filespace {ENTITIES}
