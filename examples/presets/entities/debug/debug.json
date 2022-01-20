@@ -8,7 +8,7 @@
 	"tileset": {
 
 		"main": {
-			"default": { "x": 16, "y": 16, "w": 16, "h": 16 },
+			"all": { "x": 16, "y": 16, "w": 16, "h": 16 },
 			"north": { },
 			"south": { "x": 48 },
 			"east": { "x": 0 },
@@ -24,13 +24,41 @@
 			"name": "root",
 			"cubes": [
 				{
-					"size": [ 16, 16, 16 ],
+					"size": [ 8, 8, 8 ],
+					"offset": [ 0, 0, 0 ],
 					"faces": "main"
 				}
 			]
 		}
 	],
 
-	"actions": {}
+	"actions": {
+
+		"INIT": "./scripts/init.js",
+		"UPDATE": "./scripts/update.js",
+
+		"MOVE_FORWARD": "./scripts/move-forward.js",
+		"MOVE_BACKWARD": "./scripts/move-backward.js",
+		"MOVE_LEFT": "./scripts/move-left.js",
+		"MOVE_RIGHT": "./scripts/move-right.js"
+
+	},
+
+	"bindings": {
+
+		"MOVE_FORWARD": [ "KEY_HELD_W" ],
+		"MOVE_BACKWARD": [ "KEY_HELD_S" ],
+		"MOVE_LEFT": [ "KEY_HELD_A" ],
+		"MOVE_RIGHT": [ "KEY_HELD_D" ]
+
+	},
+
+	"collision": {
+		"boxes": {
+			"default": {
+				"size": [ 8, 8, 8 ]
+			}
+		}
+	}
 
 }
