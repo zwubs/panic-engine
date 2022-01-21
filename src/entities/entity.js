@@ -83,41 +83,8 @@ class Entity {
 		this.matrix.compose( this.position, this.quaternion, this.scale );
 
 		this.collider.update();
-		this.checkCollision();
 
 		this.mesh.matrix.copy( this.matrix );
-
-	}
-
-	checkCollision() {
-
-		let distance = 0;
-		let direction = new Vector3()
-		let zero = new Vector3();
-
-		for( const [id,entity] of Object.entries( PANIC.EntityRegistry.entities ) ) {
-
-			if( this.uuid != id && this.actions.eventManager.hasEvent("COLLIDE") ) {
-
-				let collision = this.collider.isColliding( entity.collider )
-
-				if( collision ) {
-
-					// distance = ( this.collider.boundingSphere.radius + entity.collider.boundingSphere.radius ) - this.collider.boundingSphere.position.distanceTo( entity.collider.boundingSphere.position ) + 0.001
-					// direction.subVectors( this.collider.boundingSphere.position, entity.collider.boundingSphere.position ).normalize();
-					// if( direction.equals ( zero ) ) direction = new Vector3( 1, 0, 0 );
-
-					this.position.add( collision.multiplyScalar( 0.5 ) );
-					entity.position.add( collision.multiplyScalar( -0.5 ) );
-
-					this.actions.eventManager.emit("COLLIDE");
-					entity.actions.eventManager.emit("COLLIDE");
-
-				}
-
-			}
-
-		}
 
 	}
 

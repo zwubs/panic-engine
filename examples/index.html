@@ -45,18 +45,19 @@
 
 			try {
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
+				PANIC.Entities.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
 
-					Fish = PANIC.EntityTemplateRegistry.spawnEntity( template.id );
+					Fish = PANIC.Entities.spawn( template.id );
 					Fish.position.set( 0.5, 0, 0 );
 
 					// PANIC.Debug.Entity( Fish ).collision = true;
 
 				});
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/angel-fish.json" ).then( ( template ) => {
+				PANIC.Entities.load( "./presets/entities/fish/angel-fish.json" ).then( ( template ) => {
 
-					AngelFish = PANIC.EntityTemplateRegistry.spawnEntity( template.id );
+					AngelFish = PANIC.Entities.spawn( template.id );
+					AngelFish.position.set( 0.5, 0, 0 );
 
 					// PANIC.Debug.Entity( AngelFish ).collision = true;
 
@@ -78,9 +79,6 @@
 					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
 					PANIC.Updater.update();
-
-					if( AngelFish ) AngelFish.checkCollision();
-					if( Fish ) Fish.checkCollision();
 
 					requestAnimationFrame( Loop );
 

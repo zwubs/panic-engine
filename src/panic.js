@@ -47,6 +47,7 @@ export { Maths } from './core/maths.js';
  *	@filespace {ENTITIES}
  */
 export { Entity } from './entities/entity.js';
+export { Entities } from './entities/entities.js';
 export { EntityTemplate } from './entities/entity-template.js';
 export { EntityTemplateRegistry } from './entities/entity-template-registry.js';
 
