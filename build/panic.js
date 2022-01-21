@@ -28,7 +28,7 @@
 			dirLight.shadow.camera.near = 0.01;
 			dirLight.shadow.camera.far = 25;
 
-			dirLight.shadow.bias = -0.001;
+			dirLight.shadow.bias = -0.0005;
 
 			dirLight.position.set( 0.5, 1, -0.75 );
 			dirLight.position.multiplyScalar( 3 );
@@ -39,7 +39,7 @@
 
 	}
 
-	const instance$g = new Scene();
+	const instance$h = new Scene();
 
 	/**
 	 *	@author zwubs
@@ -59,7 +59,7 @@
 
 	}
 
-	const instance$f = new Camera();
+	const instance$g = new Camera();
 
 	/**
 	 *	@author zwubs
@@ -373,7 +373,7 @@
 
 	}
 
-	const instance$e = new Updater();
+	const instance$f = new Updater();
 
 	/**
 	 *  @class
@@ -475,7 +475,7 @@
 			this.element = element ? element : Element;
 			this.binding = binding ? binding : window;
 
-			instance$e.add( this );
+			instance$f.add( this );
 
 		}
 
@@ -778,7 +778,7 @@
 			super( { canvas: Canvas } );
 
 			this.shadowMap.enabled = true;
-			this.shadowMap.type = three.BasicShadowMap;
+			this.shadowMap.type = three.PCFShadowMap;
 
 			this.outputEncoding = three.sRGBEncoding;
 
@@ -798,8 +798,8 @@
 
 		onResize( e ) {
 
-			instance$f.aspect = Element.clientWidth / Element.clientHeight;
-			instance$f.updateProjectionMatrix();
+			instance$g.aspect = Element.clientWidth / Element.clientHeight;
+			instance$g.updateProjectionMatrix();
 
 			this.setPixelRatio( window.devicePixelRatio );
 			this.setSize( Element.clientWidth, Element.clientHeight );
@@ -810,7 +810,7 @@
 
 	}
 
-	const instance$d = new Renderer();
+	const instance$e = new Renderer();
 
 	/**
 	 *  @author zwubs
@@ -2184,7 +2184,7 @@
 	 *	@todo Replace using custom input system
 	 */
 
-	let Controls = new OrbitControls( instance$f, Canvas );
+	let Controls = new OrbitControls( instance$g, Canvas );
 
 	Controls.traget = new three.Vector3( 0, 0, 0);
 	Controls.update();
@@ -2222,7 +2222,7 @@
 
 	}
 
-	let instance$c = new Maths();
+	let instance$d = new Maths();
 
 	/**
 	 *	@typedef {Object} PANIC.Tileset.Tile
@@ -2695,7 +2695,7 @@
 
 	}
 
-	const instance$b = new Keyboard();
+	const instance$c = new Keyboard();
 
 	const MouseButtonCodes = {
 		L: 0,
@@ -3008,7 +3008,7 @@
 
 	}
 
-	const instance$a = new Mouse();
+	const instance$b = new Mouse();
 
 	/**
 	 *  @reference https://github.com/vaalentin/keycodes
@@ -3134,7 +3134,7 @@
 
 	}
 
-	const instance$9 = new Gamepad();
+	const instance$a = new Gamepad();
 
 	/**
 	 *	@author zwubs
@@ -3142,9 +3142,9 @@
 
 	var input = /*#__PURE__*/Object.freeze({
 		__proto__: null,
-		Keyboard: instance$b,
-		Mouse: instance$a,
-		Gamepad: instance$9
+		Keyboard: instance$c,
+		Mouse: instance$b,
+		Gamepad: instance$a
 	});
 
 	/**
@@ -3434,7 +3434,7 @@
 		}
 
 	}
-	let instance$8 = new Tools();
+	let instance$9 = new Tools();
 
 	/**
 	 *	@author zwubs
@@ -4137,7 +4137,7 @@
 
 	}
 
-	let instance$7 = new Text();
+	let instance$8 = new Text();
 
 	/**
 	 *	@typedef {Object} PANIC.Entity
@@ -4149,7 +4149,7 @@
 		constructor( template ) {
 
 			// Unique Entity Identifier
-			this.uuid = instance$8.generateUUID();
+			this.uuid = instance$9.generateUUID();
 
 			// Assign template for future access
 			this.template = template;
@@ -4183,7 +4183,7 @@
 			// Bind skeleton to mesh
 			// this.mesh.bind( this.skeleton );
 
-			instance$g.add( this.mesh );
+			instance$h.add( this.mesh );
 
 			// Entity collision
 			this.collider = new EntityCollider( this );
@@ -4200,7 +4200,7 @@
 			// Debug variables
 			this.debug = null;
 
-			instance$e.add( this );
+			instance$f.add( this );
 
 		}
 
@@ -4214,39 +4214,8 @@
 			this.matrix.compose( this.position, this.quaternion, this.scale );
 
 			this.collider.update();
-			this.checkCollision();
 
 			this.mesh.matrix.copy( this.matrix );
-
-		}
-
-		checkCollision() {
-			new three.Vector3();
-			new three.Vector3();
-
-			for( const [id,entity] of Object.entries( PANIC.EntityRegistry.entities ) ) {
-
-				if( this.uuid != id && this.actions.eventManager.hasEvent("COLLIDE") ) {
-
-					let collision = this.collider.isColliding( entity.collider );
-
-					if( collision ) {
-
-						// distance = ( this.collider.boundingSphere.radius + entity.collider.boundingSphere.radius ) - this.collider.boundingSphere.position.distanceTo( entity.collider.boundingSphere.position ) + 0.001
-						// direction.subVectors( this.collider.boundingSphere.position, entity.collider.boundingSphere.position ).normalize();
-						// if( direction.equals ( zero ) ) direction = new Vector3( 1, 0, 0 );
-
-						this.position.add( collision.multiplyScalar( 0.5 ) );
-						entity.position.add( collision.multiplyScalar( -0.5 ) );
-
-						this.actions.eventManager.emit("COLLIDE");
-						entity.actions.eventManager.emit("COLLIDE");
-
-					}
-
-				}
-
-			}
 
 		}
 
@@ -4504,277 +4473,78 @@
 	 *	@object
 	 */
 
-	class EntityRegistry {
+	class EntityTemplateRegistry {
 
 		constructor() {
 
-			this.data = [];
-
-			this.entities = {};
-
-		}
-
-		getEntityByName( name ) { return this.data.find( o => o.name == name ); }
-		getEntityByID( id ) { return this.data.find( o => o.id == id ); }
-
-		/**
-		 *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
-		 */
-		registerEntity( template ) {
-
-			if( this.getEntityByID( template.id ) == undefined ) this.data.push( template );
-
-			else warn("Entity \"" + entity.id + "\" is already registered");
+			this.data = {};
 
 		}
 
 		/**
-		 *	@param {String} id
+		 *	@description
+		 *  @param { String } id
 		 */
-		unregisterEntity( id ) {
+		getEntityTemplateByID( id ) {
 
-			if( this.getEntityByID( template.id ) != undefined ) delete this.getEntityByID( template.id );
+			if( id in this.data ) return this.data[ id ];
+
+			warn(`getEntityByID(): Entity '${id}' doesn't exist`);
+
+			return undefined;
 
 		}
 
 		/**
-		 *	@param {String} id
+		 *	@description
+		 *  @param { String } id
 		 */
-		spawnEntity( id ) {
+		doesEntityExist( id ) {
 
-			if( this.getEntityByID( id ) != undefined ) {
+			if( id in this.data ) return true;
+			else return false;
 
-				let entity = this.getEntityByID( id ).spawnEntity();
+		}
 
-				return this.entities[ entity.uuid ] = entity;
+		/**
+		 *	@description
+		 *  @param { EntityTemplate } template - The template of the template to register
+		 *	@returns { EntityTemplate }
+		 */
+		registerEntityTemplate( template ) {
+
+			let id = template.id;
+
+			if( !( template instanceof EntityTemplate ) ) {
+
+				warn(`registerEntityTemplate(): '${ id }' isn't an EntityTemplate`);
+
+				return undefined;
 
 			}
+
+			if( !( this.doesEntityExist( id ) ) ) return this.data[ id ] = template;
+
+			warn(`registerEntityTemplate(): Entity '${ id }' already exists`);
+
+			return undefined;
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { String } id
+		 */
+		unregisterEntityTemplate( id ) {
+
+			if( this.doesEntityExist( id ) ) delete this.data[ id ];
+
+			else warn(`unregisterEntityTemplate(): Entity '${ id }' doesn't exists`);
 
 		}
 
 	}
-	let instance$6 = new EntityRegistry();
-
-	/**
-	 *	@author zwubs
-	 */
-
-	class EntityColliderTemplate {
-
-		constructor() {
-
-			this.boundingSphere = new BoundingSphere();
-			this.boundingBox = new OrientedBoundingBox();
-			this.collision = [];
-
-		}
-
-		addBox( box ) {
-
-			this.collision.push( box );
-
-		}
-
-		generate() {
-
-			// Bounding Box
-			let min = new three.Vector3( +Infinity, +Infinity, +Infinity );
-			let max = new three.Vector3( -Infinity, -Infinity, -Infinity );
-
-			let vec = new three.Vector3();
-
-			for( let box of this.collision ) {
-
-				let positions = new Float32Array( [ 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5 ] );
-				let verticies = new three.BufferAttribute( positions, 3 );
-				verticies.applyMatrix4( box.matrix );
-
-				for( let i = 0; i < 8; i++ ) {
-
-					vec.fromBufferAttribute( verticies, i );
-
-					min.min( vec );
-					max.max( vec );
-
-				}
-
-			}
-
-			this.boundingBox.position.addVectors( min, max ).multiplyScalar( 0.5 );
-			this.boundingBox.scale.subVectors( max, min );
-			this.boundingBox.update();
-
-			// Bounding Sphere
-			this.boundingSphere.center.copy( this.boundingBox.position );
-			this.boundingSphere.radius = this.boundingSphere.center.distanceTo( min ) > this.boundingSphere.center.distanceTo( max ) ? this.boundingSphere.center.distanceTo( min ) : this.boundingSphere.center.distanceTo( max );
-			this.boundingSphere.update();
-		}
-
-		generateCollider( entity ) {
-
-			return new EntityCollider.fromTemplate( this, entity );
-
-		}
-
-	}
-
-	/**
-	 *  @author zwubs
-	 */
-
-	var collision = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		EntityCollider: EntityCollider,
-		EntityColliderTemplate: EntityColliderTemplate,
-		BoundingSphere: BoundingSphere
-	});
-
-	/**
-	 *	@namespace PANIC.Shaders.DebugAxes
-	 *	@author zwubs
-	 */
-	let DebugAxes = {
-
-		uniforms: {
-
-			uDistance: { value: 100.0 },
-
-		},
-
-		vertex: `
-
-		uniform float uDistance;
-
-		attribute float opacity;
-
-		varying vec3 vColor;
-		varying float vOpacity;
-		varying vec3 worldPosition;
-
-		void main() {
-
-			vColor.xyz = color.xyz;
-			vOpacity = opacity;
-
-			vec3 transformed = position.xzy * ( uDistance + distance( cameraPosition.xyz, worldPosition.xyz ) );
-
-			worldPosition = transformed;
-
-			gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
-
-		}
-
-	`,
-
-		fragment: `
-
-		uniform float uDistance;
-
-		varying vec3 vColor;
-		varying float vOpacity;
-		varying vec3 worldPosition;
-
-		void main() {
-
-			float d = 1.0 - min( distance( cameraPosition.xyz, worldPosition.xyz ) / uDistance, 1.0 );
-
-			gl_FragColor = vec4( vColor, vOpacity * pow( d, 3.0 ) );
-
-			if ( gl_FragColor.a <= 0.0 ) discard;
-
-		}
-
-	`
-
-	};
-
-	/**
-	 *	@namespace PANIC.Shaders.DebugGrid
-	 *	@author zwubs
-	 *	Based heavily off of https://github.com/Fyrestar/THREE.InfiniteGridHelper
-	 *	@todo Use fog variables instead of distance
-	 */
-
-	let DebugGrid = {
-
-		uniforms: {
-
-			uColor: { value: new three.Color( 0x000000 ) },
-
-			uScale: { value: 1.0 },
-			uSubdivisions: { value: 1.0 },
-
-			uDistance: { value: 1.0 },
-
-		},
-
-		vertex: `
-
-		uniform float uDistance;
-
-		varying vec3 worldPosition;
-
-		void main() {
-
-			vec3 pos = position.xzy * uDistance;
-			pos.xz += cameraPosition.xz;
-
-			worldPosition = pos;
-
-			gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-
-		}
-
-	`,
-
-		fragment: `
-
-		uniform float uScale;
-		uniform float uSubdivisions;
-		uniform vec3 uColor;
-		uniform float uDistance;
-
-		varying vec3 worldPosition;
-
-		float getGrid( float size ) {
-
-			 vec2 r = worldPosition.xz / size;
-
-			 vec2 grid = abs( fract( r - 0.5 ) - 0.5 ) / fwidth( r );
-			 float line = min( grid.x, grid.y );
-
-			 return 1.0 - min( line, 1.0 );
-
-		 }
-
-		 void main() {
-
-			   float d = 1.0 - min( distance( cameraPosition.xyz, worldPosition.xyz ) / uDistance, 1.0 );
-
-			   float g1 = getGrid( uScale / uSubdivisions );
-			   float g2 = getGrid( uScale );
-
-			   gl_FragColor = vec4( uColor.rgb, mix( g2, g1, g1 ) * pow( d, 3.0 ) );
-			   gl_FragColor.a = mix( 0.5 * gl_FragColor.a, gl_FragColor.a, g2 );
-
-			   if ( gl_FragColor.a <= 0.0 ) discard;
-
-		}
-	`
-
-	};
-
-	/**
-	 *	@author zwubs
-	 *	@namespace PANIC.Shaders
-	 */
-
-	var shaders = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		DebugAxes: DebugAxes,
-		DebugGrid: DebugGrid,
-		Entity: Entity
-	});
+	let instance$7 = new EntityTemplateRegistry();
 
 	/**
 	 *	@author zwubs
@@ -5369,6 +5139,69 @@
 	 *	@author zwubs
 	 */
 
+	class EntityColliderTemplate {
+
+		constructor() {
+
+			this.boundingSphere = new BoundingSphere();
+			this.boundingBox = new OrientedBoundingBox();
+			this.collision = [];
+
+		}
+
+		addBox( box ) {
+
+			this.collision.push( box );
+
+		}
+
+		generate() {
+
+			// Bounding Box
+			let min = new three.Vector3( +Infinity, +Infinity, +Infinity );
+			let max = new three.Vector3( -Infinity, -Infinity, -Infinity );
+
+			let vec = new three.Vector3();
+
+			for( let box of this.collision ) {
+
+				let positions = new Float32Array( [ 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5 ] );
+				let verticies = new three.BufferAttribute( positions, 3 );
+				verticies.applyMatrix4( box.matrix );
+
+				for( let i = 0; i < 8; i++ ) {
+
+					vec.fromBufferAttribute( verticies, i );
+
+					min.min( vec );
+					max.max( vec );
+
+				}
+
+			}
+
+			this.boundingBox.position.addVectors( min, max ).multiplyScalar( 0.5 );
+			this.boundingBox.scale.subVectors( max, min );
+			this.boundingBox.update();
+
+			// Bounding Sphere
+			this.boundingSphere.center.copy( this.boundingBox.position );
+			this.boundingSphere.radius = this.boundingSphere.center.distanceTo( min ) > this.boundingSphere.center.distanceTo( max ) ? this.boundingSphere.center.distanceTo( min ) : this.boundingSphere.center.distanceTo( max );
+			this.boundingSphere.update();
+		}
+
+		generateCollider( entity ) {
+
+			return new EntityCollider.fromTemplate( this, entity );
+
+		}
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
 	let CollisionParser = new function() {
 
 		this.parse = function( json ) {
@@ -5432,17 +5265,17 @@
 
 			if( binding.startsWith("KEY") ) {
 
-				instance$b.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$c.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 			else if( binding.startsWith("MOUSE") ) {
 
-				instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$b.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 			else if( binding.startsWith("GAMEPAD") ) {
 
-				instance$9.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
+				instance$a.eventManager.on( binding, () => { this.eventManager.emit( actionID ); } );
 
 			}
 
@@ -5517,7 +5350,7 @@
 
 	}
 
-	let instance$5 = new ActionsParser();
+	let instance$6 = new ActionsParser();
 
 	/**
 	 *	@author zwubs
@@ -5532,7 +5365,7 @@
 		EntityModel: EntityModelParser,
 		EntityArmature: EntityArmatureParser,
 		Collision: CollisionParser,
-		Actions: instance$5
+		Actions: instance$6
 	});
 
 	/**
@@ -5555,7 +5388,7 @@
 			template.id = json.id;
 			template.name = json.name;
 
-			if( json.actions ) template.actions = await instance$5.parse( json.actions, json.bindings, baseURL );
+			if( json.actions ) template.actions = await instance$6.parse( json.actions, json.bindings, baseURL );
 			else template.actions = new Actions();
 
 			if( json.collision ) template.collider = await CollisionParser.parse( json.collision );
@@ -5573,13 +5406,256 @@
 			template.setup();
 
 			// Register Entity Template
-			instance$6.registerEntity( template );
+			instance$7.registerEntityTemplate( template );
 
 			return template;
 
 		};
 
 	};
+
+	/**
+	 *	@author zwubs
+	 */
+
+	class Entities {
+
+		constructor() {
+
+			this.maxEntityCount = 256;
+
+			this.entities = {};
+
+			instance$f.add( this );
+
+		}
+
+		async load( url ) {
+
+			return await EntityLoader.load( url );
+
+		}
+
+		/**
+		 *	@description
+		 */
+		update() {
+
+			for( const [ idA, entityA ] of Object.entries( this.entities ) ) {
+
+				entityA.update();
+
+				for( const [ idB, entityB ] of Object.entries( this.entities ) ) {
+
+					if( idA != idB ) this.collision( entityA, idA, entityB, idB );
+
+				}
+
+			}
+
+		}
+
+		collision( entityA, idA, entityB, idB ) {
+			new three.Vector3();
+			new three.Vector3();
+
+			if( entityA.actions.eventManager.hasEvent("COLLIDE") ) {
+
+				let collision = entityA.collider.isColliding( entityB.collider );
+
+				if( collision ) {
+
+					entityA.position.add( collision.multiplyScalar( 0.5 ) );
+					entityB.position.add( collision.multiplyScalar(-0.5 ) );
+
+					entityA.actions.eventManager.emit("COLLIDE");
+					if( entityB.actions.eventManager.hasEvent("COLLIDE") ) entityB.actions.eventManager.emit("COLLIDE");
+
+				}
+
+			}
+
+		}
+
+		/**
+		 *	@description
+		 *	@param { String } id
+		 */
+		spawn( id ) {
+
+			if( instance$7.doesEntityExist( id ) ) {
+
+				let entity = instance$7.getEntityTemplateByID( id ).spawnEntity();
+
+				this.entities[ entity.uuid ] = entity;
+
+				return entity;
+
+			}
+
+		}
+
+	}
+
+	const instance$5 = new Entities();
+
+	/**
+	 *  @author zwubs
+	 */
+
+	var collision = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		EntityCollider: EntityCollider,
+		EntityColliderTemplate: EntityColliderTemplate,
+		BoundingSphere: BoundingSphere
+	});
+
+	/**
+	 *	@namespace PANIC.Shaders.DebugAxes
+	 *	@author zwubs
+	 */
+	let DebugAxes = {
+
+		uniforms: {
+
+			uDistance: { value: 100.0 },
+
+		},
+
+		vertex: `
+
+		uniform float uDistance;
+
+		attribute float opacity;
+
+		varying vec3 vColor;
+		varying float vOpacity;
+		varying vec3 worldPosition;
+
+		void main() {
+
+			vColor.xyz = color.xyz;
+			vOpacity = opacity;
+
+			vec3 transformed = position.xzy * ( uDistance + distance( cameraPosition.xyz, worldPosition.xyz ) );
+
+			worldPosition = transformed;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );
+
+		}
+
+	`,
+
+		fragment: `
+
+		uniform float uDistance;
+
+		varying vec3 vColor;
+		varying float vOpacity;
+		varying vec3 worldPosition;
+
+		void main() {
+
+			float d = 1.0 - min( distance( cameraPosition.xyz, worldPosition.xyz ) / uDistance, 1.0 );
+
+			gl_FragColor = vec4( vColor, vOpacity * pow( d, 3.0 ) );
+
+			if ( gl_FragColor.a <= 0.0 ) discard;
+
+		}
+
+	`
+
+	};
+
+	/**
+	 *	@namespace PANIC.Shaders.DebugGrid
+	 *	@author zwubs
+	 *	Based heavily off of https://github.com/Fyrestar/THREE.InfiniteGridHelper
+	 *	@todo Use fog variables instead of distance
+	 */
+
+	let DebugGrid = {
+
+		uniforms: {
+
+			uColor: { value: new three.Color( 0x000000 ) },
+
+			uScale: { value: 1.0 },
+			uSubdivisions: { value: 1.0 },
+
+			uDistance: { value: 1.0 },
+
+		},
+
+		vertex: `
+
+		uniform float uDistance;
+
+		varying vec3 worldPosition;
+
+		void main() {
+
+			vec3 pos = position.xzy * uDistance;
+			pos.xz += cameraPosition.xz;
+
+			worldPosition = pos;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+
+		}
+
+	`,
+
+		fragment: `
+
+		uniform float uScale;
+		uniform float uSubdivisions;
+		uniform vec3 uColor;
+		uniform float uDistance;
+
+		varying vec3 worldPosition;
+
+		float getGrid( float size ) {
+
+			 vec2 r = worldPosition.xz / size;
+
+			 vec2 grid = abs( fract( r - 0.5 ) - 0.5 ) / fwidth( r );
+			 float line = min( grid.x, grid.y );
+
+			 return 1.0 - min( line, 1.0 );
+
+		 }
+
+		 void main() {
+
+			   float d = 1.0 - min( distance( cameraPosition.xyz, worldPosition.xyz ) / uDistance, 1.0 );
+
+			   float g1 = getGrid( uScale / uSubdivisions );
+			   float g2 = getGrid( uScale );
+
+			   gl_FragColor = vec4( uColor.rgb, mix( g2, g1, g1 ) * pow( d, 3.0 ) );
+			   gl_FragColor.a = mix( 0.5 * gl_FragColor.a, gl_FragColor.a, g2 );
+
+			   if ( gl_FragColor.a <= 0.0 ) discard;
+
+		}
+	`
+
+	};
+
+	/**
+	 *	@author zwubs
+	 *	@namespace PANIC.Shaders
+	 */
+
+	var shaders = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		DebugAxes: DebugAxes,
+		DebugGrid: DebugGrid,
+		Entity: Entity
+	});
 
 	/**
 	 *	@author zwubs
@@ -5777,9 +5853,9 @@
 
 			if( !this.active ) {
 
-				if( instance$g.getObjectByName( this.id ) == null ) {
+				if( instance$h.getObjectByName( this.id ) == null ) {
 
-					instance$g.add( this.mesh );
+					instance$h.add( this.mesh );
 
 				}
 
@@ -5787,9 +5863,9 @@
 
 			else {
 
-				if( instance$g.getObjectByName( this.id ) ) {
+				if( instance$h.getObjectByName( this.id ) ) {
 
-					instance$g.remove( this.mesh );
+					instance$h.remove( this.mesh );
 
 				}
 
@@ -5898,9 +5974,9 @@
 
 			if( !this.active ) {
 
-				if( instance$g.getObjectByName( this.id ) == null ) {
+				if( instance$h.getObjectByName( this.id ) == null ) {
 
-					instance$g.add( this.mesh );
+					instance$h.add( this.mesh );
 
 				}
 
@@ -5908,9 +5984,9 @@
 
 			else {
 
-				if( instance$g.getObjectByName( this.id ) ) {
+				if( instance$h.getObjectByName( this.id ) ) {
 
-					instance$g.remove( this.mesh );
+					instance$h.remove( this.mesh );
 
 				}
 
@@ -6013,7 +6089,7 @@
 
 				DebugElement.appendChild( this.element );
 
-				instance$e.add( this, 15 );
+				instance$f.add( this, 15 );
 
 			}
 
@@ -6021,7 +6097,7 @@
 
 				DebugElement.removeChild( this.element );
 
-				instance$e.remove( this );
+				instance$f.remove( this );
 
 			}
 
@@ -6031,7 +6107,7 @@
 
 			var string = "";
 			var direction = new three.Vector3( 0, 0, 0 );
-			instance$f.getWorldDirection( direction );
+			instance$g.getWorldDirection( direction );
 
 			if( this.state == 0 ) {
 
@@ -6103,7 +6179,7 @@
 			this.status = false;
 
 			this.object = new three.Object3D();
-			instance$g.add( this.object );
+			instance$h.add( this.object );
 
 			this.meshes = {
 				collision: new three.Object3D(), // Collection of OBBs
@@ -6162,7 +6238,7 @@
 			let position = new three.Vector3();
 			let scale = new three.Vector3();
 			this.collider.boundingSphere.matrixWorld.decompose( position, new three.Quaternion(), scale );
-			this.meshes.sphere.lookAt( instance$f.getWorldPosition( new three.Vector3 ) );
+			this.meshes.sphere.lookAt( instance$g.getWorldPosition( new three.Vector3 ) );
 			this.meshes.sphere.matrix.compose( position, this.meshes.sphere.quaternion, scale );
 
 		}
@@ -6183,7 +6259,7 @@
 
 			this._collision = null;
 
-			instance$e.add( this );
+			instance$f.add( this );
 
 		}
 
@@ -6218,7 +6294,7 @@
 	var debug = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		Element: DebugElement,
-		Text: instance$7,
+		Text: instance$8,
 		Access: instance$3,
 		Grid: instance$2,
 		Axes: instance$1,
@@ -6246,16 +6322,16 @@
 	var panic = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		Version: Version,
-		Scene: instance$g,
-		Camera: instance$f,
-		Renderer: instance$d,
+		Scene: instance$h,
+		Camera: instance$g,
+		Renderer: instance$e,
 		Clock: Clock,
-		Updater: instance$e,
+		Updater: instance$f,
 		Cube: Cube,
 		Texture: Texture,
 		OrbitControls: Controls,
 		Element: Element,
-		Maths: instance$c,
+		Maths: instance$d,
 		Tile: Tile,
 		TileGroup: TileGroup,
 		Tileset: Tileset,
@@ -6263,41 +6339,43 @@
 		Input: input,
 		DataStructures: dataStructures,
 		Entity: Entity$1,
+		Entities: instance$5,
 		EntityTemplate: EntityTemplate,
-		EntityRegistry: instance$6,
+		EntityTemplateRegistry: instance$7,
 		Collision: collision,
 		Shaders: shaders,
 		Loaders: loaders,
 		Parsers: parsers,
-		Tools: instance$8,
+		Tools: instance$9,
 		Debug: debug
 	});
 
-	exports.Camera = instance$f;
+	exports.Camera = instance$g;
 	exports.Clock = Clock;
 	exports.Collision = collision;
 	exports.Cube = Cube;
 	exports.DataStructures = dataStructures;
 	exports.Debug = debug;
 	exports.Element = Element;
+	exports.Entities = instance$5;
 	exports.Entity = Entity$1;
-	exports.EntityRegistry = instance$6;
 	exports.EntityTemplate = EntityTemplate;
+	exports.EntityTemplateRegistry = instance$7;
 	exports.EventManager = EventManager;
 	exports.Input = input;
 	exports.Loaders = loaders;
-	exports.Maths = instance$c;
+	exports.Maths = instance$d;
 	exports.OrbitControls = Controls;
 	exports.Parsers = parsers;
-	exports.Renderer = instance$d;
-	exports.Scene = instance$g;
+	exports.Renderer = instance$e;
+	exports.Scene = instance$h;
 	exports.Shaders = shaders;
 	exports.Texture = Texture;
 	exports.Tile = Tile;
 	exports.TileGroup = TileGroup;
 	exports.Tileset = Tileset;
-	exports.Tools = instance$8;
-	exports.Updater = instance$e;
+	exports.Tools = instance$9;
+	exports.Updater = instance$f;
 	exports.Version = Version;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
