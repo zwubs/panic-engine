@@ -10,7 +10,7 @@ npm run build
 npm start
 ```
 
-## Version 0.0.3
+## Version 0.0.4
 **The Collision Update**
 - Add BoundingSphere to entities.
 - Add OrientedBoundingBox to entities.
