@@ -24,7 +24,7 @@ class Scene extends THREE_Scene {
 		dirLight.shadow.camera.near = 0.01;
 		dirLight.shadow.camera.far = 25;
 
-		dirLight.shadow.bias = -0.001;
+		dirLight.shadow.bias = -0.0005;
 
 		dirLight.position.set( 0.5, 1, -0.75 );
 		dirLight.position.multiplyScalar( 3 );
