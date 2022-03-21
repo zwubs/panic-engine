@@ -79,6 +79,16 @@
 
 		<script>
 
+			const perf = new function() {
+
+				this._start = 0;
+
+				this.start = function() { return this._start = performance.now(); }
+
+				this.stop = function() { return performance.now() - this._start; }
+
+			}
+
 			const _NUM_CLIENTS = 100000;
 			const _ITERATIONS = 10000;
 
@@ -118,8 +128,11 @@
 
 			class GridTester {
 			  constructor(gridClass) {
+				perf.start();
 				this._grid = new gridClass(_CLIENT_BOUNDS, _CLIENT_DIMENSIONS);
+				this.logTime( perf.stop(), 'Constructor' );
 
+				perf.start();
 				this._clients = [];
 				for (let i = 0; i < _NUM_CLIENTS; ++i) {
 				  const client = this._grid.newClient(
@@ -127,17 +140,21 @@
 				  );
 				  this._clients.push(client);
 				}
+				this.logTime( perf.stop(), 'Generate Clients' );
 			  }
 
+			  logTime( time, test="NULL" ) { console.log( `${this._grid.constructor.name} - ${test}: ${time}ms` ); }
+
 			  Test_FindNearby() {
+
 				const queryBounds = [15, 15, 15];
 
-				let startTime = performance.now();
+				perf.start();
 				for (let i = 0; i < _ITERATIONS; ++i) {
 				  this._grid.findNear(_CLIENT_QUERIES[i], queryBounds);
 				}
-				let totalTime = performance.now() - startTime;
-				return totalTime;
+				this.logTime( perf.stop(), 'FindNearby' );
+
 			  }
 
 			  Test_Update() {
@@ -149,7 +166,7 @@
 				  this._grid.updateClient(this._clients[i]);
 				}
 
-				let startTime = performance.now();
+				perf.start();
 				for (let i = 0; i < this._clients.length; ++i) {
 				  const c = this._clients[i];
 				  c.position[0] += _CLIENT_MOVES[i][0];
@@ -157,25 +174,27 @@
 				  c.position[2] += _CLIENT_MOVES[i][2];
 				  this._grid.updateClient(this._clients[i]);
 				}
-				let totalTime = performance.now() - startTime;
-
-				return totalTime;
+				this.logTime( perf.stop(), 'Update' );
 			  }
 			}
 
 
-			const grid = new GridTester( PANIC.DataStructures.SpatialHashGrid );
-
-			console.log('Spatial Grid - FindNearby: ' + grid.Test_FindNearby() + 'ms');
-			console.log('----------------------------------');
-			console.log('Spatial Grid - FindNearby: ' + grid.Test_FindNearby() + 'ms');
+			const grid1 = new GridTester( PANIC.DataStructures.SpatialHashGrid );
 
 			console.log('----------------------------------');
+
+			grid1.Test_FindNearby();
+			grid1.Test_FindNearby();
+
 			console.log('----------------------------------');
 
-			console.log('Spatial Grid - Update: ' + grid.Test_Update() + 'ms');
-			console.log('----------------------------------');
-			console.log('Spatial Grid - Update: ' + grid.Test_Update() + 'ms');
+			grid1.Test_Update()
+			grid1.Test_Update()
+
+			console.log('\n');
+
+			const grid2 = new GridTester( PANIC.DataStructures.SpatialHashGridFlat );
+
 
 		</script>
 
