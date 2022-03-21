@@ -91,7 +91,6 @@
 		"COLLIDE": "./scripts/collide.js",
 
 		"MOVE_FORWARD": "./scripts/move-forward.js",
-		"MOVE_BACKWARD": "./scripts/move-backward.js",
 		"ROTATE_LEFT": "./scripts/rotate-left.js",
 		"ROTATE_RIGHT": "./scripts/rotate-right.js",
 
@@ -104,11 +103,6 @@
 		"MOVE_FORWARD": [
 			"KEY_HELD_W",
 			"GAMEPAD_LSTICK_NORTH"
-		],
-
-		"MOVE_BACKWARD": [
-			"KEY_HELD_S",
-			"GAMEPAD_LSTICK_SOUTH"
 		],
 
 		"ROTATE_LEFT": [
