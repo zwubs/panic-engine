@@ -48,9 +48,9 @@
 				PANIC.Entities.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
 
 					Fish = PANIC.Entities.spawn( template.id );
-					Fish.position.set( 0.5, 0, 0 );
+					Fish.position.set( -0.5, 0, 0 );
 
-					// PANIC.Debug.Entity( Fish ).collision = true;
+					PANIC.Debug.Entity( Fish ).collision = true;
 
 				});
 
@@ -59,7 +59,7 @@
 					AngelFish = PANIC.Entities.spawn( template.id );
 					AngelFish.position.set( 0.5, 0, 0 );
 
-					// PANIC.Debug.Entity( AngelFish ).collision = true;
+					PANIC.Debug.Entity( AngelFish ).collision = true;
 
 				});
 
