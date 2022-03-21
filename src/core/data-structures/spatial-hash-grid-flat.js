@@ -30,7 +30,7 @@ class Cell {
 
 }
 
-export class SpatialHashGrid {
+export class SpatialHashGridFlat {
 
 	/**
 	 *	@description
@@ -41,10 +41,20 @@ export class SpatialHashGrid {
 
 		const [ x, y, z ] = dimensions;
 
-		this.cells = [ ...Array( x ) ].map( _ => [ ...Array( y ) ].map( _ => [ ...Array( z ) ].map( _ => ( null ) ) ) );
+		this.cells = Array( x * y * z ).fill( null );
 		this.dimensions = dimensions;
 		this.bounds = bounds;
 		this.queryIds = 0;
+
+	}
+
+	/**
+	 *	@description
+	 *	@param { Array } position
+	 */
+	positionToCellIndex( position ) {
+
+		return this.dimensions[ 0 ] * this.dimensions[ 1 ] * position[ 2 ] + this.dimensions[ 1 ] * position[ 1 ] + position[ 0 ];
 
 	}
 
@@ -123,7 +133,7 @@ export class SpatialHashGrid {
 			for( let y = i1[ 1 ], yn = i2[ 1 ]; y <= yn; ++y ) {
 				for( let z = i1[ 2 ], zn = i2[ 2 ]; z <= zn; ++z ) {
 
-					let head = this.cells[ x ][ y ][ z ];
+					let head = this.cells[ this.positionToCellIndex( x, y, z ) ];
 
 					while( head ) {
 
@@ -193,7 +203,7 @@ export class SpatialHashGrid {
 
 		client.cells.min = i1;
 		client.cells.max = i2;
-		client.cells.nodes = nodes;
+		client.cells.ndoes = nodes;
 
 	}
 
