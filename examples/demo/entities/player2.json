@@ -1,0 +1,81 @@
+{
+
+	"id": "player2",
+	"name": "Player2",
+	"version": "1.0.1",
+
+	"texture": "player2.png",
+
+	"tileset": {
+		"main": {
+			"all": { "x": 0, "y": 0, "w":8, "h": 8 },
+			"north": { "x": 8 }
+		}
+	},
+
+	"armature": {
+		"root": {
+			"cubes": [
+				{
+					"size": [ 8, 8, 8 ],
+					"offset": [ 0, 0, 0 ],
+					"faces": "main"
+				}
+			]
+		}
+	},
+
+	"actions": {
+
+		"INIT": "./scripts/init.js",
+		"UPDATE": "./scripts/update.js",
+
+		"MOVE_FORWARD": "./scripts/move-forward.js",
+		"MOVE_BACKWARD": "./scripts/move-backward.js",
+		"ROTATE_LEFT": "./scripts/rotate-left.js",
+		"ROTATE_RIGHT": "./scripts/rotate-right.js",
+
+		"COLLIDE": "./scripts/collide.js",
+		"JUMP": "./scripts/jump.js"
+
+	},
+
+	"bindings": {
+
+		"MOVE_FORWARD": [
+			"KEY_HELD_UP",
+			"GAMEPAD_RSTICK_NORTH"
+		],
+
+		"MOVE_BACKWARD": [
+			"KEY_HELD_DOWN",
+			"GAMEPAD_RSTICK_SOUTH"
+		],
+
+		"ROTATE_LEFT": [
+			"KEY_HELD_LEFT",
+			"GAMEPAD_RSTICK_WEST"
+		],
+
+		"ROTATE_RIGHT": [
+			"KEY_HELD_RIGHT",
+			"GAMEPAD_RSTICK_EAST"
+		],
+
+		"JUMP": [
+			"KEY_HELD_M",
+			"GAMEPAD_BUTTON_EAST"
+		]
+
+	},
+
+	"collision": {
+		"boxes": {
+			"default": {
+				"size": [ 8, 8, 8 ],
+				"offset": [ 0, 0, 0 ]
+			}
+		}
+	}
+
+}
