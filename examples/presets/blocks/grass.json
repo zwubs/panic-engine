@@ -1,0 +1,28 @@
+{
+
+	"id": "grass",
+	"name": "Grass",
+
+	"texture": "grass.png",
+
+	"tileset": {
+		"main": {
+			"all": { "x": 16, "y": 0, "w": 16, "h": 16 },
+			"up": { "x": 0 },
+			"down": { "x": 32 }
+		}
+	},
+
+	"geometry": {
+
+		"cubes": [
+			{
+				"size": [ 16, 8, 16 ],
+				"offset": [ 0, 0, 0 ],
+				"faces": "main"
+			}
+		]
+
+	}
+
+}

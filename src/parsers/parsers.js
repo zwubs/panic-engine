@@ -12,6 +12,8 @@ export { CubeUVParser as CubeUV } from './parser-cube-uv.js';
 export { EntityModelParser as EntityModel } from './parser-entity-model.js';
 export { EntityArmatureParser as EntityArmature } from './parser-entity-armature.js';
 
+export { BlockModelParser as BlockModel } from './parser-block-model.js';
+
 export { CollisionParser as Collision } from './parser-collision.js';
 
 export { ActionsParser as Actions } from './parser-actions.js';

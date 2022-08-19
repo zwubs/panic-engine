@@ -40,25 +40,13 @@
 
 			PANIC.Debug.Access.enable();
 
-			AngelFish = null;
-			Fish = null;
-
 			try {
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
+				PANIC.Loaders.Block.load( "./presets/blocks/grass.json" ).then( ( template ) => {
 
-					Fish = PANIC.EntityRegistry.spawnEntity( template.id );
-					Fish.position.set( 0.5, 0, 0 );
+					console.log("Block Testing")
 
-					// PANIC.Debug.Entity( Fish ).collision = true;
-
-				});
-
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/angel-fish.json" ).then( ( template ) => {
-
-					AngelFish = PANIC.EntityRegistry.spawnEntity( template.id );
-
-					// PANIC.Debug.Entity( AngelFish ).collision = true;
+					PANIC.Scene.add( new THREE.Mesh( template.geometry ) )
 
 				});
 
@@ -78,9 +66,6 @@
 					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
 
 					PANIC.Updater.update();
-
-					if( AngelFish ) AngelFish.checkCollision();
-					if( Fish ) Fish.checkCollision();
 
 					requestAnimationFrame( Loop );
 

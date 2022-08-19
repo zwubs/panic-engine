@@ -5089,6 +5089,55 @@
 	 *	@author zwubs
 	 */
 
+	let BlockModelParser = new function() {
+
+		/**
+		 *	@param {Object} json
+		 *	@param {BlockTemplate} template
+		 */
+		this.parse = function( json, template ) {
+
+			new three.BufferGeometry();
+			let boxes = [];
+
+			for( let cube of json.cubes ) {
+
+				console.log( cube );
+
+				let box = new Cube( 1, 1, 1 );
+
+				let matrix = new three.Matrix4();
+
+				let scale = new three.Vector3(1,1,1);
+				let position = new three.Vector3(0,0,0);
+				let rotation = new three.Euler(0,0,0);
+
+				if( cube.size ) scale.set( cube.size[0], cube.size[1], cube.size[2] ).divideScalar( 16 ).clampScalar( 0.00000001, Math.min() );
+
+				if( cube.offset ) position.set( cube.offset[0], cube.offset[1], cube.offset[2] ).divideScalar( 16 );
+
+				if( cube.rotation ) rotation.setFromVector3( new three.Vector3( cube.rotation[0], cube.rotation[1], cube.rotation[2] ).multiplyScalar( Math.PI/180 ) );
+
+				let quaternion = new three.Quaternion().setFromEuler( rotation, false );
+				matrix.compose( position, quaternion, scale );
+				box.applyMatrix4( matrix );
+
+				// if( cube.faces ) CubeUVParser.parse( cube.faces, box, template.texture, template.tileset );
+
+				boxes.push( box );
+
+			}
+
+			return mergeBufferGeometries( boxes );
+
+		};
+
+	};
+
+	/**
+	 *	@author zwubs
+	 */
+
 	let CollisionParser = new function() {
 
 		this.parse = function( json ) {
@@ -5251,6 +5300,7 @@
 		CubeUV: CubeUVParser,
 		EntityModel: EntityModelParser,
 		EntityArmature: EntityArmatureParser,
+		BlockModel: BlockModelParser,
 		Collision: CollisionParser,
 		Actions: instance$5
 	});
@@ -5303,6 +5353,57 @@
 
 	/**
 	 *	@author zwubs
+	 */
+
+	class BlockTemplate {
+
+		constructor() {
+
+			this.id = "unknown";
+			this.name = "Unknown";
+
+			// Simple tileset linked to world tiles
+			this.tileset = null;
+
+			this.geometry = null;
+
+		}
+
+	}
+
+	/**
+	 *	@author zwubs
+	 */
+
+	let BlockLoader = new function() {
+
+		this.load = async function( url ) {
+
+			console.log( url );
+
+			url.substring(0, url.lastIndexOf("/") + 1 );
+
+			let file = await FileLoader.load( url );
+
+			let json = await JSONParser.parse( file );
+
+			let template = new BlockTemplate();
+
+			// Grab ID & Name
+			template.id = json.id;
+			template.name = json.name;
+
+			// Parse Geometry Data
+			template.geometry = await BlockModelParser.parse( json.geometry, template );
+
+			return template;
+
+		};
+
+	};
+
+	/**
+	 *	@author zwubs
 	 *	@namespace PANIC.Loaders
 	 */
 
@@ -5312,6 +5413,7 @@
 		Image: ImageLoader,
 		Texture: TextureLoader,
 		Entity: EntityLoader,
+		Block: BlockLoader,
 		ActionScript: ActionScriptLoader
 	});
 
