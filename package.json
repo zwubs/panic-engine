@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ZWubs/PANIC-Engine#readme",
   "dependencies": {
+    "@types/three": "^0.143.1",
     "http-server": "^14.1.0",
     "joypad.js": "^2.2.5",
     "rollup": "^2.62.0",
