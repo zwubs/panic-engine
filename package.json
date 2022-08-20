@@ -4,9 +4,8 @@
   "description": "A WebGL & THREEjs based game engine",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c ./utils/build/rollup-basic.config.js",
-    "build-full": "rollup -c ./utils/build/rollup-full.config.js",
-    "develop": "rollup -c ./utils/build/rollup-dev.config.js -w",
+    "build": "rollup -c ./utils/build/rollup.config.js",
+    "develop": "rollup -c ./utils/build/rollup.dev.config.js -w",
     "start": "http-server -o examples -c-1"
   },
   "repository": {
@@ -31,6 +30,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.1",
-    "rollup-plugin-terser": "^7.0.2"
+    "@rollup/plugin-typescript": "^8.3.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.7.4"
   }
 }
