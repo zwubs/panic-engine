@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "es6",
+        "moduleResolution": "nodenext",
+        "outDir": "build"
+    },
+    "lib": ["ES6"],
+    "include": ["./**/*.ts"]
+}
+  
