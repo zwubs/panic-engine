@@ -11,7 +11,7 @@ class Scene extends THREE_Scene {
 		super();
 
 		this.background = new Color( 0x222222 );
-		this.fog = new FogExp2( new Color( 0x222222 ).getHexString(), 0.025 );
+		this.fog = new FogExp2( new Color( 0x222222 ), 0.025 );
 
 		this.add( new HemisphereLight( 0xFFFFFF, 0xFFFFFF, 1.00 ) );
 

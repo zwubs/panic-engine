@@ -13,8 +13,6 @@ import { WebGLRenderer, sRGBEncoding, LinearToneMapping, BasicShadowMap } from '
 
 class Renderer extends WebGLRenderer {
 
-	eventManager = new EventManager( window );
-
 	constructor() {
 
 		super( { canvas: Canvas } );
@@ -27,6 +25,8 @@ class Renderer extends WebGLRenderer {
 		this.toneMapping = LinearToneMapping;
 		this.toneMappingExposure = 0.75;
 
+		this.eventManager = new EventManager( window );
+
 		this.eventManager.registerNativeEvent( "resize" );
 		this.eventManager.on( "resize", this.onResize.bind(this) );
 
@@ -36,7 +36,7 @@ class Renderer extends WebGLRenderer {
 
 	kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
 
-	onResize() {
+	onResize( e ) {
 
 		Camera.aspect = Element.clientWidth / Element.clientHeight;
 		Camera.updateProjectionMatrix();
