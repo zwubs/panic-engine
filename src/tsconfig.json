@@ -1,11 +1,12 @@
 {
-    "compilerOptions": {
-        "module": "esnext",
-        "target": "es6",
-        "moduleResolution": "nodenext",
-        "outDir": "build"
-    },
-    "lib": ["ES6"],
-    "include": ["./**/*.ts"]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",                               
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true
+  }
 }
-  
