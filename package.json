@@ -26,7 +26,8 @@
     "http-server": "^14.1.0",
     "joypad.js": "^2.2.5",
     "rollup": "^2.62.0",
-    "three": "0.143.0"
+    "three": "0.143.0",
+    "zod": "^3.18.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.1",
