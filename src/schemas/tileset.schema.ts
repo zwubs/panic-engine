@@ -1,6 +1,6 @@
-import {z} from "zod"
+import { z } from "zod"
 
-const TileSchema = z.object({
+export const TileSchema = z.object({
     x: z.number(),
     y: z.number(),
     w: z.number(),
@@ -24,13 +24,13 @@ const TileSchema = z.object({
         .optional()
 })
 
-export const TilesetSchema = z.record(
-    z.object({
-        north: TileSchema,
-        south: TileSchema,
-        east: TileSchema,
-        west: TileSchema,
-        up: TileSchema,
-        down: TileSchema
-    })
-)
+export const TileGroupSchema = z.object({
+    north: TileSchema,
+    south: TileSchema,
+    east: TileSchema,
+    west: TileSchema,
+    up: TileSchema,
+    down: TileSchema
+})
+
+export const TilesetSchema = z.record(TileGroupSchema)
