@@ -32,6 +32,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.1",
     "@rollup/plugin-typescript": "^8.3.4",
+    "@types/three": "^0.143.1",
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.7.4"
   }
