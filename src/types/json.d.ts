@@ -1,11 +1,11 @@
 import { z } from "zod"
 import * as Schema from "../schemas/schemas"
-import { CardinalDirections } from "./types"
+import { Types } from "./types"
 
 export namespace JSON {
 
     export type Tileset = { [group: string]: TileGroup }
-    export type TileGroup = Record<CardinalDirections, Tile>
+    export type TileGroup = Record<Types.Tools.Directions, Tile>
     export type Tile = {
         x: number, y: number,
         w: number, h: number,

@@ -1,5 +1,9 @@
-import { Tools } from '../panic'
+export namespace Types {
 
-export type CardinalDirections = typeof Tools.CardinalDirections[number]
+    export { Tools } from './tools'
 
-export { JSON } from './json'
+    export { JSON } from './json'
+
+    export { Shader } from './shader'
+
+}

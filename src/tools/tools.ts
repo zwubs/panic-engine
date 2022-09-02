@@ -18,7 +18,7 @@ export namespace Tools {
 	export const Up = new Vector3(0, 1, 0);
 	export const Down = new Vector3(0, -1, 0);
 
-	export const CardinalDirections = ["north", "south", "east", "west", "up", "down"] as const
+	export const Directions = ["north", "south", "east", "west", "up", "down"] as const
 
 	export const generateUUID = () => {
 
