@@ -2,15 +2,15 @@
  *	@author zwubs
  */
 
-import { Cube } from '../core/cube.js';
+import { Cube } from '../core/cube';
 
-import { CubeUVParser } from './cube-uv.parser.js'
+import { CubeUVParser } from './cube-uv.parser'
 
 import { BufferGeometry, Matrix4, Vector3, Euler, Quaternion } from 'three';
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
-import { JSON } from '../types/json.js';
-import { Texture, Tileset } from '../panic.js';
+import { JSON } from '../types/json';
+import { Texture, Tileset } from '../panic';
 
 export namespace EntityModelParser {
 

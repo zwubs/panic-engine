@@ -2,7 +2,7 @@
  *	@author zwubss
  */
 
-import { DebugElement } from './debug-element.js';
+import { DebugElement } from './debug-element';
 
 class Text {
 

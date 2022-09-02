@@ -3,10 +3,10 @@
  *	@namespace PANIC.Parsers
  */
 
-import { CubeUVParser } from './cube-uv.parser.js';
-import { EntityModelParser } from './entity-model.parser.js';
-import { JSONParser } from './json.parser.js';
-import { TilesetParser } from './tileset.parser.js';
+import { CubeUVParser } from './cube-uv.parser';
+import { EntityModelParser } from './entity-model.parser';
+import { JSONParser } from './json.parser';
+import { TilesetParser } from './tileset.parser';
 
 export namespace Parsers {
 

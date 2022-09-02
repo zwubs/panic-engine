@@ -2,10 +2,10 @@
  *	@author zwubs
  */
 
-import { Canvas } from '../dom/canvas.js';
-import { Element } from '../dom/element.js';
+import { Canvas } from '../dom/canvas';
+import { Element } from '../dom/element';
 
-import { Camera } from './camera.js';
+import { Camera } from './camera';
 
 import { WebGLRenderer, sRGBEncoding, LinearToneMapping, BasicShadowMap } from 'three';
 
@@ -13,7 +13,7 @@ class Renderer extends WebGLRenderer {
 
 	constructor() {
 
-		super( { canvas: Canvas } );
+		super({ canvas: Canvas });
 
 		this.shadowMap.enabled = true;
 		this.shadowMap.type = BasicShadowMap;
@@ -31,8 +31,8 @@ class Renderer extends WebGLRenderer {
 		Camera.aspect = Element.clientWidth / Element.clientHeight;
 		Camera.updateProjectionMatrix();
 
-		this.setPixelRatio( window.devicePixelRatio );
-		this.setSize( Element.clientWidth, Element.clientHeight );
+		this.setPixelRatio(window.devicePixelRatio);
+		this.setSize(Element.clientWidth, Element.clientHeight);
 
 	}
 

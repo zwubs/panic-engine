@@ -4,10 +4,10 @@
  */
 
 import { Vector3, Euler, Quaternion, Matrix4, Mesh, MeshDepthMaterial, RGBADepthPacking } from 'three';
-import { Scene } from '../core/rendering/scene.js';
-import { Updater } from '../core/updater.js';
-import { Tools } from '../tools/tools.js';
-import { EntityTemplate } from './entity-template.js';
+import { Scene } from '../core/rendering/scene';
+import { Updater } from '../core/updater';
+import { Tools } from '../tools/index';
+import { EntityTemplate } from './entity-template';
 
 class Entity {
 

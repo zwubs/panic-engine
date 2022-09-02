@@ -5,8 +5,8 @@
 
 import { EntityTemplate } from '../entities/entity-template';
 import { EntityRegistry } from '../entities/entity-registry';
-import { Loaders } from './loaders';
-import { Parsers } from '../parsers/parsers';
+import { Loaders } from '.';
+import { Parsers } from '../parsers';
 
 export namespace EntityLoader {
 

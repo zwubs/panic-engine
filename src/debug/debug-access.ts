@@ -4,8 +4,8 @@
  */
 
 import * as PANIC from '../panic'
-import { THREEAccess } from './debug-access-three.js'
-import { Debug } from './debug.js';
+import { THREEAccess } from './debug-access-three'
+import { Debug } from './';
 
 declare global {
 	interface Window { PANIC: any; }
@@ -21,7 +21,7 @@ class Access {
 
 			if (!this.isGlobal) {
 
-				window.PANIC = await import('../panic.js');
+				window.PANIC = await import('../panic');
 
 				this.isGlobal = true;
 

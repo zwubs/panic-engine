@@ -2,11 +2,11 @@
  *	@author zwubs
  */
 
-import { Scene } from '../core/rendering/scene.js'
-import { Shaders } from '../shaders/shaders.js'
+import { Scene } from '../core/rendering/scene'
+import { Shaders } from '../shaders/index'
 
 import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh, BufferGeometry } from 'three';
-import { Types } from '../types/types.js';
+import { Types } from '../types/index';
 
 class Grid {
 

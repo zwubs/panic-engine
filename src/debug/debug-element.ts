@@ -2,7 +2,7 @@
  *
  */
 
-import { Element } from '../core/dom/element.js';
+import { Element } from '../core/dom/element';
 
 let DebugElement = document.createElement("div");
 

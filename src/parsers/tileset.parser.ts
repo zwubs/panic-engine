@@ -2,13 +2,13 @@
  *	@author zwubs
  */
 
-import { Tileset } from "../core/tileset/tileset.js"
-import { TileGroup } from "../core/tileset/tile-group.js"
+import { Tileset } from "../core/tileset/tileset"
+import { TileGroup } from "../core/tileset/tile-group"
 
-import * as Debug from "../debug/debug-console.js"
-import { Types } from "../types/types"
-import { TilesetSchema } from "../schemas/tileset.schema.js"
-import { Tools } from "../panic.js"
+import { Debug } from "../debug/"
+import { Types } from "../types"
+import { TilesetSchema } from "../schemas/tileset.schema"
+import { Tools } from "../panic"
 
 export namespace TilesetParser {
 

@@ -1,6 +1,6 @@
 import { z } from "zod"
-import * as Schema from "../schemas/schemas"
-import { Types } from "./types"
+import * as Schema from "../schemas"
+import { Types } from "."
 
 export namespace JSON {
 

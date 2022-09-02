@@ -3,7 +3,7 @@
  */
 
 import { Texture } from '../core/texture';
-import { Loaders } from './loaders';
+import { Loaders } from '.';
 
 export namespace TextureLoader {
 

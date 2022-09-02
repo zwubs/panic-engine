@@ -2,9 +2,9 @@
  *	@author zwubss
  */
 
-import { Updater } from '../core/updater.js';
-import { Camera } from '../core/rendering/camera.js';
-import { DebugElement } from './debug-element.js';
+import { Updater } from '../core/updater';
+import { Camera } from '../core/rendering/camera';
+import { DebugElement } from './debug-element';
 
 import { Spherical, Vector3 } from 'three';
 

@@ -3,7 +3,7 @@
  *	@description Make the PANIC namespace global
  */
 
-import { Debug } from './debug'
+import { Debug } from '.'
 
 declare global {
     interface Window { THREE: any; }

@@ -5,7 +5,7 @@
 import { BufferAttribute } from "three";
 import { Texture } from "../core/texture";
 import { Tileset } from "../core/tileset/tileset";
-import { Types } from "../types/types";
+import { Types } from "../types";
 
 export namespace CubeUVParser {
 

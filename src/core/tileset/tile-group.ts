@@ -2,8 +2,8 @@
  *	@typedef {Object} TileGroup
  */
 
-import { Tools } from '../../panic.js';
-import { Tile } from './tile.js'
+import { Tools } from '../../panic';
+import { Tile } from './tile'
 
 class TileGroup {
 

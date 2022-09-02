@@ -4,74 +4,56 @@
  *	@todo Decide what actually needs to be visible to the user.
  */
 
-export let Version = "0.0.4";
+export let Version = "0.0.4"
 
 /**
  *	@filespace {CORE}
  */
-export { Scene } from './core/rendering/scene.js';
-export { Camera } from './core/rendering/camera.js';
-export { Renderer } from './core/rendering/renderer.js';
-export { Clock } from './core/clock.js';
-export { Updater } from './core/updater.js';
-export { Cube } from './core/cube.js';
-export { Texture } from './core/texture.js';
-export { Controls as OrbitControls } from './core/input/orbit-controls.js';
-export { Element } from './core/dom/element.js';
+export { Scene } from "./core/rendering/scene"
+export { Camera } from "./core/rendering/camera"
+export { Renderer } from "./core/rendering/renderer"
+export { Clock } from "./core/clock"
+export { Updater } from "./core/updater"
+export { Cube } from "./core/cube"
+export { Texture } from "./core/texture"
+export { Element } from "./core/dom/element"
 
-	/**
-	 * 	@filespace {CORE/TILESET}
-	 */
-	export { Tile } from './core/tileset/tile.js';
-	export { TileGroup } from './core/tileset/tilegroup.js';
-	export { Tileset } from './core/tileset/tileset.js';
-
-	/**
-	 *	@filespace {EVENTS}
-	 */
-	export { EventManager } from './core/events/event-manager.js';
-
-	/**
-	 *	@filespace {INPUT}
-	 */
-	export * as Input from './core/input/input.js';
+/**
+ * 	@filespace {CORE/TILESET}
+ */
+export { Tile } from "./core/tileset/tile"
+export { TileGroup } from "./core/tileset/tile-group"
+export { Tileset } from "./core/tileset/tileset"
 
 
 /**
  *	@filespace {ENTITIES}
  */
-export { Entity } from './entities/entity.js';
-export { EntityTemplate } from './entities/entity-template.js';
-export { EntityRegistry } from './entities/entity-registry.js';
-
-
-/**
- *	@filespace {COLLISION}
- */
-export * as Collision from './collision/collision.js';
+export { Entity } from "./entities/entity"
+export { EntityTemplate } from "./entities/entity-template"
+export { EntityRegistry } from "./entities/entity-registry"
 
 /**
  *	@filespace {SHADERS}
  */
-export * as Shaders from './shaders/shaders.js';
+export * as Shaders from "./shaders"
 
 /**
  *	@filespace {LOADERS}
  */
-export * as Loaders from './loaders/loaders.js';
+export * as Loaders from "./loaders"
 
 /**
  *	@filespace {PARSERS}
  */
-export * as Parsers from './parsers/parsers.js';
-
+export * as Parsers from "./parsers"
 
 /**
  *	@filespace {TOOLS}
  */
-export { Tools } from './tools/tools.js';
+export { Tools } from "./tools"
 
 /**
  *	@filespace {DEBUG}
  */
-export * as Debug from './debug/debug.js';
+export * as Debug from "./debug"

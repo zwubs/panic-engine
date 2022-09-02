@@ -2,12 +2,12 @@
  *	@author zwubs
  */
 
-import { Element } from './element.js';
+import { Element } from './element';
 
 let Canvas = document.createElement('canvas');
 
 Canvas.id = "PANIC-Canvas";
 
-Element.appendChild( Canvas );
+Element.appendChild(Canvas);
 
 export { Canvas };

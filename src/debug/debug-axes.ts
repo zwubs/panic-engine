@@ -5,7 +5,7 @@
 
 import { BufferGeometry, Float32BufferAttribute, ShaderMaterial, LineSegments } from 'three';
 import { Scene } from '../core/rendering/scene'
-import { Shaders } from '../shaders/shaders'
+import { Shaders } from '../shaders'
 
 
 class Axes {

@@ -4,10 +4,10 @@
  */
 
 import { UniformsUtils, ShaderMaterial, Uniform, DoubleSide, BufferGeometry, Material, Shader, IUniform } from 'three';
-import { Texture } from '../core/texture.js';
+import { Texture } from '../core/texture';
 import { Tileset } from '../core/tileset/tileset';
-import { Entity } from './entity.js';
-import { EntityShader } from '../shaders/entity.shader.js';
+import { Entity } from './entity';
+import { EntityShader } from '../shaders/entity.shader';
 
 class EntityTemplate {
 
