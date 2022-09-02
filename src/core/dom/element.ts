@@ -6,11 +6,11 @@ let Element = document.createElement("div");
 
 Element.id = "PANIC";
 
-Element.style = `
+Element.setAttribute('style', `
 	width: 100%;
 	height: 100%;
 	user-select: none;
-`;
+`);
 
 Element.tabIndex = 1;
 

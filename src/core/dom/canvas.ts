@@ -3,7 +3,6 @@
  */
 
 import { Element } from './element.js';
-import { Camera } from '../rendering/camera.js';
 
 let Canvas = document.createElement('canvas');
 
