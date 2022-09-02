@@ -8,7 +8,7 @@ import { TileGroup } from "../core/tileset/tile-group"
 import { Debug } from "../debug/"
 import { Types } from "../types"
 import { TilesetSchema } from "../schemas/tileset.schema"
-import { Tools } from "../panic"
+import { Tools } from "../tools"
 
 export namespace TilesetParser {
 

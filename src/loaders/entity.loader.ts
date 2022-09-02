@@ -5,7 +5,8 @@
 
 import { EntityTemplate } from '../entities/entity-template';
 import { EntityRegistry } from '../entities/entity-registry';
-import { Loaders } from '.';
+import { FileLoader } from './file.loader';
+import { TextureLoader } from './texture.loader';
 import { Parsers } from '../parsers';
 
 export namespace EntityLoader {
@@ -13,10 +14,10 @@ export namespace EntityLoader {
 	export const load = async function (url: string) {
 
 		const baseURL = url.substring(0, url.lastIndexOf("/") + 1);
-		const file = await Loaders.File.load(url);
+		const file = await FileLoader.load(url);
 		const json = await Parsers.JSON.parse(file);
 
-		const texture = await Loaders.Texture.load(baseURL + json.texture);
+		const texture = await TextureLoader.load(baseURL + json.texture);
 		const tileset = await Parsers.Tileset.parse(json.tileset, json.id);
 		const geometry = await Parsers.EntityModel.parse(json.armature, texture, tileset);
 

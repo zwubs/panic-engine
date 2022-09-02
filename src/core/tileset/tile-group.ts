@@ -2,7 +2,7 @@
  *	@typedef {Object} TileGroup
  */
 
-import { Tools } from '../../panic';
+import { Tools } from '../../tools';
 import { Tile } from './tile'
 
 class TileGroup {

@@ -3,12 +3,12 @@
  */
 
 import { Texture } from '../core/texture';
-import { Loaders } from '.';
+import { ImageLoader } from './image.loader';
 
 export namespace TextureLoader {
 
 	export const load = async function (url: string) {
-		const image = await Loaders.Image.load(url);
+		const image = await ImageLoader.load(url);
 		return new Texture(image);
 	}
 
