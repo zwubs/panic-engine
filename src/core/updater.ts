@@ -8,6 +8,8 @@
 
 class Updater {
 
+	data: []
+
 	constructor() {
 
 		this.data = [];
@@ -21,11 +23,11 @@ class Updater {
 
 		this.pass++;
 
-		for( let i = 0; i < this.data.length; i++ ) {
+		for (let i = 0; i < this.data.length; i++) {
 
-			if( this.pass % this.data[ i ].interval == 0 ) {
+			if (this.pass % this.data[i].interval == 0) {
 
-				if( typeof this.data[i].object[ "update" ] === "function" ) {
+				if (typeof this.data[i].object["update"] === "function") {
 
 					this.data[i].object.update();
 
@@ -40,9 +42,9 @@ class Updater {
 	/**
 	 *  @param object {Object} - The object holding the function
 	 */
-	add( object, interval=1 ) { this.data.push( new UpdaterFunction( object, interval ) ); }
+	add(object, interval = 1) { this.data.push(new UpdaterFunction(object, interval)); }
 
-	remove( object ) { }
+	remove(object) { }
 
 }
 
@@ -54,10 +56,10 @@ export { instance as Updater };
  */
 class UpdaterFunction {
 
-	constructor( object, interval=1 ) {
+	constructor(object, interval = 1) {
 
 		this.object = object;
-		this.interval = ( interval <= 0 ) ? 1 : interval;
+		this.interval = (interval <= 0) ? 1 : interval;
 
 	}
 

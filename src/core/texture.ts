@@ -7,9 +7,7 @@ import { Texture as TEXTURE, NearestFilter, LinearFilter, sRGBEncoding, RepeatWr
 
 class Texture extends TEXTURE {
 
-	constructor( image ) {
-
-		if( !( image instanceof Image ) ) image = PANIC.Unknown;
+	constructor( image: HTMLImageElement ) {
 
 		super( image );
 
