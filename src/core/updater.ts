@@ -8,16 +8,8 @@
 
 class Updater {
 
-	data: []
-
-	constructor() {
-
-		this.data = [];
-
-		// The number of passes that the updater has gone through
-		this.pass = 0;
-
-	}
+	data: UpdaterFunction[] = [];
+	pass = 0;
 
 	update() {
 
@@ -42,9 +34,7 @@ class Updater {
 	/**
 	 *  @param object {Object} - The object holding the function
 	 */
-	add(object, interval = 1) { this.data.push(new UpdaterFunction(object, interval)); }
-
-	remove(object) { }
+	add(object: any, interval = 1) { this.data.push(new UpdaterFunction(object, interval)); }
 
 }
 
@@ -56,7 +46,10 @@ export { instance as Updater };
  */
 class UpdaterFunction {
 
-	constructor(object, interval = 1) {
+	object: any
+	interval: number
+
+	constructor(object: any, interval = 1) {
 
 		this.object = object;
 		this.interval = (interval <= 0) ? 1 : interval;
