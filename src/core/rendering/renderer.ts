@@ -7,8 +7,6 @@ import { Element } from '../dom/element.js';
 
 import { Camera } from './camera.js';
 
-import { EventManager } from '../events/event-manager.js';
-
 import { WebGLRenderer, sRGBEncoding, LinearToneMapping, BasicShadowMap } from 'three';
 
 class Renderer extends WebGLRenderer {
@@ -24,19 +22,11 @@ class Renderer extends WebGLRenderer {
 
 		this.toneMapping = LinearToneMapping;
 		this.toneMappingExposure = 0.75;
-
-		this.eventManager = new EventManager( window );
-
-		this.eventManager.registerNativeEvent( "resize" );
-		this.eventManager.on( "resize", this.onResize.bind(this) );
-
-		this.onResize();
-
 	}
 
-	kill() { this.getContext().getExtension('WEBGL_lose_context').loseContext(); }
+	kill() { this.getContext().getExtension('WEBGL_lose_context')?.loseContext(); }
 
-	onResize( e ) {
+	onResize() {
 
 		Camera.aspect = Element.clientWidth / Element.clientHeight;
 		Camera.updateProjectionMatrix();
