@@ -3,10 +3,10 @@
  */
 
 import { Scene } from '../core/rendering/scene'
-import { Shaders } from '../shaders/index'
+import { Shaders } from '../shaders'
 
 import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh, BufferGeometry } from 'three';
-import { Types } from '../types/index';
+import { Types } from '../types';
 
 class Grid {
 

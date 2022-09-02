@@ -6,7 +6,7 @@
 import { Vector3, Euler, Quaternion, Matrix4, Mesh, MeshDepthMaterial, RGBADepthPacking } from 'three';
 import { Scene } from '../core/rendering/scene';
 import { Updater } from '../core/updater';
-import { Tools } from '../tools/index';
+import { Tools } from '../tools';
 import { EntityTemplate } from './entity-template';
 
 class Entity {
