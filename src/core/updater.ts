@@ -36,6 +36,11 @@ class Updater {
 	 */
 	add(object: any, interval = 1) { this.data.push(new UpdaterFunction(object, interval)); }
 
+	remove(object: any) {
+		const index = this.data.indexOf(object)
+		if (index != undefined) delete this.data[index]
+	}
+
 }
 
 const instance = new Updater();
