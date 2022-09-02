@@ -4,10 +4,9 @@
 
 import { Tileset } from "../core/tileset/tileset"
 import { TileGroup } from "../core/tileset/tile-group"
-
-import { Debug } from "../debug/"
-import { Types } from "../types"
 import { TilesetSchema } from "../schemas/tileset.schema"
+import { Types } from "../types"
+import { Debug } from "../debug"
 import { Tools } from "../tools"
 
 export namespace TilesetParser {
@@ -40,18 +39,18 @@ export namespace TilesetParser {
 
             // Tile Transforms
             if (tile.t) {
-                if (tile.t.flip?.x) tileGroup[direction].editPattern(2, 3, 0, 1, 6, 7, 4, 5)
-                if (tile.t.flip?.y) tileGroup[direction].editPattern(4, 5, 6, 7, 0, 1, 2, 3)
+                if (tile.t.flip?.x) tileGroup.tiles[direction].editPattern(2, 3, 0, 1, 6, 7, 4, 5)
+                if (tile.t.flip?.y) tileGroup.tiles[direction].editPattern(4, 5, 6, 7, 0, 1, 2, 3)
 
                 if (tile.t?.translate) {
-                    if (tile.t.translate.x) tileGroup[direction].x += tile.t.translate.x
-                    if (tile.t.translate.y) tileGroup[direction].y += tile.t.translate.y
+                    if (tile.t.translate.x) tileGroup.tiles[direction].x += tile.t.translate.x
+                    if (tile.t.translate.y) tileGroup.tiles[direction].y += tile.t.translate.y
                 }
 
                 if (tile.t?.rotate) {
-                    if (tile.t.rotate == 1) tileGroup[direction].editPattern(4, 5, 0, 1, 6, 7, 2, 3)
-                    else if (tile.t.rotate == 2) tileGroup[direction].editPattern(6, 7, 4, 5, 2, 3, 0, 1)
-                    else if (tile.t.rotate == 3) tileGroup[direction].editPattern(2, 3, 6, 7, 0, 1, 4, 5)
+                    if (tile.t.rotate == 1) tileGroup.tiles[direction].editPattern(4, 5, 0, 1, 6, 7, 2, 3)
+                    else if (tile.t.rotate == 2) tileGroup.tiles[direction].editPattern(6, 7, 4, 5, 2, 3, 0, 1)
+                    else if (tile.t.rotate == 3) tileGroup.tiles[direction].editPattern(2, 3, 6, 7, 0, 1, 4, 5)
                 }
             }
         }

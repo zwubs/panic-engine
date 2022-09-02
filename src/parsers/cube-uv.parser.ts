@@ -18,7 +18,7 @@ export namespace CubeUVParser {
 
 		UVFaces.forEach((face, i) => {
 
-			const uv = group[face].UV(texture);
+			const uv = group.tiles[face].UV(texture);
 
 			(box.attributes.uv as BufferAttribute).set(uv, i * 8);
 
