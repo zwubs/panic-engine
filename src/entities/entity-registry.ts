@@ -3,51 +3,54 @@
  *	@object
  */
 
-import * as Debug from '../debug/debug-console';
+import { Debug } from '../debug';
+import { Entity } from './entity';
+import { EntityTemplate } from './entity-template';
 
 class EntityRegistry {
 
-	constructor() {
+	data: EntityTemplate[] = []
+	entities = new Map<string, Entity>();
 
-		this.data = [];
-
-		this.entities = {};
-
-	}
-
-	getEntityByName(name) { return this.data.find(o => o.name == name); }
-	getEntityByID(id) { return this.data.find(o => o.id == id); }
+	getEntityByName(name: string) { return this.data.find(o => o.name == name); }
+	getEntityByID(id: string) { return this.data.find(o => o.id == id); }
+	getEntityIndex(entity: EntityTemplate) { return this.data.indexOf(entity) }
 
 	/**
 	 *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
 	 */
-	registerEntity(template) {
+	registerEntity(template: EntityTemplate) {
 
 		if (this.getEntityByID(template.id) == undefined) this.data.push(template);
 
-		else Debug.warn("Entity \"" + entity.id + "\" is already registered");
+		else Debug.warn(`Entity "${template.id}" is already registered`);
 
 	}
 
 	/**
 	 *	@param {String} id
 	 */
-	unregisterEntity(id) {
+	unregisterEntity(id: string) {
 
-		if (this.getEntityByID(template.id) != undefined) delete this.getEntityByID(template.id);
+		const entity = this.getEntityByID(id);
+		if (entity == undefined) { Debug.warn(`Entity "${id}" hasn't been registered`); return; }
+
+		const index = this.getEntityIndex(entity);
+		if (index != undefined) delete this.data[index];
 
 	}
 
 	/**
 	 *	@param {String} id
 	 */
-	spawnEntity(id) {
+	spawnEntity(id: string) {
 
-		if (this.getEntityByID(id) != undefined) {
+		const template = this.getEntityByID(id);
 
-			let entity = this.getEntityByID(id).spawnEntity();
+		if (template != undefined) {
 
-			return this.entities[entity.uuid] = entity;
+			let entity = template.spawnEntity();
+			return this.entities.set(entity.uuid, entity);
 
 		}
 
