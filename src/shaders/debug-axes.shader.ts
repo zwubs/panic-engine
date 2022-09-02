@@ -2,7 +2,10 @@
  *	@namespace PANIC.Shaders.DebugAxes
  *	@author zwubs
  */
-export let DebugAxes = {
+
+import { Shader } from "../types/shader";
+
+export const DebugAxesShader: Shader = {
 
 	uniforms: {
 

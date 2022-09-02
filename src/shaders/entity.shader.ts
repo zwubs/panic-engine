@@ -3,8 +3,9 @@
  */
 
 import { ShaderLib } from 'three';
+import { Shader } from "../types/shader";
 
-export let Entity = {
+export const EntityShader: Shader = {
 
 	uniforms: ShaderLib.lambert.uniforms,
 

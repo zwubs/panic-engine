@@ -6,12 +6,13 @@
  */
 
 import { Color } from 'three'
+import { Shader } from "../types/shader";
 
-export let DebugGrid = {
+export const DebugGridShader: Shader = {
 
 	uniforms: {
 
-		uColor: { value: new Color( 0x000000 ) },
+		uColor: { value: new Color(0x000000) },
 
 		uScale: { value: 1.0 },
 		uSubdivisions: { value: 1.0 },
