@@ -5,17 +5,17 @@
 import { Tileset } from "../core/tileset/tileset"
 import { TileGroup } from "../core/tileset/tile-group"
 import { TilesetSchema } from "../schemas/tileset.schema"
-import { Types } from "../types"
 import { Debug } from "../debug"
 import { Tools } from "../tools"
+import { Types } from "../types"
 
 export namespace TilesetParser {
 
     export const parse = (json: Types.JSON.Tileset, id = "Undefined") => {
         let tileset = new Tileset()
 
+        TilesetSchema.parse(json)
         let groups = Object.entries(json)
-        TilesetSchema.parse(groups)
 
         console.groupCollapsed(`Tileset: '${id}'`)
 
@@ -36,6 +36,8 @@ export namespace TilesetParser {
         for (const direction of Tools.Directions) {
 
             const tile = group[direction]
+
+            tileGroup.tiles[direction].set( tile.x, tile.y, tile.w, tile.h )
 
             // Tile Transforms
             if (tile.t) {

@@ -9,12 +9,12 @@ import { CubeUVParser } from './cube-uv.parser'
 import { BufferGeometry, Matrix4, Vector3, Euler, Quaternion } from 'three';
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
-import { JSON } from '../types/json';
+import { Types } from '../types';
 import { Texture, Tileset } from '../panic';
 
 export namespace EntityModelParser {
 
-	export const parse = function (json: JSON.Armature, texture: Texture, tileset: Tileset) {
+	export const parse = function (json: Types.JSON.Armature, texture: Texture, tileset: Tileset) {
 
 		let geometry = new BufferGeometry();
 		let boxes = [];

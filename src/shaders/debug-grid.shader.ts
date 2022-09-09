@@ -6,9 +6,9 @@
  */
 
 import { Color } from 'three'
-import { Shader } from "../types/shader";
+import { Types } from "../types";
 
-export const DebugGridShader: Shader = {
+export const DebugGridShader: Types.Shader = {
 
 	uniforms: {
 

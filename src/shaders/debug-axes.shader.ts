@@ -3,9 +3,9 @@
  *	@author zwubs
  */
 
-import { Shader } from "../types/shader";
+import { Types } from "../types";
 
-export const DebugAxesShader: Shader = {
+export const DebugAxesShader: Types.Shader = {
 
 	uniforms: {
 

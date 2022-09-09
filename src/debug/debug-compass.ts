@@ -16,7 +16,7 @@ enum CompassStates {
 	CartesianCoordinates = 2
 }
 
-class Compass {
+class DebugCompass {
 
 	id = "PANIC-Debug-Compass";
 	element = document.createElement("div");
@@ -97,5 +97,5 @@ class Compass {
 
 }
 
-let instance = new Compass();
-export { instance as Compass };
+const instance = new DebugCompass();
+export { instance as DebugCompass };

@@ -8,7 +8,7 @@ import { Shaders } from '../shaders'
 import { PlaneBufferGeometry, Color, ShaderMaterial, DoubleSide, Mesh, BufferGeometry } from 'three';
 import { Types } from '../types';
 
-class Grid {
+class DebugGrid {
 
 	id = "PANIC-Debug-Grid";
 	active = false;
@@ -71,5 +71,5 @@ class Grid {
 
 }
 
-const instance = new Grid();
-export { instance as Grid };
+const instance = new DebugGrid();
+export { instance as DebugGrid };

@@ -50,7 +50,8 @@ class EntityRegistry {
 		if (template != undefined) {
 
 			let entity = template.spawnEntity();
-			return this.entities.set(entity.uuid, entity);
+			this.entities.set(entity.uuid, entity);
+			return entity;
 
 		}
 

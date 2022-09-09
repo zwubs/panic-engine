@@ -4,7 +4,7 @@
  *	@todo Decide what actually needs to be visible to the user.
  */
 
-export let Version = "0.0.4"
+export const Version = "0.0.4"
 
 /**
  *	@filespace {CORE}
@@ -17,6 +17,7 @@ export { Updater } from "./core/updater"
 export { Cube } from "./core/cube"
 export { Texture } from "./core/texture"
 export { Element } from "./core/dom/element"
+export { Controls } from './core/controls.js';
 
 /**
  * 	@filespace {CORE/TILESET}
@@ -36,17 +37,17 @@ export { EntityRegistry } from "./entities/entity-registry"
 /**
  *	@filespace {SHADERS}
  */
-export * as Shaders from "./shaders"
+export { Shaders } from "./shaders"
 
 /**
  *	@filespace {LOADERS}
  */
-export * as Loaders from "./loaders"
+export { Loaders } from "./loaders"
 
 /**
  *	@filespace {PARSERS}
  */
-export * as Parsers from "./parsers"
+export { Parsers } from "./parsers"
 
 /**
  *	@filespace {TOOLS}
@@ -56,4 +57,4 @@ export { Tools } from "./tools"
 /**
  *	@filespace {DEBUG}
  */
-export * as Debug from "./debug"
+export { Debug } from "./debug"

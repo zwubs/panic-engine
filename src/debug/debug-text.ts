@@ -4,7 +4,7 @@
 
 import { DebugElement } from './debug-element';
 
-class Text {
+class DebugText {
 
 	id = "PANIC-Debug-Text";
 	element = document.createElement("div");
@@ -31,5 +31,5 @@ class Text {
 
 }
 
-let instance = new Text();
-export { instance as Text };
+let instance = new DebugText();
+export { instance as DebugText };

@@ -8,7 +8,7 @@ import { Scene } from '../core/rendering/scene'
 import { Shaders } from '../shaders'
 
 
-class Axes {
+class DebugAxes {
 
 	id = "PANIC-Debug-Axes";
 	active = false;
@@ -64,5 +64,5 @@ class Axes {
 
 }
 
-const instance = new Axes();
-export { instance as Axes };
+const instance = new DebugAxes();
+export { instance as DebugAxes };

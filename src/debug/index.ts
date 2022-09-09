@@ -2,6 +2,12 @@
  *  @author zwubs
  */
 
+import { DebugAxes } from "./debug-axes";
+import { DebugElement } from "./debug-element";
+import { DebugGrid } from "./debug-grid";
+import { DebugText } from "./debug-text";
+import { DebugCompass } from './debug-compass';
+
 export namespace Debug {
 
     export let enabled = false;
@@ -41,5 +47,12 @@ export namespace Debug {
      * 	Clear the console
      */
     export function clear() { if (Debug.enabled) { console.clear(); } }
+
+    export const Compass = DebugCompass;
+    export const Axes = DebugAxes;
+    export const Grid = DebugGrid;
+
+    export const Element = DebugElement;
+    export const Text = DebugText;
 
 }

@@ -1,7 +1,7 @@
-import { Tools } from '../tools'
+import { Tools } from './tools'
 import { IUniform } from "three";
 
-declare namespace Types {
+export namespace Types {
 
     export namespace Tools {
 
