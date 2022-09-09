@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c ./utils/build/rollup.config.js",
-    "develop": "rollup -c ./utils/build/rollup.dev.config.js -w",
+    "build:dev": "rollup -c ./utils/build/rollup.dev.config.js -w",
     "start": "http-server -o examples -c-1"
   },
   "repository": {

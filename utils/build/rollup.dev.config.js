@@ -2,24 +2,29 @@
  *	@author zwubs
  */
 
-import typescript from '@rollup/plugin-typescript'
+ import resolve from '@rollup/plugin-node-resolve';
+ import typescript from '@rollup/plugin-typescript'
 
 export default [
-
-	// Standard
 	{
 		input: 'src/panic.ts',
-		external: ['three'],
+		external: ['three', 'zod'],
+		treeshake: true,
 		output: {
 			file: 'build/panic.js',
 			name: 'PANIC',
-			globals: { three: 'THREE' },
-			format: 'amd',
+			globals: {
+				three: 'THREE',
+				zod: 'Zod'
+			},
+			format: 'iife',
 			indent: '\t'
 		},
 		plugins: [
-			typescript()
+			typescript(),
+			resolve({
+				extensions: ['.ts', '.js', '.json']
+			})
 		]
-	},
-
+	}
 ]
