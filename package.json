@@ -31,6 +31,7 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@rollup/plugin-eslint": "^8.0.2",
     "@rollup/plugin-node-resolve": "^13.1.1",
     "@rollup/plugin-typescript": "^8.3.4",
     "@types/three": "^0.143.1",
