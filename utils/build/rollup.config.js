@@ -4,6 +4,7 @@
 
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript'
+import eslint from '@rollup/plugin-eslint';
 import { terser } from 'rollup-plugin-terser';
 
 export default [
@@ -45,6 +46,7 @@ export default [
 			},
 		],
 		plugins: [
+			eslint({ include: ['src/**/*.js', 'src/**/*.ts'] }),
 			typescript(),
 			resolve({
 				extensions: ['.ts', '.js', '.json']
