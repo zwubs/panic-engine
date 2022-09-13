@@ -16,12 +16,11 @@ export namespace EntityModelParser {
 
 	export const parse = function (json: Types.JSON.Armature, texture: Texture, tileset: Tileset) {
 
-		let geometry = new BufferGeometry();
 		let boxes = [];
 
 		let bones = Object.entries(json);
 
-		for (let [name, bone] of bones) {
+		for (let [,bone] of bones) {
 
 			if (!bone.cubes) continue;
 
