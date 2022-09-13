@@ -7,19 +7,19 @@ import { Debug } from '../debug';
 import { Entity } from './entity';
 import { EntityTemplate } from './entity-template';
 
-class EntityRegistry {
+export class EntityRegistry {
 
-	data: EntityTemplate[] = []
-	entities = new Map<string, Entity>();
+	private data: EntityTemplate[] = []
+	private entities = new Map<string, Entity>();
 
-	getEntityByName(name: string) { return this.data.find(o => o.name == name); }
-	getEntityByID(id: string) { return this.data.find(o => o.id == id); }
-	getEntityIndex(entity: EntityTemplate) { return this.data.indexOf(entity) }
+	public getEntityByName = (name: string) => this.data.find(o => o.name == name);
+	public getEntityByID = (id: string) => this.data.find(o => o.id == id);
+	public getEntityIndex = (entity: EntityTemplate) => this.data.indexOf(entity);
 
 	/**
-	 *  @param {PANIC.EntityTemplate} template - The template of the tempalte to register
+	 *	@param template - The template to register
 	 */
-	registerEntity(template: EntityTemplate) {
+	public registerEntity = (template: EntityTemplate) => {
 
 		if (this.getEntityByID(template.id) == undefined) this.data.push(template);
 
@@ -28,9 +28,9 @@ class EntityRegistry {
 	}
 
 	/**
-	 *	@param {String} id
+	 *	@param id - The ID of the entity to unregister
 	 */
-	unregisterEntity(id: string) {
+	public unregisterEntity = (id: string) => {
 
 		const entity = this.getEntityByID(id);
 		if (entity == undefined) { Debug.warn(`Entity "${id}" hasn't been registered`); return; }
@@ -43,7 +43,7 @@ class EntityRegistry {
 	/**
 	 *	@param {String} id
 	 */
-	spawnEntity(id: string) {
+	public spawnEntity(id: string) {
 
 		const template = this.getEntityByID(id);
 
@@ -57,7 +57,4 @@ class EntityRegistry {
 
 	}
 
-};
-
-let instance = new EntityRegistry();
-export { instance as EntityRegistry };
+}
