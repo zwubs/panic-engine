@@ -1,3 +1,6 @@
+![GitHub package.json version](https://img.shields.io/github/package-json/v/ZWubs/PANIC-Engine?color=%2351fd62&style=for-the-badge)
+![GitHub all releases](https://img.shields.io/github/downloads/ZWubs/PANIC-Engine/total?color=blue&style=for-the-badge)
+
 # PANIC Engine
 A game engine based on the three.js library and WebGL.
 
@@ -9,6 +12,14 @@ npm install
 npm run build
 npm start
 ```
+
+## Version 0.5.0
+**The Typescript Update**
+- Convert entire project to TS
+- Unplug some functionality (collision, events, & input)
+- Added typings
+- Cleaned up all files
+- Cleaned up examples
 
 ## Version 0.4.0
 **The Collision Update**
@@ -25,18 +36,18 @@ npm start
 - Fix window resizing issue.
 
 ## Version 0.2.0
-**The Packaging Update**
+**The NPM Update**
 - Convert entire project to a node project.
 - Move three.js dependencies from files to node modules.
 - Create a building system with minification.
 
 ## Version 0.1.0
-**The Class Update**
+**The Restructure Update**
 - Update all functions to ES6 class structures.
 - Turn 'panic.js' into an aggregating module.
 - Update to THREE v132
 
 ## Version 0.0.0
-**The First Go**
+**The Based Update**
 - The initial run.
 - Based off of the previous engine.
