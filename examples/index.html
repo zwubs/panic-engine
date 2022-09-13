@@ -37,14 +37,13 @@
 
 		PANIC.Debug.enable();
 
-		AngelFish = null;
-		Fish = null;
+		Player = null;
 
 		try {
 
-			PANIC.Loaders.Entity.load("./presets/entities/fish/fish.json").then((template) => {
-				Fish = PANIC.EntityRegistry.spawnEntity(template.id);
-				Fish.position.set(0, 0, 0);
+			PANIC.Loaders.Entity.load("./presets/entities/player/player.json").then((template) => {
+				Player = PANIC.EntityRegistry.spawnEntity(template.id);
+				Player.position.set(0, 0, 0);
 			});
 
 			PANIC.Debug.Grid.toggle();
@@ -58,7 +57,7 @@
 
 			PANIC.Debug.Text.toggle();
 
-			let Loop = function (time = 0) {
+			const Loop = (time = 0) => {
 
 				PANIC.Renderer.render(PANIC.Scene, PANIC.Camera);
 
