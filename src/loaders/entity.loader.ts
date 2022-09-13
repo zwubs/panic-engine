@@ -25,7 +25,7 @@ export namespace EntityLoader {
 		template.id = json.id;
 		template.name = json.name;
 
-		EntityRegistry.registerEntity(template);
+		EntityRegistry.registerTemplate(template);
 
 		return template;
 
