@@ -1,103 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
+<head>
 
-		<title>PANIC Engine</title>
+	<title>PANIC Engine</title>
 
-		<meta charset="UTF-8">
+	<meta charset="UTF-8">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="icon" type="image/png" href="../logo.png"/>
+	<link rel="icon" type="image/png" href="../logo.png" />
 
-		<style>
+	<style>
+		body {
 
-			body {
+			width: 100vw;
+			height: 100vh;
 
-				width: 100vw;
-				height: 100vh;
+			margin: 0;
 
-				margin: 0;
+			overflow: hidden;
 
-				overflow: hidden;
+		}
+	</style>
 
-			}
+</head>
 
-		</style>
+<body>
 
-	</head>
+	<script src="../lib/zod.js"></script>
+	<script src="../lib/three.js"></script>
 
-	<body>
+	<script src="../build/panic.js"></script>
 
-		<script src="../lib/three.js"></script>
+	<script>
 
-		<script src="../build/panic.js"></script>
+		PANIC.Debug.enable();
 
-		<script>
+		Player = null;
 
-			PANIC.Debug.enable();
+		try {
 
-			PANIC.Debug.Access.enable();
+			PANIC.Loaders.Entity.load("./presets/entities/player/player.json").then((template) => {
+				Player = PANIC.EntityRegistry.spawnEntity(template.id);
+				Player.position.set(0, 0, 0);
+			});
 
-			AngelFish = null;
-			Fish = null;
+			PANIC.Debug.Grid.toggle();
+			PANIC.Debug.Grid.scale = 16;
+			PANIC.Debug.Grid.subdivisions = 16;
+			PANIC.Debug.Grid.color = 0x888888;
 
-			try {
+			PANIC.Debug.Axes.toggle();
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/fish.json" ).then( ( template ) => {
+			PANIC.Debug.Compass.toggle();
 
-					Fish = PANIC.EntityRegistry.spawnEntity( template.id );
-					Fish.position.set( 0.5, 0, 0 );
+			PANIC.Debug.Text.toggle();
 
-					// PANIC.Debug.Entity( Fish ).collision = true;
+			const Loop = (time = 0) => {
 
-				});
+				PANIC.Renderer.render(PANIC.Scene, PANIC.Camera);
 
-				PANIC.Loaders.Entity.load( "./presets/entities/fish/angel-fish.json" ).then( ( template ) => {
+				PANIC.Updater.update();
 
-					AngelFish = PANIC.EntityRegistry.spawnEntity( template.id );
-
-					// PANIC.Debug.Entity( AngelFish ).collision = true;
-
-				});
-
-				PANIC.Debug.Grid.toggle();
-				PANIC.Debug.Grid.scale = 16;
-				PANIC.Debug.Grid.subdivisions = 16;
-				PANIC.Debug.Grid.color = 0x888888;
-
-				PANIC.Debug.Axes.toggle();
-
-				PANIC.Debug.Compass.toggle();
-
-				PANIC.Debug.Text.toggle();
-
-				let Loop = function( time=0 ) {
-
-					PANIC.Renderer.render( PANIC.Scene, PANIC.Camera );
-
-					PANIC.Updater.update();
-
-					if( AngelFish ) AngelFish.checkCollision();
-					if( Fish ) Fish.checkCollision();
-
-					requestAnimationFrame( Loop );
-
-				}
-
-				requestAnimationFrame( Loop );
+				requestAnimationFrame(Loop);
 
 			}
 
-			catch( error ) {
+			requestAnimationFrame(Loop);
 
-				PANIC.Debug.error( error );
+		}
 
-			}
+		catch (error) {
 
-		</script>
+			PANIC.Debug.error(error);
 
-	</body>
+		}
+
+	</script>
+
+</body>
 
 </html>

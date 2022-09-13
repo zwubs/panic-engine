@@ -8,13 +8,13 @@
 	"tileset": {
 
 		"main": {
-			"all": { "x": 16, "y": 16, "w": 16, "h": 16 },
-			"north": { },
-			"south": { "x": 48 },
-			"east": { "x": 0 },
-			"west": { "x": 32 },
-			"up": { "y": 0 },
-			"down": { "y": 32 }
+			"all":   { "x": 16, "y": 16, "w": 16, "h": 16 },
+			"north": { "x": 16, "y": 16, "w": 16, "h": 16 },
+			"south": { "x": 48, "y": 16, "w": 16, "h": 16 },
+			"east":  { "x":  0, "y": 16, "w": 16, "h": 16 },
+			"west":  { "x": 32, "y": 16, "w": 16, "h": 16 },
+			"up":    { "x": 16, "y":  0, "w": 16, "h": 16 },
+			"down":  { "x": 16, "y": 32, "w": 16, "h": 16 }
 		}
 
 	},
@@ -24,39 +24,21 @@
 			"name": "root",
 			"cubes": [
 				{
-					"size": [ 8, 8, 8 ],
-					"offset": [ 0, 0, 0 ],
+					"size":     [ 8, 8, 8 ],
+					"offset":   [ 0, 0, 0 ],
+					"rotation": [ 0, 0, 0 ],
 					"faces": "main"
 				}
 			]
 		}
 	],
 
-	"actions": {
-
-		"INIT": "./scripts/init.js",
-		"UPDATE": "./scripts/update.js",
-
-		"MOVE_FORWARD": "./scripts/move-forward.js",
-		"MOVE_BACKWARD": "./scripts/move-backward.js",
-		"MOVE_LEFT": "./scripts/move-left.js",
-		"MOVE_RIGHT": "./scripts/move-right.js"
-
-	},
-
-	"bindings": {
-
-		"MOVE_FORWARD": [ "KEY_HELD_W" ],
-		"MOVE_BACKWARD": [ "KEY_HELD_S" ],
-		"MOVE_LEFT": [ "KEY_HELD_A" ],
-		"MOVE_RIGHT": [ "KEY_HELD_D" ]
-
-	},
-
 	"collision": {
 		"boxes": {
 			"default": {
-				"size": [ 8, 8, 8 ]
+				"size":     [ 8, 8, 8 ],
+				"offset":   [ 0, 0, 0 ],
+				"rotation": [ 0, 0, 0 ]
 			}
 		}
 	}

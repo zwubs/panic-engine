@@ -7,8 +7,12 @@
 
 	"tileset": {
 		"main": {
-			"all": { "x": 0, "y": 0, "w":8, "h": 8 },
-			"north": { "x": 8 }
+			"north": { "x": 8, "y": 0, "w":8, "h": 8 },
+			"south": { "x": 0, "y": 0, "w":8, "h": 8 },
+			"east":  { "x": 0, "y": 0, "w":8, "h": 8 },
+			"west":  { "x": 0, "y": 0, "w":8, "h": 8 },
+			"up":    { "x": 0, "y": 0, "w":8, "h": 8 },
+			"down":  { "x": 0, "y": 0, "w":8, "h": 8 }
 		}
 	},
 
@@ -16,65 +20,21 @@
 		"root": {
 			"cubes": [
 				{
-					"size": [ 8, 8, 8 ],
-					"offset": [ 0, 0, 0 ],
+					"size":     [ 8, 8, 8 ],
+					"offset":   [ 0, 0, 0 ],
+					"rotation": [ 0, 0, 0 ],
 					"faces": "main"
 				}
 			]
 		}
 	},
 
-	"actions": {
-
-		"INIT": "./scripts/init.js",
-		"UPDATE": "./scripts/update.js",
-
-		"MOVE_FORWARD": "./scripts/move-forward.js",
-		"MOVE_BACKWARD": "./scripts/move-backward.js",
-		"ROTATE_LEFT": "./scripts/rotate-left.js",
-		"ROTATE_RIGHT": "./scripts/rotate-right.js",
-
-		"JUMP": "./scripts/jump.js"
-
-	},
-
-	"bindings": {
-
-		"MOVE_FORWARD": [
-			"KEY_HELD_W",
-			"KEY_HELD_UP",
-			"GAMEPAD_LSTICK_NORTH"
-		],
-
-		"MOVE_BACKWARD": [
-			"KEY_HELD_S",
-			"KEY_HELD_DOWN",
-			"GAMEPAD_LSTICK_SOUTH"
-		],
-
-		"ROTATE_LEFT": [
-			"KEY_HELD_A",
-			"KEY_HELD_LEFT",
-			"GAMEPAD_LSTICK_WEST"
-		],
-
-		"ROTATE_RIGHT": [
-			"KEY_HELD_D",
-			"KEY_HELD_RIGHT",
-			"GAMEPAD_LSTICK_EAST"
-		],
-
-		"JUMP": [
-			"KEY_HELD_SPACE",
-			"GAMEPAD_BUTTON_WEST"
-		]
-
-	},
-
 	"collision": {
 		"boxes": {
 			"default": {
-				"size": [ 8, 8, 8 ]
+				"size":     [ 8, 8, 8 ],
+				"offset":   [ 0, 0, 0 ],
+				"rotation": [ 0, 0, 0 ]
 			}
 		}
 	}
