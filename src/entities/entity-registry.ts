@@ -7,7 +7,7 @@ import { Debug } from '../debug';
 import { Entity } from './entity';
 import { EntityTemplate } from './entity-template';
 
-export class EntityRegistry {
+class EntityRegistry {
 
 	private templates = new Map<string, EntityTemplate>();
 	private entities = new Map<string, Entity>();
@@ -18,7 +18,7 @@ export class EntityRegistry {
 	/**
 	 *	@param template - The template to register
 	 */
-	public registerEntity = (template: EntityTemplate) => {
+	public registerTemplate = (template: EntityTemplate) => {
 
 		if (this.templates.has(template.id)) Debug.warn(`Entity "${template.id}" is already registered and is being replaced.`);
 
@@ -29,7 +29,7 @@ export class EntityRegistry {
 	/**
 	 *	@param id - The ID of the template to unregister
 	 */
-	public unregisterEntity = (id: string) => {
+	public unregisterTemplate = (id: string) => {
 
 		if (!this.templates.delete(id)) Debug.warn(`Entity "${id}" hasn't been registered`);
 
@@ -50,3 +50,6 @@ export class EntityRegistry {
 	}
 
 }
+
+const instance = new EntityRegistry();
+export { instance as EntityRegistry };
