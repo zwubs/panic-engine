@@ -20,6 +20,6 @@ export namespace Tools {
 
 	export const Directions = ["north", "south", "east", "west", "up", "down"] as const
 
-	export const generateUUID = crypto.randomUUID
+	export const generateUUID = () => crypto.randomUUID();
 
 }
