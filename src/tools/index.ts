@@ -3,7 +3,6 @@
  */
 
 import { Vector3 } from 'three';
-import { v4 } from 'uuid';
 
 export namespace Tools {
 
@@ -21,6 +20,6 @@ export namespace Tools {
 
 	export const Directions = ["north", "south", "east", "west", "up", "down"] as const
 
-	export const generateUUID = () => v4()
+	export const generateUUID = () => crypto.randomUUID();
 
 }
