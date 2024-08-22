@@ -13,6 +13,8 @@ npm run build
 npm start
 ```
 
+Or you can always [checkout the original](https://zwubs-3d.glitch.me/)
+
 ## Version 0.5.0
 **The Typescript Update**
 - Convert entire project to TS
